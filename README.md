@@ -1,15 +1,8 @@
 # Project_5MES_C
+Project 5 Man Enrollment System in C, An Enrollment System that runs in CLI with C Language.
 <a>
 <img src="https://img.shields.io/badge/Status-On--planning-blue.svg">
 </a>
-Project 5 Man Enrollment System in C, An Enrollment System that runs in CLI with C Language.
-
-# People in Charge with Task Assignment
-## -
-## -
-## -
-## -
-## -
 
 # Introduction / Information
 This project was one of our first project in programming that only circulates in C Language. Our goal is to make a responsive application that technically able to replicate a Web application / system called "Aris". Aris is one of the school web system that currently operates. With that, alternative can be done just in case.
@@ -27,3 +20,10 @@ to collaborate with people. Other than that,
 
 # Disclaimer
 We want to be good as possible, but as far as we know, this project will likely to be shared by everyone else without any credit. With that, soon enough we will try to hard coded this.
+
+# People in Charge with Task Assignment
+## -
+## -
+## -
+## -
+## -
