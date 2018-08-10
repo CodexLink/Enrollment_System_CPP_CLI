@@ -1,0 +1,11 @@
+{
+    "C_Cpp.intelliSenseEngineFallback": "Disabled",
+    "files.autoSave": "onFocusChange",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+    }
+}
