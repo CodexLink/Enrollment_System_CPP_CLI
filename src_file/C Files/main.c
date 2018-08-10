@@ -2,9 +2,7 @@
 #include <conio.h>
 #include <windows.h> // Windows Compatibility, Portability RIP
 #include <winsock2.h> // Added
-// Include Expected Header Such as ICMP for Communication in Windows
-// Paste
-
+// Include Expected Header Such as ICMP
 int main() {
 // Init POST
 // Choose a Type Login
