@@ -146,7 +146,7 @@ char CriticalComp_Check() {
   } else {
       printf("Local Database Found!");
   }
-      printf("");
+      //printf("");
   }
   // printf("Initializing Mode | %c", ModeArgumentSet);
   if ((strstr(ERROR_1, ReturnCodeChar)) || (strstr(ERROR_2, ReturnCodeChar)) ||
