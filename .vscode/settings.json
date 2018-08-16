@@ -53,5 +53,5 @@
         "haskell": "runhaskell",
         "nim": "nim compile --verbosity:0 --hints:off --run"
     },
-    "code-runner.runInTerminal": false
+    "code-runner.runInTerminal": true
 }
