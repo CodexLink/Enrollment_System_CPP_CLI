@@ -1,6 +1,6 @@
 /*==============================================================================
 Group LM - Enrollment System in C for Preliminary Project in Programming
-Enrollment System, Version 1856-08102018 - BETA
+Enrollment System, Version 2355-08182018 BETA
 ==============================================================================
 Project Leader / FrontEnd Design / Backend Programmer - Janrey Licas, Project Manager / Backend Programmer - Charles Ian Mascarenas
 Code Tester / ???? - Sim Harvey Agustin Marquez, Julie Ann Luzano, Matt Matamis
