@@ -13,45 +13,37 @@ Code Tester / ???? - Sim Harvey Agustin Marquez, Julie Ann Luzano, Matt Matamis
 #include <string.h> // String Handling for Usage of Structure and Database
 #define VERSION_NUMBER "2259-08102018-BETA"
 #define PRODUCT_NAME "Group LM | C CLI Enrollment System for TiP Engineering and Architecture"
-#define ERROR_1 "WARN.UnableReposition"
-#define ERROR_2 "WARN.Win32Disable_Denied"
-#define WARN_1 "ERROR.UnableToConnect"
-#define WARN_2 "ERROR.UnableToCheckStorage"
-#define ACMPLT "Critical Components Checkpoint Completed"
 #define FUNCTION_UNFINISHED 1362565
 #define DATABASE_NOT_FOUND 40
-struct StudentRecords {
-    int user_StudentIdentity[7];
-    char user_Username, user_Password, user_UserPersonalName;
 
+struct StudentRecords
+{
+    int user_StudentIdentity;
+    char user_Username[20], user_Password[32], user_UserPersonalName[20];
 };
-struct New_StudentRecords {
-    char user_Name;
-    char user_Birthday;
-    char user_MName, user_FName, user_Nationality;
+struct New_StudentRecords
+{
+    char user_Name[25];
+    char user_Birthday[30];
+    char user_MName[15], user_FName[15], user_Nationality[10];
 };
-int OldStd_Logon();
-char stdnt_NumberCreate(); // Function that creates a number
-char CriticalComp_Check(); // Checks and Sets Components Before Initializing
+
+int Func_AlgoStdnt_NumberCreate(); // Function that creates a number
+int Function_Managament_ERLM();
+char Function_CriticalComp_CheckCreate(); // Checks and Sets Components Before Initializing
 char Argument_Initialization(argc, argv); // PASS ARGC AND ARGV To Another Function
-void OldStd_Func();        // Function for Old Student
-void NewStd_Func();        // Function for New Student
-void NewStd_ContinuationFunc();
+void Func_OldStd_Logon();        // Function for Old Student
+void Func_NewStdnt_ERLM (struct New_StudentRecords New_Potential_Student);     // Function for New Student
 void PrintTranscript(); // New Function
-void OldStd_Func_Enrollment_Eng(OldStudent);
+void Func_OldStd_Menu(OldStudent);
+
+char Argument_Initialization(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) {
     int Counter_Argument;
     char ArgumentModeReturn;
-    printf("Checking for Arguments Given...");
-    printf("Argument/s Count is %c", argc);
-    for (Counter_Argument = 0; Counter_Argument < argc; Counter_Argument++)
-    {
-        printf(argv[Counter_Argument]);
-        printf("\n");
-    }
-    if (argc < 0) {
-        ArgumentModeReturn = Argument_Initialization(argc, argv);
+    if (argc > 1) {
+        Argument_Initialization(argc, argv);
     }
     //Insert If and Else According to FlowChart
     Sleep(2000);
@@ -61,7 +53,7 @@ int main(int argc, char *argv[]) {
         printf("Version " VERSION_NUMBER "\n");
         printf(PRODUCT_NAME "\n");
         puts("-----------------------------");
-        CriticalComp_Check();   // Init Function to Check for Critical Components Before Proceeding
+        Function_CriticalComp_CheckCreate();   // Init Function to Check for Critical Components Before Proceeding
         system("CLS");
         puts("-----------------------------");
         printf("Version " VERSION_NUMBER "\n");
@@ -85,6 +77,7 @@ int main(int argc, char *argv[]) {
             NewStd_ContinuationFunc();
             break;
         case 4:
+        SetConsoleTitle("Terminating Enrollment System | LM Enrollment System");
             puts("Terminating Enrollment System...");
             Sleep(3000);
             return EXIT_SUCCESS;
@@ -96,26 +89,106 @@ int main(int argc, char *argv[]) {
     }
 }
 
-// TECHNICAL STUDENT FUNCTION
-char Argument_Initialization(int argc, char argv[]) {
-    char *Argument_DefaultAvailable[2] = {"-fullscreen", "-management"};
-    char *Argument_FinalCheckOtpt[2] = {"NULL"};
-    int Argument_Checker;
-    
-    for (Argument_Checker = 0; Argument_Checker < argc; Argument_Checker++) {
-        if(Argument_DefaultAvailable[Argument_Checker] == argv[Argument_Checker]) {
-            Argument_FinalCheckOtpt[Argument_Checker++];
-        }   
-    }
-    printf("Initializing Mode | %c", ArgumentModeReturn);
-
-
-
-    // SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE),CONSOLE_FULLSCREEN_MODE,0);
+// TECHNICAL COMPONENT CHECKING FUNCTION
+char Argument_Initialization(int argc, char *argv[]) {
+  HWND consoleWindow = GetConsoleWindow();
+  int Argument_Checker = 0;
+  printf("  @ Function \t|\t INITIALIZING \t|\t  Argument_Initialization\n");
+  while(Argument_Checker != argc) {
+      if (strcmp(argv[Argument_Checker], "/rstrict_wnd") == 0 ) {
+        SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
+      }
+      if (strcmp(argv[Argument_Checker], "/mgr_md") == 0 ) {
+        printf("void Function_Mgr_Mode();");
+      }
+      Argument_Checker++;
+  }
+  system("CLS");
 }
 
+char Function_CriticalComp_CheckCreate() {
+    int Counter_DataPoint_Check;
+    HWND console = 0;
+    RECT ConsoleMainApp;
+    HWND hwnd = GetConsoleWindow();
+    HMENU hmenu = GetSystemMenu(hwnd, FALSE);
+    FILE *FileDatabase_ERLM;
+    FILE *FileDatabase_User;
+    FILE *FileDatabase_Admin;
+    char datapoint_ERLM[] = "2018_LM_Database_Enrollment.dat";
+    char datapoint_User[] = "2018_LM_Database_User.dat";
+    char datapoint_Admin[] = "2018_LM_Database_Admin.dat";
+    char *ERROR_1 = "WARN.UnableReposition";
+    char *ERROR_2 = "WARN.Win32Disable_Denied";
+    char *WARN_2 ="ERROR.UnableToCheckStorage";
+    char *ACMPLT ="Critical Components Checkpoint Completed";
+    char *WARN_1 ="ERROR.UnableToConnect";
+    SYSTEMTIME GetDate_Local;
+    SetConsoleTitle("Intializing Critical Components | LM Enrollment System\n");
+        printf("Initializing and Checking Critical Components Before Actual Program Initialization\n");
+        puts("---------------------------------------------------------------------------------------------------");
+        printf("COMPONENT MATERIAL\t|\t STATUS\t\t| DESCRIPTION\t\n");
+        puts("---------------------------------------------------------------------------------------------------");
+        printf("Init.Component # 1 \t|\t COMPLETE \t| Resize and Move the Command Line with Respective Ordered Values\n");
+    MoveWindow(console, ConsoleMainApp.left, ConsoleMainApp.top, 1000, 500, TRUE);
+        printf("Init.Component # 2 \t|\t COMPLETE \t| Disable Close Button\n");
+    EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
+        printf("Init.Component # 3.1 \t|\t CHECKING \t| Checking Local Database on Local Storage (Using .Dat File)\n");
+    for (Counter_DataPoint_Check = 1; Counter_DataPoint_Check <= 3; Counter_DataPoint_Check++) {
+        if (Counter_DataPoint_Check == 1) {
+            FileDatabase_ERLM = fopen(datapoint_ERLM, "r");
+            if (FileDatabase_ERLM == NULL) {
+                printf("Init.Component # 3.1 \t|\t ERROR \t\t| Database for Enrollment was not found! Creating Database Point...\n");
+                //fwrite(datapoint_ERLM, 1, sizeof(datapoint_ERLM), FileDatabase_ERLM);
+                FileDatabase_ERLM = fopen(datapoint_ERLM, "w+");
+                fclose(FileDatabase_ERLM);
+            } else {
+            printf("Init.Component # 3.1 \t|\t VERIFIED \t| Local Database Found for Enrollment!\n");
+            fclose(FileDatabase_ERLM);
+            }
+        }
+        else if (Counter_DataPoint_Check == 2) {
+            printf("Init.Component # 3.2 \t|\t CHECKING \t| Checking for DataPoint User Data...\n");
+            FileDatabase_User = fopen(datapoint_User, "r");
+            if (FileDatabase_User == NULL) {
+                printf("Init.Component # 3.2 \t|\t ERROR \t\t| Database for User was not found! Creating Database Point...\n");
+                //fwrite(datapoint_ERLM, 1, sizeof(datapoint_ERLM), FileDatabase_ERLM);
+                FileDatabase_User = fopen(datapoint_User, "w+");
+                fclose(FileDatabase_User);
+            } else {
+            printf("Init.Component # 3.2 \t|\t VERIFIED \t| Local Database Found for Student User!\n");
+            fclose(FileDatabase_User);
+            }
+        }
+        else if (Counter_DataPoint_Check == 3) {
+            printf("Init.Component # 3.3 \t|\t CHECKING \t| Checking for DataPoint Admin Data...\n");
+            FileDatabase_Admin = fopen(datapoint_Admin, "r");
+            if (FileDatabase_Admin == NULL) {
+                printf("Init.Component # 3.3 \t|\t ERROR \t\t| Database for Admin was not found! Creating Database Point...\n");
+                //fwrite(datapoint_Admin, 1, sizeof(datapoint_Admin), FileDatabase_Admin);
+                FileDatabase_Admin = fopen(datapoint_Admin, "w+");
+                fclose(FileDatabase_Admin);
+            }
+            else {
+            printf("Init.Component # 3.3 \t|\t VERIFIED \t| Local Database Found for Admin!\n");
+            fclose(FileDatabase_Admin);
+            }
+        } 
+    }
+    GetLocalTime(&GetDate_Local);
+    puts("---------------------------------------------------------------------------------------------------");
+    printf("\nDatabase Created as of %02d:%02d\n", GetDate_Local.wHour, GetDate_Local.wMinute);
+    Sleep(3000);
+    puts(ACMPLT);
+    printf("Press any key to continue...");
+    getch();
+}
+
+
+// Make this function return success in order to start.
+
 // OLD STUDENT FUNCTIONS
-void OldStd_Func() {
+void Func_OldStd_Logon() {
     struct StudentRecords OldStudent;
     while(1) {
         SetConsoleTitle("LM Enrollment System | Old Student Login");
@@ -129,9 +202,9 @@ void OldStd_Func() {
     }
     //printf("Hello %s | %d!\n", OldStudent.user_Username, OldStudent.user_StudentIdentity);
     //printf("Also your password is %s\n", OldStudent.user_Password);
-    OldStd_Func_Enrollment_Eng(OldStudent);
+    Func_OldStd_Enrollment_Menu(OldStudent);
 }
-void OldStd_Func_Enrollment_Eng(struct StudentRecords OldStudent_Continuation) {
+void Func_OldStd_Enrollment_Menu(struct StudentRecords OldStudent_Continuation) {
     FILE *FileDatabase_ERLM;
     char datapoint_ERLM[] = "data/2018_LM_Database_Enrollment.dat";
     int Database_Check;
@@ -162,20 +235,10 @@ void OldStd_Func_Enrollment_Eng(struct StudentRecords OldStudent_Continuation) {
     return FUNCTION_UNFINISHED;
     }
 }
-void OldStd_Func_Enrollment_Selection() {
 
-    printf("Here are the following available");
-}
 //Create Selectables Here for Array
-void NewStd_Func() {
-    SetConsoleTitle("LM Enrollment System | New Student Creation");
-    FILE *Database_ERLM;
-    // Not Finished
-    char user_Name;
-    char user_Birthday;
-    char user_MName, user_FName, user_Nationality;
-}
-char stdnt_NumberCreate() {
+// ALGORITHMS
+int Func_AlgoStdnt_NumberCreate() {
     SetConsoleTitle("LM Enrollment System | Generating Number Identity...");
     SYSTEMTIME Btch_Year;
     char Created_Student_NumData;
@@ -184,83 +247,12 @@ char stdnt_NumberCreate() {
     printf("Created Student Number Data(Untouched) %d | ",Btch_Year.wYear); // Another Two Predicted Values are Btch_Num,Btch_StudentNum.
     return Created_Student_NumData;
 }
+void Func_NewStdnt_ERLM (struct New_StudentRecords New_Potential_Student) {
+    SetConsoleTitle("LM Enrollment System | New Student Creation");
+    FILE *Database_ERLM;
+    // Not Finished
+}
+// SIDE FUNCTIONS
+void PrintTranscript() {
 
-char CriticalComp_Check() {
-    char ModeArgumentSet = 0, ReturnCodeChar = 0;
-    int Counter_DataPoint_Check;
-    HWND console = 0;
-    RECT ConsoleMainApp;
-    HWND hwnd = GetConsoleWindow();
-    HMENU hmenu = GetSystemMenu(hwnd, FALSE);
-    FILE *FileDatabase_ERLM;
-    FILE *FileDatabase_User;
-    FILE *FileDatabase_Admin;
-    char datapoint_ERLM[] = "data/2018_LM_Database_Enrollment.dat";
-    char datapoint_User[] = "data/2018_LM_Database_User.dat";
-    char datapoint_Admin[] = "data/2018_LM_Database_Admin.dat";
-    int datepoint_date;
-    SetConsoleTitle("Intializing and Checking Critical Components | LM Enrollment System\n");
-        printf("Initializing and Checking Critical Components Before Actual Program Initialization\n");
-        printf("COMPONENT #   | TITLE   \t  STATUS\n");
-        printf("Init.Component # 1 | Resize and Move the Command Line with Respective Ordered Values\n");
-    MoveWindow(console, ConsoleMainApp.left, ConsoleMainApp.top, 1000, 500, TRUE);
-        printf("Init.Component # 2 | Disable Close Button\n");
-    EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
-        printf("Component # 3.1 |  | Checking Local Database on Local Storage (Using .Dat File)\n");
-    for (Counter_DataPoint_Check = 1; Counter_DataPoint_Check <= 3; Counter_DataPoint_Check++) {
-        if (Counter_DataPoint_Check == 1) {
-            printf("Checking for DataPoint Enrollment Data...",Counter_DataPoint_Check);
-            FileDatabase_ERLM = fopen(datapoint_ERLM, "r");
-            if (FileDatabase_ERLM = NULL) {
-                printf("Component # 3.1 | Database for Enrollment was not found! Creating Database Point...");
-                fwrite(datapoint_ERLM, 1, sizeof(datapoint_ERLM), FileDatabase_ERLM);
-                fclose(FileDatabase_ERLM);
-            }
-        }
-        if (Counter_DataPoint_Check == 2) {
-            printf("Component # 3.2 | Checking for DataPoint User Data...",Counter_DataPoint_Check);
-            FileDatabase_User = fopen(datapoint_User, "r");
-            if (FileDatabase_User = NULL) {
-                printf("Component # 3.2 | Database for User was not found! Creating Database Point...");
-                fwrite(datapoint_ERLM, 1, sizeof(datapoint_ERLM), FileDatabase_ERLM);
-                fclose(FileDatabase_User);
-            }
-        }
-        if (Counter_DataPoint_Check == 3) {
-            printf("Component # 3.3 | Checking for DataPoint Admin Data...",Counter_DataPoint_Check);
-            FileDatabase_Admin = fopen(datapoint_Admin, "r");
-            if (FileDatabase_Admin = NULL) {
-                printf("Component # 3.3 | Database for Admin was not found! Creating Database Point...");
-                fwrite(datapoint_Admin, 1, sizeof(datapoint_Admin), FileDatabase_Admin);
-                fclose(FileDatabase_Admin);
-            }
-            GetLocalTime(&datapoint_date);
-            printf("Database Created as of %c", datapoint_date);
-        } 
-         else {
-            fclose(FileDatabase_ERLM);
-            fclose(FileDatabase_User);
-            fclose(FileDatabase_Admin);
-            printf("Local Database Found!");
-        }
-        }
-        if ((strstr(ERROR_1, ReturnCodeChar)) || (strstr(ERROR_2, ReturnCodeChar)) ||
-            (strstr(WARN_1, ReturnCodeChar)) || (strstr(WARN_2, ReturnCodeChar))) == TRUE)
-    {
-        ReturnCodeChar = "ACMPLT";
-        printf("%s", ReturnCodeChar);
-        Sleep(3000);
-    }
-    if (PostReturn == ERROR_1 || ERROR_2) {
-    printf("Most of the Critical Components where unable to compile. Terminating the program in 3 seconds.");
-        Sleep(3000);
-        return EXIT_FAILURE;
-    } else if (PostReturn == WARN_1 || WARN_2) {
-    printf("Few Critical Components where unable to compile. Although it's an optional critical component, Proceeding...");
-        Sleep(2500); // Wait Before Continue, Time In milliseconds
-    } else {
-        printf("One or more critical components has failed to comply! Terminating...\n Exit Code is %d", PostReturn);
-        // A Function Defined in Windows.H to show what error that would be. (Win32API)
-        return GetLastError();
-    }
 }
