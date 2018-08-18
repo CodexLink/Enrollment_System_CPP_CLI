@@ -50,3 +50,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+*.exe
+*.dat
+Experimental/.vs/Experimental_Argc_Argv_Extended/v15/.suo
+*.json
+*.txt
+*.dat
+*.exe
