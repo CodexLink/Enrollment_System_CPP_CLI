@@ -8,19 +8,17 @@
 #define PRODUCT_NAME "Group LM | C CLI Enrollment System for TiP Engineering and Architecture"
 struct New_StudentRecords
 {
-    char std_FName[30];
-    char std_MName[30];
-    char std_LName[30];
-    char std_Gender[1];
-    char std_Birthday[30];
-    char std_Nationality[10];
-    char std_SpecialBehavioral[50];
-    char std_Address[MAX_PATH];
-    int std_PhoneNum; 
-    int std_MobileNum; 
-    int std_EmerNum;
-    char std_stdEmail[40];
-    char POC_Emergency[30];
+    char std_FName[30],
+    std_MName[30],
+    std_LName[30],
+    std_Gender[1],
+    std_Birthday[30],
+    std_Nationality[10],
+    std_SpecialBehavioral[50],
+    std_Address[MAX_PATH],
+    std_stdEmail[40],
+    POC_Emergency[30];
+    int std_PhoneNum, std_MobileNum,std_EmerNum;
 };
 int DataReceiver();
 int main()
