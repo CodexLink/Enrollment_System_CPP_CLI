@@ -12,54 +12,38 @@
 #define ACMPLT "Critical Components Checkpoint Completed"
 
 char Argument_Initialization(int argc, char *argv[]);
-int Function(Argument_1_Bool, Argument_2_Bool);
 int Function_Start_1();
 int Function_Start_2();
 
-int main(int argc, char *argv[]) {
-  int a;
+int main(int argc, char *argv[])
+{
+  int Counter_Argument;
   char ArgumentModeReturn;
   printf("Arguments Accounted on EXE Inline is %i\n\n", argc);
-  for (a = 0; a < argc; a++) {
-    printf("argv[%i]\t", a);
-    printf(argv[a]);
+  for (Counter_Argument = 0; Counter_Argument < argc; Counter_Argument++)
+  {
+    printf("argv[%i]\t", Counter_Argument);
+    printf(argv[Counter_Argument]);
     printf("\n");
   }
-  if (argc > 1) {
+  if (argc > 1)
+  {
     ArgumentModeReturn = Argument_Initialization(argc, argv);
   }
 }
 
 char Argument_Initialization(int argc, char *argv[]) {
+  HWND consoleWindow = GetConsoleWindow();
   int CheckerFinalArray;
-  int Argument_Checker, Argument_Checker_1, Argument_1_Bool, Argument_2_Bool;
+  int Argument_Checker;
   printf("\n @ Function | char Argument_Initialization(int argc, char *argv[])\n");
-
   while(Argument_Checker != argc) {
-      if (strcmp(argv[Argument_Checker], "-fullscreen") == 0 ) {
-        Argument_1_Bool = 1;
+      if (strcmp(argv[Argument_Checker], "/rstrict_wnd") == 0 ) {
+        SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
       }
-      if (strcmp(argv[Argument_Checker], "-management") == 0 ) {
-        Argument_2_Bool = 1;
+      if (strcmp(argv[Argument_Checker], "/mgr_md") == 0 ) {
+        printf("void Function_Mgr_Mode();");
       }
       Argument_Checker++;
   }
-  Function(Argument_1_Bool, Argument_2_Bool);
-}
-int Function (int Argument_1_Bool, int Argument_2_Bool) {
-    if (Argument_1_Bool == 1) {
-      Function_Start_1();
-    }
-    if (Argument_2_Bool == 1) {
-      Function_Start_2();
-    }
-    printf("Press any key to continue...");
-    getch();
-    return EXIT_SUCCESS;
-  }
-int Function_Start_1() {
-  printf("Success Start @ Function_Start_1\n");
-}
-int Function_Start_2() {
-  printf("Success Start @ Function_Start_2\n");
 }
