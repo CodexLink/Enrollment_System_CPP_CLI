@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src_file\LM_MainProgram.c">
+    <ClCompile Include="Experimental\Experimental_SetData_NewStudent.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,5 @@
 {
-    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "files.autoSave": "onFocusChange",
     "files.exclude": {
         "**/.git": true,
@@ -9,9 +9,15 @@
         "**/.DS_Store": true,
     },
     "files.associations": {
-        "menu.h": "c"
+        "menu.h": "c",
+        "xstring": "c",
+        "*.rh": "c",
+        "xutility": "c",
+        "ios": "c",
+        "string": "c",
+        "string.h": "c",
+        "stdio.h": "c"
     },
-    "code-runner.customCommand": "-lmenu -lncurses",
     "code-runner.executorMap": {
         "javascript": "node",
         "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
@@ -53,5 +59,6 @@
         "haskell": "runhaskell",
         "nim": "nim compile --verbosity:0 --hints:off --run"
     },
-    "code-runner.runInTerminal": true
+    "code-runner.runInTerminal": true,
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe"
 }

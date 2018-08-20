@@ -57,3 +57,15 @@ Experimental/.vs/Experimental_Argc_Argv_Extended/v15/.suo
 *.txt
 *.dat
 *.exe
+*.db
+.vs/Project_5MES_C/v15/.suo
+*.db
+.vs/Project_5MES_C/v15/.suo
+*.ipch
+*.ipch
+*.ipch
+*.sqlite
+*.json
+*.tlog
+*.exe
+*.dat

@@ -96,7 +96,7 @@ void append()
     FILE *fp;
     struct emp t1;
 
-    fp=fopen(fname,"ab");
+    fp=fopen(fname,"a");
 
     printf("\nEnter ID:");
     scanf("%d",&t1.id);
