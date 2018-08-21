@@ -65,11 +65,14 @@ int main(int argc, char *argv[]) {
 }
 
 char Argument_Initialization(int argc, char *argv[]) {
+  HWND hwnd = GetConsoleWindow();
   HWND consoleWindow = GetConsoleWindow();
   int Argument_Checker = 0;
   printf("  @ Function \t|\t INITIALIZING \t|\t  Argument_Initialization\n");
   while(Argument_Checker != argc) {
       if (strcmp(argv[Argument_Checker], "/rstrict_wnd") == 0 ) {
+   		printf("Init.Component # 1 \t|\t COMPLETE \t| Set Command Line to Full Screen\n");
+    	ShowWindow(hwnd, SHOW_FULLSCREEN);
         SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
         printf("@ Function \t|\t INITIALIZED \t|\t Restricted Window Console");
       }
@@ -83,6 +86,7 @@ char Argument_Initialization(int argc, char *argv[]) {
 }
 
 char Function_CriticalComp_CheckCreate() {
+
     int Counter_DataPoint_Check;
     HWND console = 0;
     RECT ConsoleMainApp;
@@ -105,10 +109,8 @@ char Function_CriticalComp_CheckCreate() {
         puts("---------------------------------------------------------------------------------------------------");
         printf("COMPONENT MATERIAL\t|\t STATUS\t\t| DESCRIPTION\t\n");
         puts("---------------------------------------------------------------------------------------------------");
-        printf("Init.Component # 1 \t|\t COMPLETE \t| Resize and Move the Command Line with Respective Ordered Values\n");
-    MoveWindow(console, ConsoleMainApp.left, ConsoleMainApp.top, 1000, 500, TRUE);
         printf("Init.Component # 2 \t|\t COMPLETE \t| Disable Close Button\n");
-    EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
+    EnableMenuItem(hmenu, SC_CLOSE, MF_DISABLED);
         printf("Init.Component # 3.1 \t|\t CHECKING \t| Checking Local Database on Local Storage (Using .Dat File)\n");
     for (Counter_DataPoint_Check = 1; Counter_DataPoint_Check <= 3; Counter_DataPoint_Check++) {
         if (Counter_DataPoint_Check == 1) {

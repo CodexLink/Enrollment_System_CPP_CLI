@@ -128,7 +128,7 @@ int Stdnt_4thYear_ME_SecondSem();
 int main()
 {
     HWND hwnd = GetConsoleWindow();
-    ShowWindow(hwnd, SW_MAXIMIZE);
+    ShowWindow(hwnd, SHOW_FULLSCREEN); // Temporarily Commented due to Terminal Shows CMD but Small Font
     Main_Menu();
 }
 int Main_Menu()
@@ -138,18 +138,48 @@ int Main_Menu()
     { // This will loop forever because wtf is 1?
         int Selection_1 = 0;
         system("CLS");
-        puts("-----------------------------");
-        printf("Version " VERSION_NUMBER "\n");
-        printf(PRODUCT_NAME "\n");
-        puts("-----------------------------");
-        puts("Main Menu");
-        printf("[1] | Old Student\n");
-        printf("[2] | New Student\n");
-        printf("[3] | Reprint Enrollment Student Form | Registration Form\n");
-        printf("[4] | Exit Application\n");
-        printf("Please enter your decision [1 - 4] | ");
+        gotoxy(30, 3);
+        printf("\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+        gotoxy(30, 4);
+        printf("\xBA \xDD Version "VERSION_NUMBER"\t\t\t\t\t\t\t\t\t\t\xBA\n");
+        gotoxy(30, 5);
+        printf("\xBA \xDD "PRODUCT_NAME "\t\t\t\t\t\t\t\t\t\t\xBA\n");
+        gotoxy(30, 6);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+        gotoxy(30, 8);
+        printf("\xC9\xCD\xCD \xDD Main Menu \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+        gotoxy(30, 9);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\xBA");
+        gotoxy(30, 10);
+        printf("\xBA");
+        gotoxy(30, 11);
+        printf("\xBA [1] \xDD Old Student\n");
+        gotoxy(30, 12);
+        printf("\xBA");
+        gotoxy(30, 13);
+        printf("\xBA [2] \xDD New Student\n");
+        gotoxy(30, 14);
+        printf("\xBA");
+        gotoxy(30, 15);
+        printf("\xBA [3] \xDD Reprint Enrollment Student Form | Registration Form\n");
+        gotoxy(30, 16);
+        printf("\xBA");
+        gotoxy(30, 17);
+        printf("\xBA [4] \xDD Manage Enrollment");
+        gotoxy(30, 18);
+        printf("\xBA");
+        gotoxy(30, 19);
+        printf("\xBA [5] \xDD Exit Application\n");
+        gotoxy(30, 20);
+        printf("\xBA");
+        gotoxy(30, 21);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+        gotoxy(30, 23);
+        printf("\xC8\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBC\t");
+        gotoxy(30, 25);
+        printf("Please enter your decision [1 - 5] \xDD ");
         scanf("%i", &Selection_1);
-        fflush(stdin);
+        fflush(stdin); // Use fflush to flush \n because scanf always put \n when user inputs
         switch (Selection_1)
         {
         case 1:
@@ -162,6 +192,15 @@ int Main_Menu()
             Func_ERLM_Recheck();
             break;
         case 4:
+        gotoxy(30, 27);
+        printf("WARNING!");
+        gotoxy(30, 29);
+        printf("Access Denied! Please rerun the program with '/mgr_md' in order to access this function!\n");
+        gotoxy(30, 30);
+        printf("Press any key in the keyboard to terminate the program...");
+        getch();
+        return EXIT_SUCCESS;
+        case 5:
             SetConsoleTitle("Terminating Enrollment System | LM Enrollment System");
             puts("Terminating Enrollment System...");
             Sleep(3000);
@@ -405,7 +444,7 @@ int Func_NewStdnt_ERLM_Step2(struct New_StudentRecords NewData_Receiver)
             Func_NewStdnt_Eng_YearSelect(NewData_Receiver, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
         }
         if (MainCourse_Accepter == 3)
-        {
+        {  
             printf("You have selected %s. Moving Foward to Year Selection...", MainCourse_FullName[2]);
             Sleep(2000);
             strcpy(MainCourse_CodeName_Passer, MainCourse_CodeName[2]);
@@ -2505,6 +2544,8 @@ void PrintDocument_FinalTranscript()
 void Func_ERLM_Recheck() {
 
 }
+
+
 // Uncategoterized Function
 void gotoxy(int x, int y)
 {
