@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(Windows) Launch",
+            "name": "(Windows) C Application.Launch (Expected Build)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "enter program name, for example ${workspaceFolder}/a.exe",
-            "args": [],
+            "program": "${workspaceFolder}/Experimental/${fileBasenameNoExtension}.exe",
+            "args": ["/rstrict_wnd"], 
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

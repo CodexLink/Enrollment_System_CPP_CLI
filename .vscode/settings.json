@@ -59,6 +59,5 @@
         "haskell": "runhaskell",
         "nim": "nim compile --verbosity:0 --hints:off --run"
     },
-    "code-runner.runInTerminal": true,
-    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe"
+    "code-runner.runInTerminal": false,
 }
