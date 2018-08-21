@@ -4,6 +4,7 @@ An Enrollment Project that runs in CLI with C Language.
 
 ## Introduction / Information
 This project was one of our first project in programming that only circulates in C Language. Our goal is to make a responsive application that technically able to replicate a Web application / system called "Aris". Aris is one of the school web system that currently operates. With that, alternative can be done just in case.
+
 ## Getting Started
 
 
@@ -98,7 +99,7 @@ Here are the list of authors who is part of the project.
 
 ## License
 
-This project is licensed under the GNU v3 License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU v3 License - see the [LICENSE.md](https://github.com/CodexLink/Project_5MES_C/blob/master/README.md) file for details
 
 ## Acknowledgments
 
