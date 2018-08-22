@@ -63,15 +63,11 @@ Add additional notes about how to deploy this on a live system
 ## Built With
 
 * [Visual Studio Code](https://code.visualstudio.com/) - The primary text editor with Github Integration and other such stuffs. Secondary Compiler and Debugger.
-
 * [Dev C++](http://www.bloodshed.net/devcpp.html) - The secondary text editor for compiling with GCC, integrated to CMD.
-
 * [CppCheck](http://cppcheck.sourceforge.net/) - Cppcheck is a static code analysis tool for the C and C++ programming languages.
-
 * [Visual Studio Code Extension - Code Runner](https://github.com/formulahendry/vscode-code-runner) - A Visual Studio Code Extension used to easily build the program.
-
 * [Windows API / Win32API / Visual C / C++](https://docs.microsoft.com/en-us/windows/desktop/apiindex/windows-api-list) - A C / C++ Library API used to initialize / manipulate functions and windows and other such stuffs from Windows OS.
-* [LibSSH](https://www.libssh.org/) - libssh is a multiplatform C library implementing the SSHv2 and SSHv1 protocol on client and server side.
+* [Win32 Port of OpenSSH](https://github.com/PowerShell/Win32-OpenSSH) - Win32 port of OpenSSH.
 
 ## Contributing
 
