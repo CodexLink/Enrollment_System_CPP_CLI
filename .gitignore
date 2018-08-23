@@ -72,3 +72,6 @@ Experimental/.vs/Experimental_Argc_Argv_Extended/v15/.suo
 *.log
 Experimental/Win32Example_SetConsole.c
 Experimental/Example.c
+Debug/
+x64/
+flowchart/
