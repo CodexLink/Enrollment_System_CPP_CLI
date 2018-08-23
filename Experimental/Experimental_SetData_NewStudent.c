@@ -142,9 +142,9 @@ int Main_Menu()
         gotoxy(30, 3);
         printf("\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
         gotoxy(30, 4);
-        printf("\xBA \xDD Version "VERSION_NUMBER"\t\t\t\t\t\t\t\t\t       \xBA");
+        printf("\xBA \xDD Version " VERSION_NUMBER "\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 5);
-        printf("\xBA \xDD "PRODUCT_NAME "\t\t       \xBA");
+        printf("\xBA \xDD " PRODUCT_NAME "\t\t       \xBA");
         gotoxy(30, 6);
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
         gotoxy(30, 8);
@@ -189,14 +189,14 @@ int Main_Menu()
             Func_ERLM_Recheck();
             break;
         case 4:
-        gotoxy(30, 24);
-        printf("WARNING!");
-        gotoxy(30, 26);
-        printf("Access Denied! Please rerun the program with '/mgr_md' in order to access this function!\n");
-        gotoxy(30, 27);
-        printf("Press any key in the keyboard to terminate the program...");
-        getch();
-        return EXIT_SUCCESS;
+            gotoxy(30, 24);
+            printf("WARNING!");
+            gotoxy(30, 26);
+            printf("Access Denied! Please rerun the program with '/mgr_md' in order to access this function!\n");
+            gotoxy(30, 27);
+            printf("Press any key in the keyboard to terminate the program...");
+            getch();
+            return EXIT_SUCCESS;
         case 5:
             SetConsoleTitle("Terminating Enrollment System | LM Enrollment System");
             puts("Terminating Enrollment System...");
@@ -209,9 +209,9 @@ int Main_Menu()
         }
     }
 }
-void Func_OldStdnt_ERLM() 
+void Func_OldStdnt_ERLM()
 {
-struct Old_StudentRecords OldData;
+    struct Old_StudentRecords OldData;
     FILE *FileDatabase_ERLM;
     char datapoint_ERLM[] = "data/2018_LM_Database_Enrollment.dat";
     while (1)
@@ -227,14 +227,13 @@ struct Old_StudentRecords OldData;
         //)
         //{
 
-        
         //} else {
-            Func_OldStdnt_ERLM();
+        Func_OldStdnt_ERLM();
         //}
-    //printf("Hello %s | %d!\n", OldStudent.user_Username, OldStudent.user_StudentIdentity);
-    //printf("Also your password is %s\n", OldStudent.user_Password);
-    Func_OldStd_ERLM_Menu(OldData);
-}
+        //printf("Hello %s | %d!\n", OldStudent.user_Username, OldStudent.user_StudentIdentity);
+        //printf("Also your password is %s\n", OldStudent.user_Password);
+        Func_OldStd_ERLM_Menu(OldData);
+    }
 }
 int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
 {
@@ -441,7 +440,7 @@ int Func_NewStdnt_ERLM_Step2(struct New_StudentRecords NewData_Receiver)
             Func_NewStdnt_Eng_YearSelect(NewData_Receiver, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
         }
         if (MainCourse_Accepter == 3)
-        {  
+        {
             printf("You have selected %s. Moving Foward to Year Selection...", MainCourse_FullName[2]);
             Sleep(2000);
             strcpy(MainCourse_CodeName_Passer, MainCourse_CodeName[2]);
@@ -551,277 +550,352 @@ int Func_NewStdnt_Eng_YearSelect(struct New_StudentRecords NewData, char *MainCo
     printf("%s \t\t|\t\t %s | %s \t\t|\t\t %s\n", MainCourse_FullName_Passer, ERLM_Selection_Eng[YearSelection_Accepter_Eng], ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], MainCourse_CodeName_Passer);
     DataCheck = getchar();
     if (DataCheck == 'Y' || DataCheck == 'y')
-{
-    printf("Data Inputted | Yes. -> Going To The Next Step");
-    Sleep(2000);
-    // WARNING THERE ARE 64 IF AND ELSE FUNCTION INSIDE, STARTING AT THIS POINT
-    if (strcmp(MainCourse_CodeName_Passer, "BSCE") == 0) {
-        if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_1stYear_CE_FirstSem();
+    {
+        printf("Data Inputted | Yes. -> Going To The Next Step");
+        Sleep(2000);
+        // WARNING THERE ARE 64 IF AND ELSE FUNCTION INSIDE, STARTING AT THIS POINT
+        if (strcmp(MainCourse_CodeName_Passer, "BSCE") == 0)
+        {
+            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_1stYear_CE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_1stYear_CE_SecondSem();
+                }
             }
-            else {
-                Stdnt_1stYear_CE_SecondSem();
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_2ndYear_CE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_2ndYear_CE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_3rdYear_CE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_3rdYear_CE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_4thYear_CE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_4thYear_CE_SecondSem();
+                }
             }
         }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_2ndYear_CE_FirstSem();
+        if (strcmp(MainCourse_CodeName_Passer, "BSCpE") == 0)
+        {
+            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_1stYear_CpE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_1stYear_CpE_SecondSem();
+                }
             }
-            else {
-                Stdnt_2ndYear_CE_SecondSem();
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_2ndYear_CpE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_2ndYear_CpE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_3rdYear_CpE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_3rdYear_CpE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_4thYear_CpE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_4thYear_CpE_SecondSem();
+                }
             }
         }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_3rdYear_CE_FirstSem();
+        if (strcmp(MainCourse_CodeName_Passer, "BSEE") == 0)
+        {
+            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_1stYear_EE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_1stYear_EE_SecondSem();
+                }
             }
-            else {
-                Stdnt_3rdYear_CE_SecondSem();
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_2ndYear_EE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_2ndYear_EE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_3rdYear_EE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_3rdYear_EE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_4thYear_EE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_4thYear_EE_SecondSem();
+                }
             }
         }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_4thYear_CE_FirstSem();
+        if (strcmp(MainCourse_CodeName_Passer, "BSECE") == 0)
+        {
+            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_1stYear_ECE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_1stYear_ECE_SecondSem();
+                }
             }
-            else {
-                Stdnt_4thYear_CE_SecondSem();
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_2ndYear_ECE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_2ndYear_ECE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_3rdYear_ECE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_3rdYear_ECE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_4thYear_ECE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_4thYear_ECE_SecondSem();
+                }
+            }
+        }
+        if (strcmp(MainCourse_CodeName_Passer, "BSEnSE") == 0)
+        {
+            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_1stYear_EnSE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_1stYear_EnSE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_2ndYear_EnSE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_2ndYear_EnSE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_3rdYear_EnSE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_3rdYear_EnSE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_4thYear_EnSE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_4thYear_EnSE_SecondSem();
+                }
+            }
+        }
+        if (strcmp(MainCourse_CodeName_Passer, "BSIE") == 0)
+        {
+            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_1stYear_IE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_1stYear_IE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_2ndYear_IE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_2ndYear_IE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_3rdYear_IE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_3rdYear_IE_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_4thYear_IE_FirstSem();
+                }
+                else
+                {
+                    Stdnt_4thYear_IE_SecondSem();
+                }
+            }
+        }
+        if (strcmp(MainCourse_CodeName_Passer, "BSME") == 0)
+        {
+            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_1stYear_ME_FirstSem();
+                }
+                else
+                {
+                    Stdnt_1stYear_ME_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_2ndYear_ME_FirstSem();
+                }
+                else
+                {
+                    Stdnt_2ndYear_ME_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_3rdYear_ME_FirstSem();
+                }
+                else
+                {
+                    Stdnt_3rdYear_ME_SecondSem();
+                }
+            }
+            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
+                {
+                    Stdnt_4thYear_ME_FirstSem();
+                }
+                else
+                {
+                    Stdnt_4thYear_ME_SecondSem();
+                }
             }
         }
     }
-    if (strcmp(MainCourse_CodeName_Passer, "BSCpE") == 0) {
-        if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0) {
-            if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_1stYear_CpE_FirstSem();
-            }
-            else {
-                Stdnt_1stYear_CpE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0) {
-            if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_2ndYear_CpE_FirstSem();
-            }
-            else {
-                Stdnt_2ndYear_CpE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0) {
-            if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_3rdYear_CpE_FirstSem();
-            }
-            else {
-                Stdnt_3rdYear_CpE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0) {
-            if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_4thYear_CpE_FirstSem();
-            }
-            else {
-                Stdnt_4thYear_CpE_SecondSem();
-            }
-        }
+    else if (DataCheck == 'N' || DataCheck == 'n')
+    {
+        printf("Data Inputted | No. -> Returning to this Function! (Data Reinitiated!)");
+        Sleep(2000);
+        Func_NewStdnt_Eng_YearSelect(NewData, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
     }
-    if (strcmp(MainCourse_CodeName_Passer, "BSEE") == 0) {
-        if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0) {
-            if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_1stYear_EE_FirstSem();
-            }
-            else {
-                Stdnt_1stYear_EE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0) {
-            if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_2ndYear_EE_FirstSem();
-            }
-            else {
-                Stdnt_2ndYear_EE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0) {
-            if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_3rdYear_EE_FirstSem();
-            }
-            else {
-                Stdnt_3rdYear_EE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0) {
-            if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0) {
-                Stdnt_4thYear_EE_FirstSem();
-            }
-            else {
-                Stdnt_4thYear_EE_SecondSem();
-            }
-        }
+    else
+    {
+        printf("Data Inputted | Out of Range from Choices. Reinitializing Function! (Data Reinitiated!)");
+        Sleep(2000);
+        Func_NewStdnt_Eng_YearSelect(NewData, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
     }
-    if (strcmp(MainCourse_CodeName_Passer, "BSECE") == 0) {
-        if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_1stYear_ECE_FirstSem();
-            }
-            else {
-                Stdnt_1stYear_ECE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_2ndYear_ECE_FirstSem();
-            }
-            else {
-                Stdnt_2ndYear_ECE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_3rdYear_ECE_FirstSem();
-            }
-            else {
-                Stdnt_3rdYear_ECE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_4thYear_ECE_FirstSem();
-            }
-            else {
-                Stdnt_4thYear_ECE_SecondSem();
-            }
-        }
-    }
-    if (strcmp(MainCourse_CodeName_Passer, "BSEnSE") == 0) {
-        if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_1stYear_EnSE_FirstSem();
-            }
-            else {
-                Stdnt_1stYear_EnSE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_2ndYear_EnSE_FirstSem();
-            }
-            else {
-                Stdnt_2ndYear_EnSE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_3rdYear_EnSE_FirstSem();
-            }
-            else {
-                Stdnt_3rdYear_EnSE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_4thYear_EnSE_FirstSem();
-            }
-            else {
-                Stdnt_4thYear_EnSE_SecondSem();
-            }
-        }
-    }
-    if (strcmp(MainCourse_CodeName_Passer, "BSIE") == 0) {
-        if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_1stYear_IE_FirstSem();
-            }
-            else {
-                Stdnt_1stYear_IE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_2ndYear_IE_FirstSem();
-            }
-            else {
-                Stdnt_2ndYear_IE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_3rdYear_IE_FirstSem();
-            }
-            else {
-                Stdnt_3rdYear_IE_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_4thYear_IE_FirstSem();
-            }
-            else {
-                Stdnt_4thYear_IE_SecondSem();
-            }
-        }
-    }
-    if (strcmp(MainCourse_CodeName_Passer, "BSME") == 0) {
-        if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_1stYear_ME_FirstSem();
-            }
-            else {
-                Stdnt_1stYear_ME_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_2ndYear_ME_FirstSem();
-            }
-            else {
-                Stdnt_2ndYear_ME_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_3rdYear_ME_FirstSem();
-            }
-            else {
-                Stdnt_3rdYear_ME_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0) {
-            if(strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-            {
-                Stdnt_4thYear_ME_FirstSem();
-            }
-            else {
-                Stdnt_4thYear_ME_SecondSem();
-            }
-        }
-    }
-}
-else if (DataCheck == 'N' || DataCheck == 'n')
-{
-    printf("Data Inputted | No. -> Returning to this Function! (Data Reinitiated!)");
-    Sleep(2000);
-    Func_NewStdnt_Eng_YearSelect(NewData, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
-}
-else
-{
-    printf("Data Inputted | Out of Range from Choices. Reinitializing Function! (Data Reinitiated!)");
-    Sleep(2000);
-    Func_NewStdnt_Eng_YearSelect(NewData, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
-}
 }
 // Architecture Functions
 int Func_NewStdnt_Arch_YearSelect(struct New_StudentRecords NewData, char *MainCourse_CodeName_Passer)
@@ -865,82 +939,87 @@ int Func_NewStdnt_Arch_YearSelect(struct New_StudentRecords NewData, char *MainC
     printf("%s \t\t|\t\t %s | %s \t\t|\t\t %s", "Architecture", ERLM_Selection_Arch[YearSelection_Accepter_Arch], ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch], MainCourse_CodeName_Passer);
     scanf("%c", &DataCheck);
     if (DataCheck == 'Y' || DataCheck == 'y')
-{
-    printf("Data Inputted | Yes. -> Going To The Next Step");
-    Sleep(2000);
-    if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "1st Year College") == 0)
     {
-        if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+        printf("Data Inputted | Yes. -> Going To The Next Step");
+        Sleep(2000);
+        if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "1st Year College") == 0)
         {
-            Stdnt_1stYear_Arch_FirstSem();
+            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+            {
+                Stdnt_1stYear_Arch_FirstSem();
+            }
+            else
+            {
+                Stdnt_1stYear_Arch_SecondSem();
+            }
         }
-        else
+        else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "2nd Year College") == 0)
         {
-            Stdnt_1stYear_Arch_SecondSem();
+            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+            {
+                Stdnt_2ndYear_Arch_FirstSem();
+            }
+            else
+            {
+                Stdnt_2ndYear_Arch_SecondSem();
+            }
+        }
+        else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "3rd Year College") == 0)
+        {
+            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+            {
+                Stdnt_3rdYear_Arch_FirstSem();
+            }
+            else
+            {
+                Stdnt_3rdYear_Arch_SecondSem();
+            }
+        }
+        else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "4th Year College") == 0)
+        {
+            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+            {
+                Stdnt_4thYear_Arch_FirstSem();
+            }
+            else
+            {
+                Stdnt_4thYear_Arch_SecondSem();
+            }
+        }
+        else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "5th Year College") == 0)
+        {
+            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+            {
+                Stdnt_5thYear_Arch_FirstSem();
+            }
+            else
+            {
+                Stdnt_5thYear_Arch_SecondSem();
+            }
         }
     }
-    else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "2nd Year College") == 0)
+    else if (DataCheck == 'N' || DataCheck == 'n')
     {
-        if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
-        {
-            Stdnt_2ndYear_Arch_FirstSem();
-        }
-        else
-        {
-            Stdnt_2ndYear_Arch_SecondSem();
-        }
+        printf("Data Inputted | No. -> Returning to this Function! (Data Reinitiated!)");
+        Sleep(2000);
+        Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
     }
-    else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "3rd Year College") == 0)
+    else
     {
-        if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
-        {
-            Stdnt_3rdYear_Arch_FirstSem();
-        }
-        else
-        {
-            Stdnt_3rdYear_Arch_SecondSem();
-        }
+        printf("Data Inputted | Out of Range from Choices. Reinitializing Function! (Data Reinitiated!)");
+        Sleep(2000);
+        Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
     }
-    else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "4th Year College") == 0)
-    {
-        if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
-        {
-            Stdnt_4thYear_Arch_FirstSem();
-        }
-        else
-        {
-            Stdnt_4thYear_Arch_SecondSem();
-        }
-    }
-    else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "5th Year College") == 0)
-    {
-        if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
-        {
-            Stdnt_5thYear_Arch_FirstSem();
-        }
-        else
-        {
-            Stdnt_5thYear_Arch_SecondSem();
-        }
-    }
-}
-else if (DataCheck == 'N' || DataCheck == 'n')
-{
-    printf("Data Inputted | No. -> Returning to this Function! (Data Reinitiated!)");
-    Sleep(2000);
-    Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
-}
-else
-{
-    printf("Data Inputted | Out of Range from Choices. Reinitializing Function! (Data Reinitiated!)");
-    Sleep(2000);
-    Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
-}
 }
 
 //Architecture Selection Functions for Enrollment
-int Stdnt_1stYear_Arch_FirstSem() {
+int Stdnt_1stYear_Arch_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -948,23 +1027,28 @@ int Stdnt_1stYear_Arch_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_1stYear_Arch_SecondSem() {
+int Stdnt_1stYear_Arch_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -972,23 +1056,28 @@ int Stdnt_1stYear_Arch_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_Arch_FirstSem() {
+int Stdnt_2ndYear_Arch_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -996,23 +1085,28 @@ int Stdnt_2ndYear_Arch_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_Arch_SecondSem() {
+int Stdnt_2ndYear_Arch_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1020,23 +1114,28 @@ int Stdnt_2ndYear_Arch_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_Arch_FirstSem() {
+int Stdnt_3rdYear_Arch_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1044,23 +1143,28 @@ int Stdnt_3rdYear_Arch_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_Arch_SecondSem() {
+int Stdnt_3rdYear_Arch_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1068,23 +1172,28 @@ int Stdnt_3rdYear_Arch_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_Arch_FirstSem() {
+int Stdnt_4thYear_Arch_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1092,23 +1201,28 @@ int Stdnt_4thYear_Arch_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_Arch_SecondSem() {
+int Stdnt_4thYear_Arch_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1116,23 +1230,28 @@ int Stdnt_4thYear_Arch_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_5thYear_Arch_FirstSem() {
+int Stdnt_5thYear_Arch_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1140,23 +1259,28 @@ int Stdnt_5thYear_Arch_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_5thYear_Arch_SecondSem() {
+int Stdnt_5thYear_Arch_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1164,24 +1288,29 @@ int Stdnt_5thYear_Arch_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
 // Civil Engineer Selection Functions for Enrollment
-int Stdnt_1stYear_CE_FirstSem() {
+int Stdnt_1stYear_CE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1189,23 +1318,28 @@ int Stdnt_1stYear_CE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_1stYear_CE_SecondSem() {
+int Stdnt_1stYear_CE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1213,23 +1347,28 @@ int Stdnt_1stYear_CE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_CE_FirstSem() {
+int Stdnt_2ndYear_CE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1237,23 +1376,28 @@ int Stdnt_2ndYear_CE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_CE_SecondSem() {
+int Stdnt_2ndYear_CE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1261,23 +1405,28 @@ int Stdnt_2ndYear_CE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_CE_FirstSem() {
+int Stdnt_3rdYear_CE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1285,23 +1434,28 @@ int Stdnt_3rdYear_CE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_CE_SecondSem() {
+int Stdnt_3rdYear_CE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1309,22 +1463,23 @@ int Stdnt_3rdYear_CE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_CE_FirstSem() {
+int Stdnt_4thYear_CE_FirstSem()
+{
     int Subject_Selector;
     system("CLS");
     gotoxy(30, 3);
@@ -1345,11 +1500,16 @@ int Stdnt_4thYear_CE_FirstSem() {
     printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_CE_SecondSem() {
+int Stdnt_4thYear_CE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1357,24 +1517,29 @@ int Stdnt_4thYear_CE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
 // Computer Engineer Selection Functions for Enrollment
-int Stdnt_1stYear_CpE_FirstSem() {
+int Stdnt_1stYear_CpE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1382,23 +1547,28 @@ int Stdnt_1stYear_CpE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_1stYear_CpE_SecondSem() {
+int Stdnt_1stYear_CpE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1406,47 +1576,28 @@ int Stdnt_1stYear_CpE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_CpE_FirstSem() {
+int Stdnt_2ndYear_CpE_FirstSem()
+{
     int Subject_Selector;
-    system("CLS");
-    gotoxy(30,3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-    gotoxy(30, 4);
-    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
-    gotoxy(30, 5);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
-    //Continue Function...
-}
-int Stdnt_2ndYear_CpE_SecondSem() {
-    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1454,44 +1605,28 @@ int Stdnt_2ndYear_CpE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [ ] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-}
-int Stdnt_3rdYear_CpE_FirstSem() {
-    int Subject_Selector;
-    system("CLS");
-        gotoxy(30,3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-    gotoxy(30, 4);
-    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
-    gotoxy(30, 5);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_CpE_SecondSem() {
+int Stdnt_2ndYear_CpE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1499,23 +1634,25 @@ int Stdnt_3rdYear_CpE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [ ] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
-    //Continue Function...
 }
-int Stdnt_4thYear_CpE_FirstSem() {
+int Stdnt_3rdYear_CpE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1523,23 +1660,28 @@ int Stdnt_4thYear_CpE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_CpE_SecondSem() {
+int Stdnt_3rdYear_CpE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1547,24 +1689,87 @@ int Stdnt_4thYear_CpE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
+    scanf("%i", &Subject_Selector);
+    //Continue Function...
+}
+int Stdnt_4thYear_CpE_FirstSem()
+{
+    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+    system("CLS");
+    gotoxy(30, 3);
+    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+    gotoxy(30, 4);
+    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
+    gotoxy(30, 5);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
+    scanf("%i", &Subject_Selector);
+    //Continue Function...
+}
+int Stdnt_4thYear_CpE_SecondSem()
+{
+    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+    system("CLS");
+    gotoxy(30, 3);
+    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+    gotoxy(30, 4);
+    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
+    gotoxy(30, 5);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
 // Electrical Engineer Selection Functions for Enrollment
-int Stdnt_1stYear_EE_FirstSem() {
+int Stdnt_1stYear_EE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1572,23 +1777,28 @@ int Stdnt_1stYear_EE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_1stYear_EE_SecondSem() {
+int Stdnt_1stYear_EE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1596,23 +1806,28 @@ int Stdnt_1stYear_EE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_EE_FirstSem() {
+int Stdnt_2ndYear_EE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1620,23 +1835,28 @@ int Stdnt_2ndYear_EE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_EE_SecondSem() {
+int Stdnt_2ndYear_EE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1644,23 +1864,28 @@ int Stdnt_2ndYear_EE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_EE_FirstSem() {
+int Stdnt_3rdYear_EE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1668,23 +1893,28 @@ int Stdnt_3rdYear_EE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_EE_SecondSem() {
+int Stdnt_3rdYear_EE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1692,23 +1922,28 @@ int Stdnt_3rdYear_EE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_EE_FirstSem() {
+int Stdnt_4thYear_EE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1716,72 +1951,116 @@ int Stdnt_4thYear_EE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_EE_SecondSem() {
+int Stdnt_4thYear_EE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
-        gotoxy(30,3);
+    gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
     gotoxy(30, 4);
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
 // Electronics Engineer Selection Functions for Enrollment
-int Stdnt_1stYear_ECE_FirstSem() {
+int Stdnt_1stYear_ECE_FirstSem()
+{
     system("CLS");
     gotoxy(30, 3);
- int Subject_Selector;
+    int Subject_Selector;
+    char *Subject_FullNameEncoded[10];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
     gotoxy(30, 4);
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
+    //Continue F\tunct\t Subject.TimeLineari\t\xDD\t n...
+}
+int Stdnt_1stYear_ECE_SecondSem()
+{
+    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+    system("CLS");
+    gotoxy(30, 3);
+    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+    gotoxy(30, 4);
+    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
+    gotoxy(30, 5);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_1stYear_ECE_SecondSem() {
+int Stdnt_2ndYear_ECE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1789,23 +2068,28 @@ int Stdnt_1stYear_ECE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_ECE_FirstSem() {
+int Stdnt_2ndYear_ECE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1813,23 +2097,28 @@ int Stdnt_2ndYear_ECE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_ECE_SecondSem() {
+int Stdnt_3rdYear_ECE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1837,23 +2126,28 @@ int Stdnt_2ndYear_ECE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_ECE_FirstSem() {
+int Stdnt_3rdYear_ECE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1861,23 +2155,28 @@ int Stdnt_3rdYear_ECE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_ECE_SecondSem() {
+int Stdnt_4thYear_ECE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1885,23 +2184,28 @@ int Stdnt_3rdYear_ECE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_ECE_FirstSem() {
+int Stdnt_4thYear_ECE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1909,48 +2213,29 @@ int Stdnt_4thYear_ECE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
-    //Continue Function...
-}
-int Stdnt_4thYear_ECE_SecondSem() {
-    int Subject_Selector;
-    system("CLS");
-    gotoxy(30, 3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-    gotoxy(30, 4);
-    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
-    gotoxy(30, 5);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
 // Environmental and Sanitary Engineer Selection Functions for Enrollment
-int Stdnt_1stYear_EnSE_FirstSem() {
- int Subject_Selector;
+int Stdnt_1stYear_EnSE_FirstSem()
+{
+    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1958,23 +2243,28 @@ int Stdnt_1stYear_EnSE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_1stYear_EnSE_SecondSem() {
+int Stdnt_1stYear_EnSE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -1982,47 +2272,57 @@ int Stdnt_1stYear_EnSE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_EnSE_FirstSem() {
+int Stdnt_2ndYear_EnSE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
-        gotoxy(30,3);
+    gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
     gotoxy(30, 4);
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrollled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_EnSE_SecondSem() {
+int Stdnt_2ndYear_EnSE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2030,23 +2330,28 @@ int Stdnt_2ndYear_EnSE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_EnSE_FirstSem() {
+int Stdnt_3rdYear_EnSE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2054,47 +2359,28 @@ int Stdnt_3rdYear_EnSE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_EnSE_SecondSem() {
+int Stdnt_3rdYear_EnSE_SecondSem()
+{
     int Subject_Selector;
-    system("CLS");
-    gotoxy(30,3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-    gotoxy(30, 4);
-    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
-    gotoxy(30, 5);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
-    //Continue Function...
-}
-int Stdnt_4thYear_EnSE_FirstSem() {
-    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2102,23 +2388,28 @@ int Stdnt_4thYear_EnSE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_EnSE_SecondSem() {
+int Stdnt_4thYear_EnSE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2126,24 +2417,58 @@ int Stdnt_4thYear_EnSE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
+    //Continue Function...
+}
+int Stdnt_4thYear_EnSE_SecondSem()
+{
+    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+    system("CLS");
+    gotoxy(30, 3);
+    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+    gotoxy(30, 4);
+    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
+    gotoxy(30, 5);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
 // Industrial Engineer Selection Functions for Enrollment
-int Stdnt_1stYear_IE_FirstSem() {
+int Stdnt_1stYear_IE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2151,23 +2476,28 @@ int Stdnt_1stYear_IE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_1stYear_IE_SecondSem() {
+int Stdnt_1stYear_IE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2175,23 +2505,28 @@ int Stdnt_1stYear_IE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_IE_FirstSem() {
+int Stdnt_2ndYear_IE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2199,23 +2534,28 @@ int Stdnt_2ndYear_IE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_IE_SecondSem() {
+int Stdnt_2ndYear_IE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2223,47 +2563,28 @@ int Stdnt_2ndYear_IE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_IE_FirstSem() {
+int Stdnt_3rdYear_IE_FirstSem()
+{
     int Subject_Selector;
-    system("CLS");
-        gotoxy(30,3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-    gotoxy(30, 4);
-    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
-    gotoxy(30, 5);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
-    //Continue Function...
-}
-int Stdnt_3rdYear_IE_SecondSem() {
-    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2271,23 +2592,28 @@ int Stdnt_3rdYear_IE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_IE_FirstSem() {
+int Stdnt_3rdYear_IE_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2295,23 +2621,28 @@ int Stdnt_4thYear_IE_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_IE_SecondSem() {
+int Stdnt_4thYear_IE_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2319,24 +2650,58 @@ int Stdnt_4thYear_IE_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
+    //Continue Function...
+}
+int Stdnt_4thYear_IE_SecondSem()
+{
+    int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+    system("CLS");
+    gotoxy(30, 3);
+    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+    gotoxy(30, 4);
+    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
+    gotoxy(30, 5);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
 // Mechanical Engineer Selection Functions for Enrollment
-int Stdnt_1stYear_ME_FirstSem() {
+int Stdnt_1stYear_ME_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2344,23 +2709,28 @@ int Stdnt_1stYear_ME_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_1stYear_ME_SecondSem() {
+int Stdnt_1stYear_ME_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2368,23 +2738,28 @@ int Stdnt_1stYear_ME_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_ME_FirstSem() {
+int Stdnt_2ndYear_ME_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2392,23 +2767,28 @@ int Stdnt_2ndYear_ME_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_2ndYear_ME_SecondSem() {
+int Stdnt_2ndYear_ME_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2416,23 +2796,28 @@ int Stdnt_2ndYear_ME_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_ME_FirstSem() {
+int Stdnt_3rdYear_ME_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2440,23 +2825,28 @@ int Stdnt_3rdYear_ME_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_3rdYear_ME_SecondSem() {
+int Stdnt_3rdYear_ME_SecondSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2464,23 +2854,28 @@ int Stdnt_3rdYear_ME_SecondSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_ME_FirstSem() {
+int Stdnt_4thYear_ME_FirstSem()
+{
     int Subject_Selector;
+    char *Subject_FullNameEncoded[11];
+    char *Subject_FullNameEncode_Bool[11];
+    char *Subject_Units[11];
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
     system("CLS");
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
@@ -2488,46 +2883,123 @@ int Stdnt_4thYear_ME_FirstSem() {
     printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
+    printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+    printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+    scanf("%i", &Subject_Selector);
     //Continue Function...
 }
-int Stdnt_4thYear_ME_SecondSem() {
-    int Subject_Selector;
-    system("CLS");
-    gotoxy(30, 3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-    gotoxy(30, 4);
-    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
-    gotoxy(30, 5);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xBA [0] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [1] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [2] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [3] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [4] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [5] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [6] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [7] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [8] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xBA [9] \xAF Year.Subject \xDD  Sem.Units\xBA\n");
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-    printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-    scanf("%i",&Subject_Selector);
+int Stdnt_4thYear_ME_SecondSem()
+{
+    while (1)
+    {
+        int Subject_Selector, Final_Comp_SelectedSubjects = 0, Final_Comp_SemUnits = 0, Subject_Counter = 0;
+        char *Subject_FullNameEncoded[11];
+        char *Subject_FullNameEncode_Bool[11];
+        char *Subject_Units[11];
+        char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+        system("CLS");
+        gotoxy(30, 3);
+        printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+        gotoxy(30, 4);
+        printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
+        gotoxy(30, 5);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+        printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+        while (Subject_Counter <= 12)
+        {
+            if (strcmp(Subject_FullNameEncode_Bool[Subject_Counter], "TRUE") == 0)
+            {
+                Final_Comp_SelectedSubjects++;
+                //Final_Comp_SemUnits += Subject_Units[Subject_Counter];
+                Subject_Counter++;
+            }
+        }
+        printf("CURRENT STATISTICS");
+        printf("Total Selected Subjects: %i \t \xAF Total Units: %i\n", Final_Comp_SelectedSubjects, Final_Comp_SemUnits);
+        printf("INPUT");
+        printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
+        scanf("%i", &Subject_Selector);
+        fflush(stdin);
+        //PRINT OUTSIDE
+        printf("PROPERTIES");
+        printf("Press 10 To Encode All\tPress Any Subject Number Order To Encode\tEnter 'X or x' to proceed.");
+        if (Subject_Selector == 1)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 2)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 3)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 4)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 5)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 6)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 7)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 8)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 9)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 10)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 11)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else if (Subject_Selector == 12)
+        {
+            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+        }
+        else
+        {
+            printf("You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Funcition...");
+            Sleep(2000);
+            Stdnt_4thYear_ME_SecondSem();
+        }
+    }
     //Continue Function...
 }
-
 
 int Func_Stdnt_ScholarshipCheck()
 {
@@ -2538,10 +3010,9 @@ void PrintDocument_FinalTranscript()
     //FILE*
 }
 
-void Func_ERLM_Recheck() {
-
+void Func_ERLM_Recheck()
+{
 }
-
 
 // Uncategoterized Function
 void gotoxy(int x, int y)
