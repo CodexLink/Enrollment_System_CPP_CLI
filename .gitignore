@@ -69,5 +69,6 @@ Experimental/.vs/Experimental_Argc_Argv_Extended/v15/.suo
 *.tlog
 *.exe
 *.dat
+*.log
 Experimental/Win32Example_SetConsole.c
 Experimental/Example.c
