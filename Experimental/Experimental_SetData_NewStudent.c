@@ -202,6 +202,8 @@ int Main_Menu()
             puts("Terminating Enrollment System...");
             Sleep(3000);
             return EXIT_SUCCESS;
+        case 6:
+        Stdnt_4thYear_ME_SecondSem();
         default:
             printf("Invalid Choice...");
             Sleep(3000);
@@ -239,9 +241,8 @@ int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
 {
     FILE *FileDatabase_ERLM;
     char datapoint_ERLM[] = "data/2018_LM_Database_Enrollment.dat";
-    int Database_Check;
-    Database_Check = fopen(datapoint_ERLM, "rb");
-    if (Database_Check == NULL)
+    FileDatabase_ERLM = fopen(datapoint_ERLM, "rb");
+    if (FileDatabase_ERLM == NULL)
     {
         printf("Database Not Found, Terminating Program...");
         printf("Exit Code is %i", DATABASE_NOT_FOUND);
@@ -317,12 +318,12 @@ void Func_NewStdnt_ERLM()
     printf("\n");
     puts("--- TECHNICAL INFORMATION -------------------------------------------------------------------------");
     printf("\n [8] Mobile Number \xDD\xAF ");
-    scanf("%11ld", &NewData.stdnt_MobileNum);
+    scanf("%11li", &NewData.stdnt_MobileNum);
     printf("\n [9] Phone Number \xDD\xAF ");
-    scanf("%11ld", &NewData.stdnt_PhoneNum);
+    scanf("%11li", &NewData.stdnt_PhoneNum);
     printf("\n [10] Emergency Number and Emergency Point of Contact (Seperated)\n");
     printf("\n [10.1] Input Emergency Number \xDD\xAF ");
-    scanf("%11ld", &NewData.stdnt_EmerNum);
+    scanf("%11li", &NewData.stdnt_EmerNum);
     fflush(stdin);
     printf("\n [10.2] Input Name Emergency Point of Contact |> ");
     fgets(NewData.stdnt_POC_Emergency, sizeof(NewData.stdnt_POC_Emergency), stdin);
@@ -468,7 +469,7 @@ int Func_NewStdnt_ERLM_Step2(struct New_StudentRecords NewData_Receiver)
         }
         if (MainCourse_Accepter == 6)
         {
-            printf("You have selected %s. Moving Foward to Year Selection...", MainCourse_FullName[6]);
+            printf("You have selected %s. Moving Foward to Year Selection...", MainCourse_FullName[5]);
             Sleep(2000);
             strcpy(MainCourse_CodeName_Passer, MainCourse_CodeName[5]);
             fflush(stdin); // Remove This Soon
@@ -516,385 +517,506 @@ int Func_NewStdnt_Eng_YearSelect(struct New_StudentRecords NewData, char *MainCo
     char DataCheck = 'A';
     char *ERLM_Selection_Eng[4] = {"1st Year College", "2nd Year College", "3rd Year College", "4th Year College"};
     char *ERLM_Selection_Eng_Sem[2] = {"1st Semester", "2nd Semester"};
-    printf("--! 1st | [2nd Step - Course Registration | Year Select] | 3rd | 4th | 5th | Confirm | End --!\n\n");
-    printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
-    printf("CODENAME   |     COURSE NAME     |    STUDENT NAME\n");
-    printf("%s   |     %s      %s,  %s  %s", MainCourse_CodeName_Passer, MainCourse_CodeName_Passer, NewData.stdnt_LName, NewData.stdnt_FName, NewData.stdnt_MName);
-    printf("\n\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
-    printf("[0] 1st Year College\n");
-    printf("[1] 2nd Year College\n");
-    printf("[2] 3rd Year College\n");
-    printf("[3] 4th Year College\n");
-    printf("\n\xAF Please Select Desired College Year Level [0-3] \xAF ");
-    scanf("%i", &YearSelection_Accepter_Eng);
-    printf("You have selected %s", ERLM_Selection_Eng[YearSelection_Accepter_Eng]);
-    Sleep(2000);
-    system("CLS");
-    printf("--! 1st | [2nd Step - Course Registration | Year Select] | 3rd | 4th | 5th | Confirm | End --!\n\n");
-    printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
-    printf("\tCODENAME\t|\tNAME\t");
-    printf("%s\t | \t%s,%s %s\t\t", MainCourse_CodeName_Passer, NewData.stdnt_LName, NewData.stdnt_FName, NewData.stdnt_MName);
-    printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n\n");
-    fflush(stdin);
-    printf("[0] | First Semester\n");
-    printf("[1] | Second Semester\n");
-    printf("Please choose your Desired Semester [0-1] \xAF ");
-    scanf("%i", &YearSelection_Accepter_Eng_Sem);
-    fflush(stdin);
-    printf("You have selected %s", ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem]);
-    Sleep(2000);
-    system("CLS");
-    printf("\xCD\xCD\xCD CONFIRMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n\n");
-    printf("Are you sure is this correct?\n\n");
-    printf("\xCD\xCD COURSE NAME \t\t|\t\t YEAR LEVEL && SEMESTER \t\t|\t\t COURSE CODE \n");
-    printf("%s \t\t|\t\t %s | %s \t\t|\t\t %s\n", MainCourse_FullName_Passer, ERLM_Selection_Eng[YearSelection_Accepter_Eng], ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], MainCourse_CodeName_Passer);
-    DataCheck = getchar();
-    if (DataCheck == 'Y' || DataCheck == 'y')
+    while (1)
     {
-        printf("Data Inputted | Yes. -> Going To The Next Step");
-        Sleep(2000);
-        // WARNING THERE ARE 64 IF AND ELSE FUNCTION INSIDE, STARTING AT THIS POINT
-        if (strcmp(MainCourse_CodeName_Passer, "BSCE") == 0)
+        printf("--! 1st | [2nd Step - Course Registration | Year Select] | 3rd | 4th | 5th | Confirm | End --!\n\n");
+        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
+        printf("CODENAME   |     COURSE NAME     |    STUDENT NAME\n");
+        printf("%s   |     %s      %s,  %s  %s", MainCourse_CodeName_Passer, MainCourse_CodeName_Passer, NewData.stdnt_LName, NewData.stdnt_FName, NewData.stdnt_MName);
+        printf("\n\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
+        printf("[1] 1st Year College\n");
+        printf("[2] 2nd Year College\n");
+        printf("[3] 3rd Year College\n");
+        printf("[4] 4th Year College\n");
+        printf("\n\xAF Please Select Desired College Year Level [1 - 4] \xAF ");
+        scanf("%i", &YearSelection_Accepter_Eng);
+        if (YearSelection_Accepter_Eng == 1)
         {
-            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_1stYear_CE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_1stYear_CE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_2ndYear_CE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_2ndYear_CE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_3rdYear_CE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_3rdYear_CE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_4thYear_CE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_4thYear_CE_SecondSem();
-                }
-            }
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1]);
+            break;
         }
-        if (strcmp(MainCourse_CodeName_Passer, "BSCpE") == 0)
+        else if (YearSelection_Accepter_Eng == 2)
         {
-            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_1stYear_CpE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_1stYear_CpE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_2ndYear_CpE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_2ndYear_CpE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_3rdYear_CpE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_3rdYear_CpE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_4thYear_CpE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_4thYear_CpE_SecondSem();
-                }
-            }
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1]);
+            break;
         }
-        if (strcmp(MainCourse_CodeName_Passer, "BSEE") == 0)
+        else if (YearSelection_Accepter_Eng == 3)
         {
-            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_1stYear_EE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_1stYear_EE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_2ndYear_EE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_2ndYear_EE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_3rdYear_EE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_3rdYear_EE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_4thYear_EE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_4thYear_EE_SecondSem();
-                }
-            }
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1]);
+            break;
         }
-        if (strcmp(MainCourse_CodeName_Passer, "BSECE") == 0)
+        else if (YearSelection_Accepter_Eng == 4)
         {
-            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_1stYear_ECE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_1stYear_ECE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_2ndYear_ECE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_2ndYear_ECE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_3rdYear_ECE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_3rdYear_ECE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_4thYear_ECE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_4thYear_ECE_SecondSem();
-                }
-            }
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1]);
+            break;
         }
-        if (strcmp(MainCourse_CodeName_Passer, "BSEnSE") == 0)
+        else
         {
-            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_1stYear_EnSE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_1stYear_EnSE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_2ndYear_EnSE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_2ndYear_EnSE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_3rdYear_EnSE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_3rdYear_EnSE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_4thYear_EnSE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_4thYear_EnSE_SecondSem();
-                }
-            }
-        }
-        if (strcmp(MainCourse_CodeName_Passer, "BSIE") == 0)
-        {
-            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_1stYear_IE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_1stYear_IE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_2ndYear_IE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_2ndYear_IE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_3rdYear_IE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_3rdYear_IE_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_4thYear_IE_FirstSem();
-                }
-                else
-                {
-                    Stdnt_4thYear_IE_SecondSem();
-                }
-            }
-        }
-        if (strcmp(MainCourse_CodeName_Passer, "BSME") == 0)
-        {
-            if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "1st Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_1stYear_ME_FirstSem();
-                }
-                else
-                {
-                    Stdnt_1stYear_ME_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "2nd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_2ndYear_ME_FirstSem();
-                }
-                else
-                {
-                    Stdnt_2ndYear_ME_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "3rd Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_3rdYear_ME_FirstSem();
-                }
-                else
-                {
-                    Stdnt_3rdYear_ME_SecondSem();
-                }
-            }
-            else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng], "4th Year College") == 0)
-            {
-                if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem], "First Semester") == 0)
-                {
-                    Stdnt_4thYear_ME_FirstSem();
-                }
-                else
-                {
-                    Stdnt_4thYear_ME_SecondSem();
-                }
-            }
+            fflush(stdin);
+            printf("Your input is invalid from the choices...");
+            Sleep(2000);
+            continue;
         }
     }
-    else if (DataCheck == 'N' || DataCheck == 'n')
+    Sleep(2000);
+    system("CLS");
+
+    while (1)
     {
-        printf("Data Inputted | No. -> Returning to this Function! (Data Reinitiated!)");
-        Sleep(2000);
-        Func_NewStdnt_Eng_YearSelect(NewData, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
+        printf("--! 1st | [2nd Step - Course Registration | Year Select] | 3rd | 4th | 5th | Confirm | End --!\n\n");
+        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
+        printf("\tCODENAME\t|\tNAME\t");
+        printf("%s\t | \t%s,%s %s\t\t", MainCourse_CodeName_Passer, NewData.stdnt_LName, NewData.stdnt_FName, NewData.stdnt_MName);
+        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n\n");
+        fflush(stdin);
+        printf("[1] | First Semester\n");
+        printf("[2] | Second Semester\n");
+        printf("Please choose your Desired Semester [1 - 2] \xAF ");
+        scanf("%i", &YearSelection_Accepter_Eng_Sem);
+
+        if (YearSelection_Accepter_Eng_Sem == 1)
+        {
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1]);
+            break;
+        }
+        else if (YearSelection_Accepter_Eng_Sem == 2)
+        {
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1]);
+            break;
+        }
+        else
+        {
+            fflush(stdin);
+            printf("Your input is invalid from the choices...");
+            Sleep(2000);
+            continue;
+        }
     }
-    else
+    Sleep(2000);
+    system("CLS");
+
+    while (1)
     {
-        printf("Data Inputted | Out of Range from Choices. Reinitializing Function! (Data Reinitiated!)");
-        Sleep(2000);
-        Func_NewStdnt_Eng_YearSelect(NewData, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
+        printf("\xCD\xCD\xCD CONFIRMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n\n");
+        printf("Are you sure is this correct?\n\n");
+        printf("\xCD\xCD COURSE NAME \t\t|\t\t YEAR LEVEL && SEMESTER \t\t|\t\t COURSE CODE \n");
+        printf("%s \t\t|\t\t %s | %s \t\t|\t\t %s\n", MainCourse_FullName_Passer, ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], MainCourse_CodeName_Passer);
+        DataCheck = getchar();
+        if (DataCheck == 'Y' || DataCheck == 'y')
+        {
+            printf("Data Inputted | Yes. -> Going To The Next Step");
+            Sleep(2000);
+            // WARNING THERE ARE 64 IF AND ELSE FUNCTION INSIDE, STARTING AT THIS POINT
+            if (strcmp(MainCourse_CodeName_Passer, "BSCE") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "1st Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_1stYear_CE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_1stYear_CE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "2nd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_2ndYear_CE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_2ndYear_CE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "3rd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_3rdYear_CE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_3rdYear_CE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "4th Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_4thYear_CE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_4thYear_CE_SecondSem();
+                        break;
+                    }
+                }
+            }
+            if (strcmp(MainCourse_CodeName_Passer, "BSCpE") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "1st Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_1stYear_CpE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_1stYear_CpE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "2nd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_2ndYear_CpE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_2ndYear_CpE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "3rd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_3rdYear_CpE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_3rdYear_CpE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "4th Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_4thYear_CpE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_4thYear_CpE_SecondSem();
+                        break;
+                    }
+                }
+            }
+            if (strcmp(MainCourse_CodeName_Passer, "BSEE") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "1st Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_1stYear_EE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_1stYear_EE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "2nd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_2ndYear_EE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_2ndYear_EE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "3rd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_3rdYear_EE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_3rdYear_EE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "4th Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_4thYear_EE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_4thYear_EE_SecondSem();
+                        break;
+                    }
+                }
+            }
+            if (strcmp(MainCourse_CodeName_Passer, "BSECE") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "1st Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_1stYear_ECE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_1stYear_ECE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "2nd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_2ndYear_ECE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_2ndYear_ECE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "3rd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_3rdYear_ECE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_3rdYear_ECE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "4th Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_4thYear_ECE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_4thYear_ECE_SecondSem();
+                        break;
+                    }
+                }
+            }
+            if (strcmp(MainCourse_CodeName_Passer, "BSEnSE") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "1st Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_1stYear_EnSE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_1stYear_EnSE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "2nd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_2ndYear_EnSE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_2ndYear_EnSE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "3rd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_3rdYear_EnSE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_3rdYear_EnSE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "4th Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_4thYear_EnSE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_4thYear_EnSE_SecondSem();
+                        break;
+                    }
+                }
+            }
+            if (strcmp(MainCourse_CodeName_Passer, "BSIE") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "1st Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_1stYear_IE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_1stYear_IE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "2nd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_2ndYear_IE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_2ndYear_IE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "3rd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_3rdYear_IE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_3rdYear_IE_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "4th Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_4thYear_IE_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_4thYear_IE_SecondSem();
+                        break;
+                    }
+                }
+            }
+            if (strcmp(MainCourse_CodeName_Passer, "BSME") == 0)
+            {
+                if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "1st Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_1stYear_ME_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_1stYear_ME_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "2nd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_2ndYear_ME_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_2ndYear_ME_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "3rd Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_3rdYear_ME_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_3rdYear_ME_SecondSem();
+                        break;
+                    }
+                }
+                else if (strcmp(ERLM_Selection_Eng[YearSelection_Accepter_Eng - 1], "4th Year College") == 0)
+                {
+                    if (strcmp(ERLM_Selection_Eng_Sem[YearSelection_Accepter_Eng_Sem - 1], "First Semester") == 0)
+                    {
+                        Stdnt_4thYear_ME_FirstSem();
+                        break;
+                    }
+                    else
+                    {
+                        Stdnt_4thYear_ME_SecondSem();
+                        break;
+                    }
+                }
+                else
+                {
+                    printf("\xDD\xAF ERROR! : Comparison OUT OF RANGE. This is a bug or flow issue. Please report it to the developer.");
+                    return EXIT_FAILURE;
+                }
+            }
+        }
+        else if (DataCheck == 'N' || DataCheck == 'n')
+        {
+            printf("Going back...");
+            Sleep(2000);
+            continue;
+            //Func_NewStdnt_Eng_YearSelect(NewData, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
+        }
+        else
+        {
+            printf("Your input is 'Out of Range' from the Choices!");
+            Sleep(2000);
+            continue;
+        }
     }
 }
 // Architecture Functions
@@ -905,110 +1027,179 @@ int Func_NewStdnt_Arch_YearSelect(struct New_StudentRecords NewData, char *MainC
     char DataCheck = 'A';
     char *ERLM_Selection_Arch[5] = {"1st Year College", "2nd Year College", "3rd Year College", "4th Year College", "5th Year College"};
     char *ERLM_Selection_Arch_Sem[2] = {"1st Semester", "2nd Semester"};
-    printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD");
-    printf("\t\t CODENAME \t | \t COURSE NAME \t | \t STUDENT NAME\n");
-    printf("\t\t %s \t\t | %s,%s,%s\t\t", MainCourse_CodeName_Passer, NewData.stdnt_LName, NewData.stdnt_FName, NewData.stdnt_MName);
-    printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
-    printf("[0] 1st Year College");
-    printf("[1] 2nd Year College");
-    printf("[2] 3rd Year College");
-    printf("[3] 4th Year College");
-    printf("[4] 5th Year College");
-    printf("\n\xAF Please Select Your Year \xAF ");
-    scanf("%i", &YearSelection_Accepter_Arch);
-    printf("You have selected %s", ERLM_Selection_Arch[YearSelection_Accepter_Arch]);
+    while (1)
+    {
+        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD");
+        printf("\t\t CODENAME \t | \t COURSE NAME \t | \t STUDENT NAME\n");
+        printf("\t\t %s \t\t | %s,%s,%s\t\t", MainCourse_CodeName_Passer, NewData.stdnt_LName, NewData.stdnt_FName, NewData.stdnt_MName);
+        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
+        printf("[0] 1st Year College");
+        printf("[1] 2nd Year College");
+        printf("[2] 3rd Year College");
+        printf("[3] 4th Year College");
+        printf("[4] 5th Year College");
+        printf("\n\xAF Please Select Your Year \xAF ");
+        scanf("%i", &YearSelection_Accepter_Arch);
+        if (YearSelection_Accepter_Arch == 1)
+        {
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Arch[YearSelection_Accepter_Arch - 1]);
+            break;
+        }
+        else if (YearSelection_Accepter_Arch == 2)
+        {
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Arch[YearSelection_Accepter_Arch - 1]);
+            break;
+        }
+        else if (YearSelection_Accepter_Arch == 3)
+        {
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Arch[YearSelection_Accepter_Arch - 1]);
+            break;
+        }
+        else if (YearSelection_Accepter_Arch == 4)
+        {
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Arch[YearSelection_Accepter_Arch - 1]);
+            break;
+        }
+        else
+        {
+            fflush(stdin);
+            printf("Your input is invalid from the choices...");
+            Sleep(2000);
+            continue;
+        }
+    }
     Sleep(2000);
     system("CLS");
-    printf("--! 1st | [2nd Step - Course Registration | Year Select] | 3rd | 4th | 5th | Confirm | End --!\n\n");
-    printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD");
-    printf("\t\t CODENAME \t\t | \t\t NAME \t\t ");
-    printf("\t\t %s \t\t | %s,%s,%s\t\t", MainCourse_CodeName_Passer, NewData.stdnt_LName, NewData.stdnt_FName, NewData.stdnt_MName);
-    printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD");
-    fflush(stdin);
-    printf("[1] | First Semester");
-    printf("[2] | Second Semester");
-    printf("Please choose your Semester: \xAF ");
-    scanf("%i", &YearSelection_Accepter_Arch_Sem);
-    fflush(stdin);
-    printf("You have selected %s", ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem]);
+    while (1)
+    {
+        printf("--! 1st | [2nd Step - Course Registration | Year Select] | 3rd | 4th | 5th | Confirm | End --!\n\n");
+        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD");
+        printf("\t\t CODENAME \t\t | \t\t NAME \t\t ");
+        printf("\t\t %s \t\t | %s,%s,%s\t\t", MainCourse_CodeName_Passer, NewData.stdnt_LName, NewData.stdnt_FName, NewData.stdnt_MName);
+        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD");
+        fflush(stdin);
+        printf("[1] | First Semester");
+        printf("[2] | Second Semester");
+        printf("Please choose your Semester: \xAF ");
+        scanf("%i", &YearSelection_Accepter_Arch_Sem);
+        fflush(stdin);
 
+        if (YearSelection_Accepter_Arch_Sem == 1)
+        {
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem - 1]);
+            break;
+        }
+        else if (YearSelection_Accepter_Arch_Sem == 2)
+        {
+            fflush(stdin);
+            printf("You have selected %s", ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem - 1]);
+            break;
+        }
+        else
+        {
+            fflush(stdin);
+            printf("Your input is invalid from the choices...");
+            Sleep(2000);
+            continue;
+        }
+    }
     system("CLS");
-    printf("\xCD\xCD\xCD CONFIRMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n\n");
-    printf("Are you sure is this correct?\n\n");
-    printf("\xCD\xCD COURSE NAME \t\t|\t\t YEAR LEVEL && SEMESTER \t\t|\t\t COURSE CODE ");
-    printf("%s \t\t|\t\t %s | %s \t\t|\t\t %s", "Architecture", ERLM_Selection_Arch[YearSelection_Accepter_Arch], ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch], MainCourse_CodeName_Passer);
-    scanf("%c", &DataCheck);
-    if (DataCheck == 'Y' || DataCheck == 'y')
+    while (1)
     {
-        printf("Data Inputted | Yes. -> Going To The Next Step");
-        Sleep(2000);
-        if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "1st Year College") == 0)
+        printf("\xCD\xCD\xCD CONFIRMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n\n");
+        printf("Are you sure is this correct?\n\n");
+        printf("\xCD\xCD COURSE NAME \t\t|\t\t YEAR LEVEL && SEMESTER \t\t|\t\t COURSE CODE ");
+        printf("%s \t\t|\t\t %s | %s \t\t|\t\t %s", "Architecture", ERLM_Selection_Arch[YearSelection_Accepter_Arch], ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch], MainCourse_CodeName_Passer);
+        scanf("%c", &DataCheck);
+        if (DataCheck == 'Y' || DataCheck == 'y')
         {
-            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+            printf("Data Inputted | Yes. -> Going To The Next Step");
+            Sleep(2000);
+            if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "1st Year College") == 0)
             {
-                Stdnt_1stYear_Arch_FirstSem();
+                if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+                {
+                    Stdnt_1stYear_Arch_FirstSem();
+                    break;
+                }
+                else
+                {
+                    Stdnt_1stYear_Arch_SecondSem();
+                    break;
+                }
             }
-            else
+            else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "2nd Year College") == 0)
             {
-                Stdnt_1stYear_Arch_SecondSem();
+                if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+                {
+                    Stdnt_2ndYear_Arch_FirstSem();
+                    break;
+                }
+                else
+                {
+                    Stdnt_2ndYear_Arch_SecondSem();
+                    break;
+                }
+            }
+            else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "3rd Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+                {
+                    Stdnt_3rdYear_Arch_FirstSem();
+                    break;
+                }
+                else
+                {
+                    Stdnt_3rdYear_Arch_SecondSem();
+                    break;
+                }
+            }
+            else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "4th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+                {
+                    Stdnt_4thYear_Arch_FirstSem();
+                    break;
+                }
+                else
+                {
+                    Stdnt_4thYear_Arch_SecondSem();
+                    break;
+                }
+            }
+            else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "5th Year College") == 0)
+            {
+                if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
+                {
+                    Stdnt_5thYear_Arch_FirstSem();
+                    break;
+                }
+                else
+                {
+                    Stdnt_5thYear_Arch_SecondSem();
+                    break;
+                }
             }
         }
-        else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "2nd Year College") == 0)
+        else if (DataCheck == 'N' || DataCheck == 'n')
         {
-            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
-            {
-                Stdnt_2ndYear_Arch_FirstSem();
-            }
-            else
-            {
-                Stdnt_2ndYear_Arch_SecondSem();
-            }
+            printf("Data Inputted | No. \xAF Going Back...");
+            Sleep(2000);
+            continue;
+            //Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
         }
-        else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "3rd Year College") == 0)
+        else
         {
-            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
-            {
-                Stdnt_3rdYear_Arch_FirstSem();
-            }
-            else
-            {
-                Stdnt_3rdYear_Arch_SecondSem();
-            }
+            printf("Data Inputted | Out of Range from Choices. Going Back...");
+            Sleep(2000);
+            continue;
+            //Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
         }
-        else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "4th Year College") == 0)
-        {
-            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
-            {
-                Stdnt_4thYear_Arch_FirstSem();
-            }
-            else
-            {
-                Stdnt_4thYear_Arch_SecondSem();
-            }
-        }
-        else if (strcmp(ERLM_Selection_Arch[YearSelection_Accepter_Arch], "5th Year College") == 0)
-        {
-            if (strcmp(ERLM_Selection_Arch_Sem[YearSelection_Accepter_Arch_Sem], "First Semester") == 0)
-            {
-                Stdnt_5thYear_Arch_FirstSem();
-            }
-            else
-            {
-                Stdnt_5thYear_Arch_SecondSem();
-            }
-        }
-    }
-    else if (DataCheck == 'N' || DataCheck == 'n')
-    {
-        printf("Data Inputted | No. -> Returning to this Function! (Data Reinitiated!)");
-        Sleep(2000);
-        Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
-    }
-    else
-    {
-        printf("Data Inputted | Out of Range from Choices. Reinitializing Function! (Data Reinitiated!)");
-        Sleep(2000);
-        Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
     }
 }
 
@@ -2880,7 +3071,7 @@ int Stdnt_4thYear_ME_FirstSem()
     gotoxy(30, 3);
     printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
     gotoxy(30, 4);
-    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
+    printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t                \xBA\n");
     gotoxy(30, 5);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
     printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
@@ -2900,102 +3091,197 @@ int Stdnt_4thYear_ME_FirstSem()
 }
 int Stdnt_4thYear_ME_SecondSem()
 {
+    int Subject_Selector, Final_Comp_SelectedSubjects = 0, Final_Comp_SemUnits = 0, Subject_Counter = 0;
+    int Subject_Units[12] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    char *Subject_CodeName[12] = {"Wht", "is", "lve", "whn", "yu", "ony", "luve", "thm", "in phy", "thn", "thir", "inn slf..."};
+    char *Subject_FullName[12] = {"What", "is", "love", "when", "you", "only", "love", "them", "in physical", "than", "their", "inner self."};
+    char *Subject_Include[12] = {"FALSE", "TRUE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE"};
+    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+    char *SbjSel_Stats[12] = {"Not Included", "Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included"};
+    int Counter = 0;
+    system("CLS");
+
     while (1)
     {
-        int Subject_Selector, Final_Comp_SelectedSubjects = 0, Final_Comp_SemUnits = 0, Subject_Counter = 0;
-        char *Subject_FullNameEncoded[11];
-        char *Subject_FullNameEncode_Bool[11];
-        char *Subject_Units[11];
-        char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
-        system("CLS");
-        gotoxy(30, 3);
-        printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-        gotoxy(30, 4);
-        printf("\xBA 1st | 2nd | \xDD [3rd Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t           \xBA\n");
-        gotoxy(30, 5);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-        printf("\xBA [0] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [1] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [2] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [3] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [4] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [5] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [6] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [7] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [8] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xBA [9] \xAF Year.Subject \t\xDD\t Subject.TimeLinear \t\xDD\t Sem.Units\xBA\n");
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-        while (Subject_Counter <= 12)
+        while (Subject_Counter != 11)
         {
-            if (strcmp(Subject_FullNameEncode_Bool[Subject_Counter], "TRUE") == 0)
+            if (strcmp(Subject_Include[Subject_Counter], "TRUE") == 0)
             {
                 Final_Comp_SelectedSubjects++;
                 //Final_Comp_SemUnits += Subject_Units[Subject_Counter];
                 Subject_Counter++;
             }
+            else
+            {
+                Subject_Counter++;
+            }
         }
+        system("CLS");
+        gotoxy(30, 3);
+        printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+        gotoxy(30, 4);
+        printf("\xBA 1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t                   \xBA\n");
+        gotoxy(30, 5);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+        gotoxy(30, 6);
+        printf("\n");
+        gotoxy(30, 7);
+        printf("\xC9\xCD\xCD SUBJECT LIST AND SMALL DETAILS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+        gotoxy(30, 8);
+        printf("\xBA  #  \xDD \tSTATUS\t   \xDD\tSUBJECT CODE - SUBJECT NAME\t  \xDD LINEAR TIME(START - END)\t   \xDD\t UNITS \t   \xBA\n");
+        gotoxy(30, 9);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+        gotoxy(30, 10);
+        printf("\xBA [1] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA\n", SbjSel_Stats[0], Subject_CodeName[0], Subject_FullName[0], Subject_LinearTime[0], Subject_Units[0]);
+        gotoxy(30, 11);
+        printf("\xBA [2] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA\n", SbjSel_Stats[1], Subject_CodeName[1], Subject_FullName[1], Subject_LinearTime[1], Subject_Units[1]);
+        gotoxy(30, 12);
+        printf("\xBA [3] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA\n", SbjSel_Stats[2], Subject_CodeName[2], Subject_FullName[2], Subject_LinearTime[2], Subject_Units[2]);
+        gotoxy(30, 13);
+        printf("\xBA [4] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[3], Subject_CodeName[3], Subject_FullName[3], Subject_LinearTime[3], Subject_Units[3]);
+        gotoxy(30, 15);
+        printf("\xBA [5] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[4], Subject_CodeName[4], Subject_FullName[4], Subject_LinearTime[4], Subject_Units[4]);
+        gotoxy(30, 14);
+        printf("\xBA [6] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[5], Subject_CodeName[5], Subject_FullName[5], Subject_LinearTime[5], Subject_Units[5]);
+        gotoxy(30, 16);
+        printf("\xBA [7] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[6], Subject_CodeName[6], Subject_FullName[6], Subject_LinearTime[6], Subject_Units[6]);
+        gotoxy(30, 16);
+        printf("\xBA [8] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[7], Subject_CodeName[7], Subject_FullName[7], Subject_LinearTime[7], Subject_Units[7]);
+        gotoxy(30, 17);
+        printf("\xBA [9] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[8], Subject_CodeName[8], Subject_FullName[8], Subject_LinearTime[8], Subject_Units[8]);
+        gotoxy(30, 18);
+        printf("\xBA [10] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[9], Subject_CodeName[9], Subject_FullName[9], Subject_LinearTime[9], Subject_Units[9]);
+        gotoxy(30, 19);
+        printf("\xBA [11] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[10], Subject_CodeName[10], Subject_FullName[10], Subject_LinearTime[10], Subject_Units[10]);
+        gotoxy(30, 20);
+        printf("\xBA [12] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[11], Subject_CodeName[11], Subject_FullName[11], Subject_LinearTime[11], Subject_Units[11]);
+        gotoxy(30, 21);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+        gotoxy(30, 23);
         printf("CURRENT STATISTICS");
-        printf("Total Selected Subjects: %i \t \xAF Total Units: %i\n", Final_Comp_SelectedSubjects, Final_Comp_SemUnits);
+        gotoxy(30, 24);
+        printf("Total Selected Subjects: %d \t \xAF Total Units: %d\n", Final_Comp_SelectedSubjects, Final_Comp_SemUnits);
+        gotoxy(30, 25);
         printf("INPUT");
+        gotoxy(30, 26);
         printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-        scanf("%i", &Subject_Selector);
-        fflush(stdin);
-        //PRINT OUTSIDE
+        gotoxy(30, 27);
         printf("PROPERTIES");
-        printf("Press 10 To Encode All\tPress Any Subject Number Order To Encode\tEnter 'X or x' to proceed.");
+        gotoxy(30, 28);
+        printf("Press 1 To Include Subject/s\n");
+        printf("Press 2 To Withdraw Subject/s\n");
+        gotoxy(30, 29);
+        printf("Enter 'X or x' to proceed.\n");
+        gotoxy(30, 30);
+        while (Counter <= 11) {
+            printf("[%i], %s\n", Counter, SbjSel_Stats[Counter]);
+            Counter++;
+        }
+        scanf("%d", &Subject_Selector);
+        //PRINT OUTSIDE
+
         if (Subject_Selector == 1)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 2)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 3)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 4)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 5)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 6)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 7)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 8)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 9)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 10)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 11)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else if (Subject_Selector == 12)
         {
-            printf("Subject #%i is now included!", Subject_FullNameEncoded[Subject_Selector], Subject_Selector);
+            gotoxy(30, 31);
+            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+            Sleep(1000);
+            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            continue;
         }
         else
         {
-            printf("You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Funcition...");
+            gotoxy(30, 31);
+            printf("You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Function...");
             Sleep(2000);
-            Stdnt_4thYear_ME_SecondSem();
+            continue;
         }
     }
     //Continue Function...
