@@ -5,9 +5,16 @@
 #include <time.h>    // For Time Display and Such
 #include <string.h>  // String Handling for Usage of Structure and Database
 #define VERSION_NUMBER "2259-08102018-BETA"
-#define PRODUCT_NAME "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime "
+#define PRODUCT_NAME "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime"
 #define FUNCTION_UNFINISHED 1362565
 #define DATABASE_NOT_FOUND 40
+#define FUNCTION_STEP1 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End]"
+#define FUNCTION_STEP2 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End]"
+#define FUNCTION_STEP3 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End]"
+#define FUNCTION_STEP4 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End]"
+#define FUNCTION_STEP5 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End]"
+#define FUNCTION_STEP6 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End]"
+#define FUNCTION_STEP7 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End]"
 struct New_StudentRecords
 {
     char stdnt_FName[30],
@@ -28,6 +35,13 @@ struct Old_StudentRecords
     char stdnt_old_Username[20], stdnt_old_Password[32], stdnt_old_UserPersonalName[20];
 };
 
+struct Enrollment_InformationReceiver
+{
+    char *Subject_CodeName[12];
+    char *Subject_FullName[12];
+    char *Subject_LinearTime[12];
+    char *Subject_Units[12];
+};
 void gotoxy(int x, int y);
 
 int stdnt_DataCheck(struct New_StudentRecords NewData_Receiver);
@@ -142,38 +156,42 @@ int Main_Menu()
         gotoxy(30, 3);
         printf("\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
         gotoxy(30, 4);
-        printf("\xBA \xDD Version " VERSION_NUMBER "\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 5);
-        printf("\xBA \xDD " PRODUCT_NAME "\t\t       \xBA");
-        gotoxy(30, 6);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 8);
-        printf("\xC9\xCD\xCD \xDD Main Menu \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 9);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        gotoxy(30, 5);
+        printf("\xBA \xDD Version " VERSION_NUMBER "\t\t\t\t\t\t\t\t\t       \xBA");
+        gotoxy(30, 6);
+        printf("\xBA \xDD " PRODUCT_NAME "\t\t       \xBA");
+        gotoxy(30, 7);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        gotoxy(30, 8);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
         gotoxy(30, 10);
-        printf("\xBA [1] \xDD Old Student\t\t\t\t\t\t\t\t\t\t       \xBA");
+        printf("\xC9\xCD\xCD \xDD Main Menu \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
         gotoxy(30, 11);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 12);
-        printf("\xBA [2] \xDD New Student\t\t\t\t\t\t\t\t\t\t       \xBA");
+        printf("\xBA [1] \xDD Old Student\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 13);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 14);
-        printf("\xBA [3] \xDD Reprint Enrollment Student Form | Registration Form\t\t\t\t\t       \xBA");
+        printf("\xBA [2] \xDD New Student\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 15);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 16);
-        printf("\xBA [4] \xDD Manage Enrollment\t\t\t\t\t\t\t\t\t\t       \xBA");
+        printf("\xBA [3] \xDD Reprint Enrollment Student Form | Registration Form\t\t\t\t\t       \xBA");
         gotoxy(30, 17);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 18);
-        printf("\xBA [5] \xDD Exit Application\t\t\t\t\t\t\t\t\t\t       \xBA");
+        printf("\xBA [4] \xDD Manage Enrollment\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 19);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 20);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        printf("\xBA [5] \xDD Exit Application\t\t\t\t\t\t\t\t\t\t       \xBA");
+        gotoxy(30, 21);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
         gotoxy(30, 22);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        gotoxy(30, 24);
         printf("\xC8\xAF Please enter your decision [1 - 5] \xDD ");
         scanf("%i", &Selection_1);
         fflush(stdin); // Use fflush to flush \n because scanf always put \n when user inputs
@@ -189,24 +207,30 @@ int Main_Menu()
             Func_ERLM_Recheck();
             break;
         case 4:
-            gotoxy(30, 24);
-            printf("WARNING!");
             gotoxy(30, 26);
-            printf("Access Denied! Please rerun the program with '/mgr_md' in order to access this function!\n");
+            printf("\xC9\xCD\xCD \xDD Warning! \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
             gotoxy(30, 27);
-            printf("Press any key in the keyboard to terminate the program...");
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t      \xBA");
+            gotoxy(30, 28);
+            printf("\xBA Access Denied! Please rerun the program with '/mgr_md' in order to access this function!\t      \xBA");
+            gotoxy(30, 29);
+            printf("\xBA Press any key in the keyboard to terminate the program...\t\t\t\t\t      \xBA");
+            gotoxy(30, 30);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t      \xBA");
+            gotoxy(30, 31);
+            printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
             getch();
-            return EXIT_SUCCESS;
+            continue;
         case 5:
             SetConsoleTitle("Terminating Enrollment System | LM Enrollment System");
             puts("Terminating Enrollment System...");
-            Sleep(3000);
+            Sleep(1500);
             return EXIT_SUCCESS;
         case 6:
-        Stdnt_4thYear_ME_SecondSem();
+            Stdnt_4thYear_ME_SecondSem();
         default:
             printf("Invalid Choice...");
-            Sleep(3000);
+            Sleep(1500);
             continue;
         }
     }
@@ -1188,14 +1212,14 @@ int Func_NewStdnt_Arch_YearSelect(struct New_StudentRecords NewData, char *MainC
         }
         else if (DataCheck == 'N' || DataCheck == 'n')
         {
-            printf("Data Inputted | No. \xAF Going Back...");
+            printf("\xDD PROCESS \xAF No. \xAF Going Back...");
             Sleep(2000);
             continue;
             //Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
         }
         else
         {
-            printf("Data Inputted | Out of Range from Choices. Going Back...");
+            printf("\xDD PROCESS \xAF Out of Range from Choices. Going Back...");
             Sleep(2000);
             continue;
             //Func_NewStdnt_Arch_YearSelect(NewData, MainCourse_CodeName_Passer);
@@ -3062,7 +3086,7 @@ int Stdnt_3rdYear_ME_SecondSem()
 }
 int Stdnt_4thYear_ME_FirstSem()
 {
-    int Subject_Selector;
+    int Subject_Selector, Option_Selector;
     char *Subject_FullNameEncoded[11];
     char *Subject_FullNameEncode_Bool[11];
     char *Subject_Units[11];
@@ -3091,204 +3115,922 @@ int Stdnt_4thYear_ME_FirstSem()
 }
 int Stdnt_4thYear_ME_SecondSem()
 {
-    int Subject_Selector, Final_Comp_SelectedSubjects = 0, Final_Comp_SemUnits = 0, Subject_Counter = 0;
-    int Subject_Units[12] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    char *Subject_CodeName[12] = {"Wht", "is", "lve", "whn", "yu", "ony", "luve", "thm", "in phy", "thn", "thir", "inn slf..."};
-    char *Subject_FullName[12] = {"What", "is", "love", "when", "you", "only", "love", "them", "in physical", "than", "their", "inner self."};
-    char *Subject_Include[12] = {"FALSE", "TRUE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE", "FALSE"};
-    char *Subject_LinearTime[12] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
-    char *SbjSel_Stats[12] = {"Not Included", "Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included", "Not Included"};
-    int Counter = 0;
+    int Subject_Selector, Option_Selector, Final_Comp_SelectedSubjects = 0, Final_Comp_SemUnits = 0, Subject_Counter = 0, SbjSel_Checker = 1, Subject_WholeSize = 12;
+    int Subject_UnitsGuard_AntiDuplicate_Include[12] = {0};
+    int Subject_UnitsGuard_AntiDuplicate_Exclude[12] = {0};
+    int Subject_Units[12] = {3, 3, 3, 0, 1, 3, 0, 2, 2, 1, 2, 3};
+    char Final_Decision_Selector;
+    char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "CHEM 001", "AR 001", "COE 001", "ENGL 001", "FIL 001", "PE 001", "NSTP 001", "MATH 004", "CPE 001", "HUMMS 001"};
+    char *Subject_FullName[12] = {"---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------"};
+    char *Subject_Include[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
+    char *Subject_Parameters[2] = {"Include", "Exclude"};
+    char *Subject_LinearTime[12] = {"8:00AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "1:30PM - 4:30PM", "7:30AM - 9:30AM", "9:30AM - 12:00PM", "4:30PM - :5:30PM", "4:30PM - 6:30PM", "5:30PM - 6:30PM"};
+    char *SbjSel_Stats[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
     system("CLS");
-
+    int Counter = 0;
+    SetConsoleTitle(FUNCTION_STEP3);
+    struct Enrollment_InformationReceiver ReceiveData;
     while (1)
     {
-        while (Subject_Counter != 11)
+        int Sbj_Stats_Increment = 0, Sbj_Stats_Decrement = 0, SbjSel_Stats_Exceptions = 0;
+        system("CLS");
+        gotoxy(30, 3);
+        printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        gotoxy(30, 4);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 5);
+        printf("\xBA 1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t                   \xBA");
+        gotoxy(30, 6);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 7);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        gotoxy(30, 8);
+        printf("\n");
+        gotoxy(30, 9);
+        printf("\xC9\xCD\xCD \xDD SUBJECT LIST FOR 4TH YEAR MECHANICAL ENGINEERING \xAF SECOND SEMESTER \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        gotoxy(30, 10);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 11);
+        printf("\xBA #    \xDD  STATUS  \xDD\tSUBJECT CODE - SUBJECT NAME\t  \xDD \tLINEAR TIME(START - END)    \xDD\t UNITS \t   \xBA\n");
+        gotoxy(30, 12);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 13);
+        printf("\xCC\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xB9");
+        gotoxy(30, 14);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 15);
+        printf("\xBA [1]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA", SbjSel_Stats[0], Subject_CodeName[0], Subject_FullName[0], Subject_LinearTime[0], Subject_Units[0]);
+        gotoxy(30, 16);
+        printf("\xBA [2]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA", SbjSel_Stats[1], Subject_CodeName[1], Subject_FullName[1], Subject_LinearTime[1], Subject_Units[1]);
+        gotoxy(30, 17);
+        printf("\xBA [3]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA", SbjSel_Stats[2], Subject_CodeName[2], Subject_FullName[2], Subject_LinearTime[2], Subject_Units[2]);
+        gotoxy(30, 18);
+        printf("\xBA [4]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[3], Subject_CodeName[3], Subject_FullName[3], Subject_LinearTime[3], Subject_Units[3]);
+        gotoxy(30, 19);
+        printf("\xBA [5]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[4], Subject_CodeName[4], Subject_FullName[4], Subject_LinearTime[4], Subject_Units[4]);
+        gotoxy(30, 20);
+        printf("\xBA [6]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[5], Subject_CodeName[5], Subject_FullName[5], Subject_LinearTime[5], Subject_Units[5]);
+        gotoxy(30, 21);
+        printf("\xBA [7]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[6], Subject_CodeName[6], Subject_FullName[6], Subject_LinearTime[6], Subject_Units[6]);
+        gotoxy(30, 22);
+        printf("\xBA [8]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[7], Subject_CodeName[7], Subject_FullName[7], Subject_LinearTime[7], Subject_Units[7]);
+        gotoxy(30, 23);
+        printf("\xBA [9]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[8], Subject_CodeName[8], Subject_FullName[8], Subject_LinearTime[8], Subject_Units[8]);
+        gotoxy(30, 24);
+        printf("\xBA [10] \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[9], Subject_CodeName[9], Subject_FullName[9], Subject_LinearTime[9], Subject_Units[9]);
+        gotoxy(30, 25);
+        printf("\xBA [11] \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[10], Subject_CodeName[10], Subject_FullName[10], Subject_LinearTime[10], Subject_Units[10]);
+        gotoxy(30, 26);
+        printf("\xBA [12] \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[11], Subject_CodeName[11], Subject_FullName[11], Subject_LinearTime[11], Subject_Units[11]);
+        gotoxy(30, 27);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 28);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        gotoxy(30, 30);
+        printf("\xC9\xCD\xCD STATISTICS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        gotoxy(30, 31);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 32);
+        printf("\xBA \xDD Total Included Subject/s \xAF %d \t \xDD Total Included Units \xAF %d", Final_Comp_SelectedSubjects, Final_Comp_SemUnits);
+        gotoxy(30, 33);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 34);
+        printf("\xCC\xCD\xCD OPTIONS FOR INPUT \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xB9");
+        gotoxy(30, 35);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 36);
+        printf("\xBA Input '1' To Include Subject/s     \t\xDD      Input '-1' To Include All Subject/s                         \xBA");
+        gotoxy(30, 37);
+        printf("\xBA Input '2' To Withdraw Subject/s \t\xDD      Input '-2' To Exclude All Subject/s                         \xBA");
+        gotoxy(30, 38);
+        printf("\xBA Input '3' to process the data. \t\t\t\t\t\t\t\t\t\t   \xBA");
+        gotoxy(30, 39);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        gotoxy(30, 40);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        gotoxy(30, 42);
+        printf("INPUT \xDD Please select an option \xAF ");
+        scanf("%d", &Option_Selector);
+        if (Option_Selector == 1)
         {
-            if (strcmp(Subject_Include[Subject_Counter], "TRUE") == 0)
+            gotoxy(30, 44);
+            printf("Please select the subject number to be included \xAF ");
+            scanf("%d", &Subject_Selector);
+            if (Subject_Selector == 1)
             {
-                Final_Comp_SelectedSubjects++;
-                //Final_Comp_SemUnits += Subject_Units[Subject_Counter];
-                Subject_Counter++;
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 2)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 3)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 4)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 5)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 6)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 7)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 8)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 9)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 10)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 11)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 12)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
+                    Final_Comp_SelectedSubjects += 1;
+                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
             }
             else
             {
-                Subject_Counter++;
+                gotoxy(30, 45);
+                printf("\xDD WARNING \xAF You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Function...");
+                Sleep(2000);
+                continue;
             }
         }
-        system("CLS");
-        gotoxy(30, 3);
-        printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-        gotoxy(30, 4);
-        printf("\xBA 1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t                   \xBA\n");
-        gotoxy(30, 5);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-        gotoxy(30, 6);
-        printf("\n");
-        gotoxy(30, 7);
-        printf("\xC9\xCD\xCD SUBJECT LIST AND SMALL DETAILS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
-        gotoxy(30, 8);
-        printf("\xBA  #  \xDD \tSTATUS\t   \xDD\tSUBJECT CODE - SUBJECT NAME\t  \xDD LINEAR TIME(START - END)\t   \xDD\t UNITS \t   \xBA\n");
-        gotoxy(30, 9);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-        gotoxy(30, 10);
-        printf("\xBA [1] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA\n", SbjSel_Stats[0], Subject_CodeName[0], Subject_FullName[0], Subject_LinearTime[0], Subject_Units[0]);
-        gotoxy(30, 11);
-        printf("\xBA [2] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA\n", SbjSel_Stats[1], Subject_CodeName[1], Subject_FullName[1], Subject_LinearTime[1], Subject_Units[1]);
-        gotoxy(30, 12);
-        printf("\xBA [3] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA\n", SbjSel_Stats[2], Subject_CodeName[2], Subject_FullName[2], Subject_LinearTime[2], Subject_Units[2]);
-        gotoxy(30, 13);
-        printf("\xBA [4] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[3], Subject_CodeName[3], Subject_FullName[3], Subject_LinearTime[3], Subject_Units[3]);
-        gotoxy(30, 15);
-        printf("\xBA [5] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[4], Subject_CodeName[4], Subject_FullName[4], Subject_LinearTime[4], Subject_Units[4]);
-        gotoxy(30, 14);
-        printf("\xBA [6] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[5], Subject_CodeName[5], Subject_FullName[5], Subject_LinearTime[5], Subject_Units[5]);
-        gotoxy(30, 16);
-        printf("\xBA [7] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[6], Subject_CodeName[6], Subject_FullName[6], Subject_LinearTime[6], Subject_Units[6]);
-        gotoxy(30, 16);
-        printf("\xBA [8] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[7], Subject_CodeName[7], Subject_FullName[7], Subject_LinearTime[7], Subject_Units[7]);
-        gotoxy(30, 17);
-        printf("\xBA [9] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[8], Subject_CodeName[8], Subject_FullName[8], Subject_LinearTime[8], Subject_Units[8]);
-        gotoxy(30, 18);
-        printf("\xBA [10] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[9], Subject_CodeName[9], Subject_FullName[9], Subject_LinearTime[9], Subject_Units[9]);
-        gotoxy(30, 19);
-        printf("\xBA [11] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[10], Subject_CodeName[10], Subject_FullName[10], Subject_LinearTime[10], Subject_Units[10]);
-        gotoxy(30, 20);
-        printf("\xBA [12] \xAF %s \xAF %s \t\xDD\t %s - %s \t\xDD\t %i\xBA \t \n", SbjSel_Stats[11], Subject_CodeName[11], Subject_FullName[11], Subject_LinearTime[11], Subject_Units[11]);
-        gotoxy(30, 21);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
-        gotoxy(30, 23);
-        printf("CURRENT STATISTICS");
-        gotoxy(30, 24);
-        printf("Total Selected Subjects: %d \t \xAF Total Units: %d\n", Final_Comp_SelectedSubjects, Final_Comp_SemUnits);
-        gotoxy(30, 25);
-        printf("INPUT");
-        gotoxy(30, 26);
-        printf("\xDD Please select the subject corresponding to the number to be enrolled \xAF ");
-        gotoxy(30, 27);
-        printf("PROPERTIES");
-        gotoxy(30, 28);
-        printf("Press 1 To Include Subject/s\n");
-        printf("Press 2 To Withdraw Subject/s\n");
-        gotoxy(30, 29);
-        printf("Enter 'X or x' to proceed.\n");
-        gotoxy(30, 30);
-        while (Counter <= 11) {
-            printf("[%i], %s\n", Counter, SbjSel_Stats[Counter]);
-            Counter++;
-        }
-        scanf("%d", &Subject_Selector);
-        //PRINT OUTSIDE
-
-        if (Subject_Selector == 1)
+        else if (Option_Selector == 2)
         {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            gotoxy(30, 44);
+            printf("\xDD INPUT \xAF Please select the subject number to be excluded \xAF ");
+            scanf("%d", &Subject_Selector);
+            if (Subject_Selector == 1)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 2)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 3)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 4)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 5)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 6)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 7)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 8)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 9)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 10)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 11)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+            else if (Subject_Selector == 12)
+            {
+                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                {
+                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                    if (Final_Comp_SelectedSubjects == 0)
+                    {
+                        Final_Comp_SelectedSubjects = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SelectedSubjects -= 1;
+                    }
+                    if (Final_Comp_SemUnits == 0)
+                    {
+                        Final_Comp_SemUnits = 0;
+                    }
+                    else
+                    {
+                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                    }
+                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    gotoxy(30, 45);
+                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                    Sleep(500);
+                    continue;
+                }
+            }
+        }
+        else if (Option_Selector == 3)
+        {
+            fflush(stdin);
+            while (1)
+            {
+                gotoxy(30, 44);
+                printf("\xDD QUESTION \xAF Are you sure you picked the subjects that you wanted to take???");
+                gotoxy(30, 45);
+                printf("\xDD Choices \xAF [Y]es or [N]o \xAF");
+                scanf("%c", &Final_Decision_Selector);
+                if (Final_Decision_Selector == 'Y' || Final_Decision_Selector == 'y')
+                {
+                    while (SbjSel_Checker <= 12)
+                    {
+                        if (SbjSel_Stats_Exceptions == Subject_WholeSize)
+                        {
+                            gotoxy(30, 46);
+                            printf("\xDD CRITICAL ERROR \xAF Are you even trying to enroll without any subjects!?");
+                            Sleep(5000);
+                            break;
+                        }
+                        else if (SbjSel_Stats[SbjSel_Checker - 1] == "Unknown")
+                        {
+                            gotoxy(30, 46);
+                            printf("\xDD ERROR \xAF You cannot leave subject/s to be 'Unknown'. Set them to exclude if you don't want to include it.");
+                            Sleep(3000);
+                            break;
+                        }
+                        else if (SbjSel_Stats[SbjSel_Checker - 1] == "Exclude")
+                        {
+                            SbjSel_Stats_Exceptions++;
+                        }
+                        else
+                        {
+                            gotoxy(30, 46);
+                            printf("\xDD PROCESS \xAF Copying information to structure to pass with....");
+                            //Insert Code To Copy with TRUE to Struct Array
+                            gotoxy(30, 47);
+                            printf("\xDD PROCESS \xAF Moving Foward to \xDD [ 4th ] Scholarship Check...");
+                            Func_Stdnt_ScholarshipCheck();
+                            break;
+                        }
+                    }
+                    continue; // Trick to go back to the Main Loop While(1) at the top...
+                }
+                else
+                {
+                    gotoxy(30, 46);
+                    printf("\xDD PROCESS \xAF Going back...");
+                    break;
+                }
+            }
             continue;
         }
-        else if (Subject_Selector == 2)
+        else if (Option_Selector == -1)
         {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            gotoxy(30, 44);
+            printf("\xDD PROCESS \xAF Including All Available Subjects...");
+            Final_Comp_SelectedSubjects = 0;
+            Final_Comp_SemUnits = 0;
+            while (Sbj_Stats_Increment <= Subject_WholeSize)
+            {
+                SbjSel_Stats[Sbj_Stats_Increment - 1] = Subject_Parameters[0];
+                Final_Comp_SelectedSubjects += 1;
+                Final_Comp_SemUnits += Subject_Units[Sbj_Stats_Increment - 1];
+                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Increment - 1] = 1;
+                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Increment - 1] = 0;
+                Sbj_Stats_Increment++;
+            }
+            Sleep(1500);
             continue;
         }
-        else if (Subject_Selector == 3)
+        else if (Option_Selector == -2)
         {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 4)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 5)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 6)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 7)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 8)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 9)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 10)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 11)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
-            continue;
-        }
-        else if (Subject_Selector == 12)
-        {
-            gotoxy(30, 31);
-            printf("Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-            Sleep(1000);
-            strcpy(SbjSel_Stats[Subject_Selector - 1], "Active");
+            gotoxy(30, 44);
+            printf("\xDD PROCESS \xAF Excluding All Available Subjects...");
+            Final_Comp_SelectedSubjects = 0;
+            Final_Comp_SemUnits = 0;
+            while (Sbj_Stats_Decrement <= Subject_WholeSize)
+            {
+                SbjSel_Stats[Sbj_Stats_Decrement - 1] = Subject_Parameters[1];
+                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Decrement - 1] = 0;
+                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement - 1] = 0;
+                Sbj_Stats_Decrement++;
+            }
+            Sleep(1500);
             continue;
         }
         else
         {
-            gotoxy(30, 31);
-            printf("You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Function...");
+            gotoxy(30, 44);
+            printf("\xDD WARNING \xAF You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Function...");
             Sleep(2000);
             continue;
         }
     }
-    //Continue Function...
 }
+
+//Continue Function...
 
 int Func_Stdnt_ScholarshipCheck()
 {
+    printf("\xDD INFO \xAF We on the 4th Step of this!");
+    getch();
+    return ERROR_SUCCESS;
 }
 
 void PrintDocument_FinalTranscript()
