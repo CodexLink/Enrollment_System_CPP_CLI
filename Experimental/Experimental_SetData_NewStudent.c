@@ -46,38 +46,48 @@ struct OnHold_DataRecords
         stdnt_Address[MAX_PATH],
         stdnt_Email[40],
         stdnt_POC_Emergency[30],
+        stdnt_StudentType[20],
         MainCourse_CodeName_Passer[40],
         MainCourse_FullName_Passer[40],
         Course_YearChoice[20],
         Course_SemSelection[20],
-        Generated_stdnt_NewPass[32],
-        Generated_stdnt_NewUser[16],
-        Granted_ScholarshipStats[70],
+        Generated_stdnt_NewPass[10],
+        Generated_stdnt_NewUser[20],
+        Granted_ScholarshipStats[16],
+        Granted_ScholarshipDetails[65],
         PaymentMethod[12];
+    int GradeLowest,
+        GradeHighest,
+        GradeGeneralAverage_LastSem,
+        Generated_StudentID;
     long long int stdnt_NumGenerated;
 };
 // Structure For Old Student Checker Credentials
 struct Old_StudentRecords
 {
-    int stdnt_old_StudentIdentity;
-    char stdnt_old_Username[20], stdnt_old_Password[32], stdnt_old_UserPersonalName[20];
+    int stdnt_StudentID;
+    char stdnt_Username[20], stdnt_Password[32], stdnt_UserPersonalName[20];
 };
 // used To Receive Only True
 struct Enrollment_InformationReceiver
 {
     char *Subject_CodeName_Receiver[12];
     char *Subject_FullName_Receiver[12];
-    int Subject_Units_Receiver[12];
+    char *Subject_ScheduleDay_Receiver[12];
     char *Subject_LinearTime_Receiver[12];
+    int Subject_Units_Receiver[12];
+    int Subject_Candidates;
+    int Subjects_Selected;
 };
 
 struct OnHold_DataRecords OnProcess_StudentData;
 struct Enrollment_InformationReceiver ERLM_DataReceiver;
-
+struct Old_StudentRecords OldDataProcess_StudentData;
 void SetCursorCoord_XY(int x, int y); //Custom Function To Call SetCursorCoord_XY. @Conio.h cannot be used for Windows.
 int Main_Menu();                      // Call For Main Menu
-void Func_OldStdnt_ERLM();            // Old Student Function Prototype
-int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldData);
+//void Func_OldStdnt_ERLM();            // Old Student Function Prototype
+//int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldData);
+
 //Function Prototype on Ascending Order
 void Func_NewStdnt_FillUp();
 int Func_NewStdnt_InfoCheck();
@@ -86,11 +96,14 @@ int Func_NewStdnt_YearSemSelect();
 int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12]);
 int Func_Stdnt_ScholarshipCheck();
 void Func_Mode_Of_Payment();
-void Func_PrintDocument_FinalTranscript(/*struct OnHold_DataRecords NewData_Receiver*/);
+void Func_PrintDocument_FinalTranscript();
 void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates);
 
 void Func_ERLM_Check();
 
+void GenerateUserandPass();
+char GenerateFileName();
+void Func_EndofProcess();
 //int ReceiveData();
 
 int main()
@@ -154,7 +167,7 @@ int Main_Menu()
         switch (Selection_1 = getche())
         {
         case '1':
-            Func_OldStdnt_ERLM();
+            //Func_OldStdnt_ERLM();
             break;
         case '2':
             Func_NewStdnt_FillUp();
@@ -192,8 +205,6 @@ int Main_Menu()
             Sleep(2500);
             return EXIT_SUCCESS;
         case '6':
-            //Func_Stdnt_ScholarshipCheck();
-           // Func_Mode_Of_Payment();
             Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
         default:
             SetCursorCoord_XY(30, 26);
@@ -211,7 +222,7 @@ int Main_Menu()
         }
     }
 }
-void Func_OldStdnt_ERLM()
+/*void Func_OldStdnt_ERLM()
 {
     struct Old_StudentRecords OldData;
     FILE *FileDatabase_ERLM;
@@ -273,7 +284,7 @@ int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
         return FUNCTION_UNFINISHED;
     }
 }
-
+*/
 /////////////////////////////////////////////////////////////////////////////////////
 void Func_NewStdnt_FillUp()
 {
@@ -1473,7 +1484,7 @@ int Func_NewStdnt_YearSemSelect()
                     if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
                         char *Subject_CodeName[12] = {"ENSE 501", "ENSE 502", "ENSE 503", "ENSE 504", "ENSE 505", "ENSE 506", "ENSE 507", "ENSE 508"};
-                        char *Subject_FullName[12] = {"PLANT VISITS & SEMINARS FOR ENSE", "SEWERAGE & DRAINAGE ENGINEERING", "ENSE LAWS, ETHICS, CODES, AND STANDARDS", "ENVIRONMENTAL ENGINEERING LABORATORY", "SANITARY SCIENCE, FIRE PROTECTION AND PLUMBING...", "RESEARCH IN A.W.N.S POLLUTIONS", "CONSTRUCTION METHODS & PROJECT MANAGEMENT", "WATER SUPPLY ENGINEERING"};
+                        char *Subject_FullName[12] = {"PLANT VISITS & SEMINARS FOR ENSE", "SEWERAGE & DRAINAGE ENGINEERING", "ENSE LAWS, ETHICS, CODES, AND STANDARDS", "ENVIRONMENTAL ENGINEERING LABORATORY", "SANITARY SCIENCE, FIRE PROTECTION AND PLUMBING", "RESEARCH IN A.W.N.S POLLUTIONS", "CONSTRUCTION METHODS & PROJECT MANAGEMENT", "WATER SUPPLY ENGINEERING"};
                         char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30 PM", "12:30PM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
                         int Subject_Units[12] = {1, 3, 3, 1, 4, 3, 4, 3};
                         Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
@@ -1916,6 +1927,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
         printf("\xFE\xCD\xCD \xDD SELECTION STATISTICS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
         SetCursorCoord_XY(20, 32);
         printf("          %-40s \xAF %d / %d  \xDD %28s \xAF %d / %-2d", "Total Included Subject/s", Final_Comp_SelectedSubjects, Subject_ExpectedCandidates, "Total Included Units", Final_Comp_SemUnits, Subject_ExpectedSemUnits);
+        SetCursorCoord_XY(20, 33);
         SetCursorCoord_XY(20, 33);
         printf("          %-40s \xAF %-*s, %-*s \xDD %-*s", "Current list of subjects is only for", Sizeof_YearChoice, OnProcess_StudentData.Course_YearChoice, Sizeof_FullNamePasser, OnProcess_StudentData.MainCourse_FullName_Passer, Sizeof_SemSelection, OnProcess_StudentData.Course_SemSelection);
         SetCursorCoord_XY(20, 35);
@@ -2942,7 +2954,10 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                                 ERLM_DataReceiver.Subject_CodeName_Receiver[Transport_Element] = Subject_CodeName[Transport_Element];
                                 ERLM_DataReceiver.Subject_FullName_Receiver[Transport_Element] = Subject_FullName[Transport_Element];
                                 ERLM_DataReceiver.Subject_LinearTime_Receiver[Transport_Element] = Subject_LinearTime[Transport_Element];
+                                ERLM_DataReceiver.Subject_ScheduleDay_Receiver[Transport_Element] = Subject_ScheduleDay[Transport_Element];
                                 ERLM_DataReceiver.Subject_Units_Receiver[Transport_Element] = Subject_Units[Transport_Element];
+                                ERLM_DataReceiver.Subject_Candidates = Subject_ExpectedCandidates;
+                                ERLM_DataReceiver.Subjects_Selected = Final_Comp_SelectedSubjects;
                                 //Transport_PassElementTrue++;
                             }
                         }
@@ -3045,11 +3060,13 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     {
         StudentType = "Irregular Student";
         StatusTake = "Incomplete Take";
+        strcpy(OnProcess_StudentData.stdnt_StudentType, StudentType);
     }
     else
     {
         StudentType = "Regular Student";
         StatusTake = "Complete Take";
+        strcpy(OnProcess_StudentData.stdnt_StudentType, StudentType);
     }
     system("CLS");
     SetCursorCoord_XY(30, 3);
@@ -3080,11 +3097,21 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
         else
         {
             SetCursorCoord_XY(30, SetCoordinates_Dependent);
-            printf("\xBA  [ %d ]    %-10s -  %-51s \xDD %-18s\xDD     %-5i\xBA", Subject_Pass_Reader_Counter, ERLM_DataReceiver.Subject_CodeName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_FullName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_LinearTime_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_Units_Receiver[Subject_Pass_Reader]);
-            Subject_Pass_Reader++;
-            Subject_Pass_Reader_Counter++;
-            SetCoordinates_Dependent++;
-            continue;
+            if (Subject_Pass_Reader_Counter >= 10)
+            {
+                printf("\xBA  [ %d ]   %-10s -  %-51s \xDD %-18s\xDD     %-5i\xBA", Subject_Pass_Reader_Counter, ERLM_DataReceiver.Subject_CodeName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_FullName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_LinearTime_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_Units_Receiver[Subject_Pass_Reader]);
+                Subject_Pass_Reader++;
+                Subject_Pass_Reader_Counter++;
+                SetCoordinates_Dependent++;
+            }
+            else
+            {
+                printf("\xBA  [ %d ]    %-10s -  %-51s \xDD %-18s\xDD     %-5i\xBA", Subject_Pass_Reader_Counter, ERLM_DataReceiver.Subject_CodeName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_FullName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_LinearTime_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_Units_Receiver[Subject_Pass_Reader]);
+                Subject_Pass_Reader++;
+                Subject_Pass_Reader_Counter++;
+                SetCoordinates_Dependent++;
+                continue;
+            }
         }
     }
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
@@ -3095,19 +3122,15 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
-    printf("\xC9\xCD\xCD \xDD ADDITIONALS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    printf("\xFE\xCD\xCD \xDD ADDITIONALS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
-    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    printf("\xDD Student Type \xAF %s\t\xDD\t Subjects Enrolled \xAF %d / %d => %-28s", StudentType, Subject_Pass_Reader_Counter - 1, Subject_ExpectedCandidates, StatusTake);
+    SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
-    printf("\xBA \xDD Student Type \xAF %s\t\xDD\t Subjects Enrolled \xAF %d / %d => %-29s\xBA", StudentType, Subject_Pass_Reader_Counter - 1, Subject_ExpectedCandidates, StatusTake);
-    SetCoordinates_Dependent++;
-    SetCursorCoord_XY(30, SetCoordinates_Dependent);
-    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    SetCoordinates_Dependent++;
-    SetCursorCoord_XY(30, SetCoordinates_Dependent);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
@@ -3123,8 +3146,8 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
 int Func_Stdnt_ScholarshipCheck()
 {
     char Confirmation;
-    int GradeLowCheck = 0, GradeHighCheck = 0, GradeAverageCheck_LastSem = 0;
-    char *ScholarshipGrant, *Granted_ScholarshipStats;
+    OnProcess_StudentData.GradeLowest = 0, OnProcess_StudentData.GradeHighest, OnProcess_StudentData.GradeGeneralAverage_LastSem = 0;
+    //char *OnProcess_StudentData.Granted_ScholarshipStats[0], *Granted_ScholarshipStats;
     system("CLS");
     SetCursorCoord_XY(30, 3);
     printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
@@ -3162,55 +3185,59 @@ int Func_Stdnt_ScholarshipCheck()
     printf("\xAF \xDD QUESTION #1 \xDD What is your general average grade from your last semester?");
     SetCursorCoord_XY(30, 23);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-    scanf("%i", &GradeAverageCheck_LastSem);
+    scanf("%d", &OnProcess_StudentData.GradeGeneralAverage_LastSem);
     fflush(stdin);
     SetCursorCoord_XY(30, 25);
     printf("\xAF \xDD QUESTION #2 \xDD What is your lowest grade on any subject?");
     SetCursorCoord_XY(30, 26);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-    scanf("%i", &GradeLowCheck);
+    scanf("%d", &OnProcess_StudentData.GradeLowest);
     fflush(stdin);
     SetCursorCoord_XY(30, 28);
     printf("\xAF \xDD QUESTION #3 \xDD What is your highest grade on any subject?");
     SetCursorCoord_XY(30, 29);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-    scanf("%i", &GradeHighCheck);
+    scanf("%d", &OnProcess_StudentData.GradeHighest);
     fflush(stdin);
-    if (GradeLowCheck >= 82 && GradeAverageCheck_LastSem >= 84)
+    if (OnProcess_StudentData.GradeLowest >= 82 && OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84)
     {
         SetCursorCoord_XY(30, 31);
         printf("\xAF \xDD INFO \xDD Congratulations! You are eligible for scholarship!");
         Sleep(1500);
-        if ((GradeLowCheck >= 82) && (GradeAverageCheck_LastSem >= 84 && GradeAverageCheck_LastSem <= 86))
+        if ((OnProcess_StudentData.GradeLowest >= 82) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 86))
         {
-            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "50% Discount on Tuition Fee for one (1) semester");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "50%% Discount");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "50%% Discount on Tuition Fee for one (1) semester | Entrance Scholarship");
             SetCursorCoord_XY(30, 32);
-            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", ScholarshipGrant);
+            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
         }
-        else if ((GradeLowCheck >= 84) && (GradeAverageCheck_LastSem >= 86 && GradeAverageCheck_LastSem <= 88))
+        else if ((OnProcess_StudentData.GradeLowest >= 84) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 86 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 88))
         {
             SetCursorCoord_XY(30, 32);
-            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "75% Discount on Tuition Fee for one (1) semester");
-            printf("\xA7 \xDD ELIGIBILITY \xDD You are eligible for %s", ScholarshipGrant);
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "75%% Discount");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "75%% Discount on Tuition Fee for one (1) semester | Entrance Scholarship");
+            printf("\xA7 \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
         }
-        else if ((GradeLowCheck >= 86) && (GradeAverageCheck_LastSem >= 88 && GradeAverageCheck_LastSem <= 89))
+        else if ((OnProcess_StudentData.GradeLowest >= 86) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 88 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 89))
         {
             SetCursorCoord_XY(30, 32);
-            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "Free tuition fee for one (1) semester");
-            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", ScholarshipGrant);
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "100%% Discount");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "Free tuition fee for one (1) semester | Entrance Scholarship");
+            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
         }
-        else if ((GradeLowCheck >= 88) && (GradeAverageCheck_LastSem >= 89 && GradeAverageCheck_LastSem >= 90))
+        else if ((OnProcess_StudentData.GradeLowest >= 88) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 89))
         {
             SetCursorCoord_XY(30, 32);
-            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "Free tuition and basic miscellaneous fees for one (1) semester");
-            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", ScholarshipGrant);
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "100%% + MISC.");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "Free tuition and basic miscellaneous fees for one (1) semester | Entrance Scholarship");
+            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
         }
     }
     else
     {
         SetCursorCoord_XY(30, 32);
-        printf("xDD INFO \xAF Sorry, you are not allowed to take scholarship... But your encoded grade is still recorded...");
-        SetCursorCoord_XY(30, 32);
+        printf("\xDD INFO \xAF Sorry, you are not allowed to take scholarship... But your encoded grade is still recorded...");
+        SetCursorCoord_XY(30, 34);
         printf("\xDD INFO \xAF Proceeding to Mode of Payment...");
         Sleep(1750);
         Func_Mode_Of_Payment();
@@ -3227,11 +3254,13 @@ int Func_Stdnt_ScholarshipCheck()
             SetCursorCoord_XY(30, 35);
             printf("\xDD INFO \xAF Data Acquired. Good to know :). Proceeding to Mode of Payment...");
             Sleep(1500);
+            //Func_Stdnt_ScholarshipCheck();
             Func_Mode_Of_Payment();
         case 'N':
         case 'n': // Falls Through
             SetCursorCoord_XY(30, 35);
             printf("\xDD INFO \xAF Scholarship Grant Aborted :(. Proceeding to Mode of Payment...");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "NULL");
             Sleep(1500);
             Func_Mode_Of_Payment();
             break;
@@ -3285,7 +3314,7 @@ void Func_Mode_Of_Payment()
             Sleep(1750);
             Func_PrintDocument_FinalTranscript();
         case '2':
-            strcpy(OnProcess_StudentData.PaymentMethod, "Installment");
+            strcpy(OnProcess_StudentData.PaymentMethod, "Installment, Please talk to any representatives for schedule of payment.");
             SetCursorCoord_XY(30, 19);
             printf("\xAF \xDD SUCCESS \xAF Selected %s as a Mode of Payment. Proceeding to Final Overview...", OnProcess_StudentData.PaymentMethod);
             Sleep(1750);
@@ -3300,6 +3329,30 @@ void Func_Mode_Of_Payment()
 }
 void Func_PrintDocument_FinalTranscript()
 {
+    //Create an Student ID for New People
+    long long int stdnt_NumGenerated;
+    int SetCoordinates_Dependent = 20, SubjectCount = 0, SubjectNumber = 1, TotalCreditUnits = 0;
+    float TuitionFee, LaboratoryFee = 7225.85, AthleticsFee = 761.20,
+                      AudioVisualFee = 133.60, ClassroomEnergyFee = 1100, ComputerFee = 2650.75,
+                      CulturalnActivityFee = 48.30, DevFee = 830.45, EnergExtFee = 890.63,
+                      GuidancenCounselFee = 520.17, HandbookFee = 153.35, IDFee = 487.10,
+                      InsuranceFee = 12.00, InternetFee = 105.30, LibraryFee = 1520.35,
+                      MedicalFee = 510.20, RedCrossFee = 1, StudentConcilFee = 60,
+                      TestPaperFee = 266, ScholarshipDiscount = 0, TotalFee = 0;
+    FILE *FileCreation_StudentCopy;
+    char *FileNameGenerated;
+    //FileNameGenerated = GenerateFileName();
+    GenerateUserandPass();
+    //FileCreation_StudentCopy = fopen(FileNameGenerated[MAX_PATH], "wb+");
+    if (OldDataProcess_StudentData.stdnt_StudentID == 0)
+    {
+        //Create Algorithm here
+        stdnt_NumGenerated = 2018000;
+    }
+    else
+    {
+        stdnt_NumGenerated = OldDataProcess_StudentData.stdnt_StudentID;
+    }
     system("CLS");
     SetCursorCoord_XY(20, 3);
     printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
@@ -3311,9 +3364,182 @@ void Func_PrintDocument_FinalTranscript()
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
     SetCursorCoord_XY(20, 7);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-    getch();
-}
+    SetCursorCoord_XY(20, 9);
+    printf("\xFE\xCD\xCD \xDD STUDENTS REGISTRATION FORM - STUDENTS COPY \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(20, 11);
+    printf(" \xDD %-18s \xAF %-50ld \xDD %-18s \xAF %-10s", "Student Number", stdnt_NumGenerated, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
+    SetCursorCoord_XY(20, 12);
+    printf(" \xDD %-18s \xAF %-s, %s %-50s \xDD%-10s \xAF %-20s ", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName, "Year Level", OnProcess_StudentData.Course_YearChoice);
+    SetCursorCoord_XY(20, 13);
+    printf(" \xDD %-18s \xAF %-50s", "Permanent Address", OnProcess_StudentData.stdnt_Address);
+    SetCursorCoord_XY(20, 14);
+    printf(" \xDD %-18s \xAF %-50s", "Student Type", OnProcess_StudentData.stdnt_StudentType);
+    SetCursorCoord_XY(20, 16);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(20, 18);
+    printf("\xFE\xCD\xCD \xDD SUBJECT INFORMATION \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SubjectCount = 0;
+    SubjectNumber = 1;
+    while (SubjectCount < ERLM_DataReceiver.Subject_Candidates)
+    {
+        if ((ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount] == NULL) || (ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount] == NULL) || (ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount] == NULL))
+        {
+            SubjectCount++;
+            continue;
+        }
+        else
+        {
 
+            SetCursorCoord_XY(20, SetCoordinates_Dependent);
+            if (SubjectNumber >= 10)
+            {
+                printf("      [ %d ]  \xDD    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i", SubjectNumber, ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_ScheduleDay_Receiver[SubjectCount], ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount], ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount]);
+                TotalCreditUnits += ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount];
+                SetCoordinates_Dependent++;
+                SubjectCount++;
+                SubjectNumber++;
+            }
+            else
+            {
+                printf("      [ %d ]   \xDD    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i", SubjectNumber, ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_ScheduleDay_Receiver[SubjectCount], ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount], ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount]);
+                TotalCreditUnits += ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount];
+                SetCoordinates_Dependent++;
+                SubjectCount++;
+                SubjectNumber++;
+            }
+        }
+    }
+
+    TuitionFee = SubjectCount * 200 + 21500;
+    if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "50%% Discount") == 0)
+    {
+        ScholarshipDiscount = TuitionFee * 0.5;
+    }
+    else if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "75%% Discount") == 0)
+    {
+        ScholarshipDiscount = TuitionFee * 0.75;
+    }
+    else if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "100%% Discount") == 0)
+    {
+        TuitionFee = 0;
+        ScholarshipDiscount = TuitionFee * 0.100;
+    }
+    else if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "100%% + MISC.") == 0)
+    {
+        TuitionFee = 0;
+        ScholarshipDiscount = 0;
+        LaboratoryFee = 0;
+        AthleticsFee = 0;
+        AudioVisualFee = 0;
+        ClassroomEnergyFee = 0;
+        ComputerFee = 0;
+        CulturalnActivityFee = 0;
+        DevFee = 0;
+        EnergExtFee = 0;
+        GuidancenCounselFee = 0;
+        HandbookFee = 0;
+        IDFee = 0;
+        InsuranceFee = 0;
+        InternetFee = 0;
+        LibraryFee = 0;
+        MedicalFee = 0;
+        RedCrossFee = 0;
+        StudentConcilFee = 0;
+        TestPaperFee = 0;
+    }
+    else
+    {
+        ScholarshipDiscount = 0;
+    }
+    TotalFee = (TuitionFee + LaboratoryFee + AthleticsFee +
+                AudioVisualFee + ClassroomEnergyFee + ComputerFee +
+                CulturalnActivityFee + DevFee + EnergExtFee +
+                GuidancenCounselFee + HandbookFee + IDFee +
+                InsuranceFee + InternetFee + LibraryFee +
+                MedicalFee + RedCrossFee + StudentConcilFee +
+                TestPaperFee) -
+               ScholarshipDiscount;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("      Total Subjects To Take \xAF %d / %- 20d\xAF Total Credit Units To Take \xAF %d", ERLM_DataReceiver.Subjects_Selected, ERLM_DataReceiver.Subject_Candidates, TotalCreditUnits);
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD \xDD FEES AND IT'S AMOUNTS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "TUITION FEE", TuitionFee, "Laboratory Fee", LaboratoryFee, "Athletics Fee", AthleticsFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Audio Visual Fee", AudioVisualFee, "Classroom Energy Fee", ClassroomEnergyFee, "Computer Fee", ComputerFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Cultural & Act. Fee", CulturalnActivityFee, "Development Fee", DevFee, "Energy Fee", EnergExtFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-14.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Guidance & Counselling Fee", GuidancenCounselFee, "Handbook Fee", HandbookFee, "ID Fee", IDFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Insurance Fee", InsuranceFee, "Internet Fee", InternetFee, "Library Fee", LibraryFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Medical Fee", MedicalFee, "Red Cross Fee", RedCrossFee, "Student Concil Fee", StudentConcilFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-19s \xAF -%-19.2f\xDD %-20s \xAF %-20.2f", "Test Paper Fee", TestPaperFee, "Scholarship Reduction", ScholarshipDiscount, "TOTAL FEE", TotalFee);
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD \xDD SCHOLARSHIP, SCHEDULE OF PAYMENT AND STUDENT PORTAL INFO \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD Scholarship Taken \xAF %s", OnProcess_StudentData.Granted_ScholarshipDetails);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD Payment Selected \xAF %s", OnProcess_StudentData.PaymentMethod);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD Student Portal Account \xDD");
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD User ID \xAF %s", OnProcess_StudentData.Generated_stdnt_NewUser);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD Temporary Password \xAF %s", OnProcess_StudentData.Generated_stdnt_NewPass);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD You can access it after this enrollment!");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xAF \xDD INFO \xDD Here are the full student copy OF your registration form containing everything you need to enroll...");
+    Sleep(5000);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xAF \xDD INFO \xDD A file name called %s will be saved, please call assistance for printing. Thank you.", FileNameGenerated);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xAF \xDD CONFIMRATION \xDD If you are done viewing this, press any key to continue...");
+    getch();
+    Func_EndofProcess();
+}
+void Func_EndofProcess() {
+
+}
 void Func_ERLM_Check()
 {
 }
@@ -3324,3 +3550,20 @@ void SetCursorCoord_XY(int x, int y)
     COORD ConsoleXY = {x, y};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), ConsoleXY);
 }
+
+void GenerateUserandPass()
+{
+    char *BaseBranch = "qc-";
+    char Container[20], FirstNameLetter[30], LastName[20];
+
+    strncpy(FirstNameLetter, OnProcess_StudentData.stdnt_FName, 1);
+    strcpy(LastName, OnProcess_StudentData.stdnt_LName);
+
+    strcat(Container, BaseBranch);
+    strcat(Container, FirstNameLetter);
+    strcat(Container, LastName);
+    strncpy(OnProcess_StudentData.Generated_stdnt_NewUser, Container, sizeof(Container));
+}
+/*char GenerateFileName()
+{
+}*/
