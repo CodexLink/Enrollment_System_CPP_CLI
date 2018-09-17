@@ -6,27 +6,39 @@
 #include <string.h>  // String Handling for Usage of Structure and Database
 
 // Defined STRINGS, Call this and the string will show up or error code
-#define VERSION_NUMBER "0941-09062018-BETA"
-#define PRODUCT_NAME "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime"
+#define VERSION_NUMBER "1530-09172018-CLOSED BETA"
+#define PRODUCT_NAME "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime"
 #define FUNCTION_UNFINISHED 1362565
 #define DATABASE_NOT_FOUND 40
 #define FUNCTION_LINEAR_DISCONTINUE 1827090918
-#define FUNCTION_STEP1 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [ \xDD [1st Step \xAF Filling up Information] | 2nd | 3rd | 4th | 5th | Confirm | End]"
-#define FUNCTION_STEP2 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | \xDD [2nd Step \xAF Course Registration] | 3rd | 4th | 5th | Confirm | End]"
-#define FUNCTION_STEP2_1 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | \xDD [2nd Step \xAF Course Registration \xAF Year Selection] | 3rd | 4th | 5th | Confirm | End]"
-#define FUNCTION_STEP3 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End]"
-#define FUNCTION_STEP4 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | [3rd] | \xDD[4th \xAF] | 5th | Confirm | End]"
-#define FUNCTION_STEP5 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | 3rd | 4th | \xDD[5th \xAF] | Confirm | End]"
-#define FUNCTION_STEP6 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | 3rd | 4th | 5th | \xDD [Confirmation] | End]"
-#define FUNCTION_STEP7 "Team LM | Enrollment System for TiP Engineering and Architecture | C CLI Runtime \xAF [1st | 2nd | 3rd | 4th | 5th | Confirm | \xDD [End Process]"
+#define FUNCTION_STEP1 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime|D Current Step \xAF 1st Step Filling up Information"
+#define FUNCTION_STEP2 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF 2nd Step \xAF Course Registration"
+#define FUNCTION_STEP2_1 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF 2nd Step | Course Registration \xAF Year Selection"
+#define FUNCTION_STEP3 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF 3rd Step | Subject Enrollment Selection"
+#define FUNCTION_STEP4 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF 4th Step | Slight Overview Data"
+#define FUNCTION_STEP5 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF 5th Step | Scholarship and Mode of Payment"
+#define FUNCTION_STEP6 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF Confirmation | Overall Overview"
+#define FUNCTION_STEP7 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF End of Process"
 
 // Structure Variables for New Student, Used For Filling Information
 // After Function Update On Function...
-struct New_StudentRecords
+struct OnHold_DataRecords
 {
     char stdnt_FName[30],
         stdnt_MName[30],
         stdnt_LName[30],
+        stdnt_PhoneNum[11],
+        stdnt_MobileNum[11],
+        stdnt_EmerNum[11],
+        stdnt_MothersName[30],
+        stdnt_MothersInfoJob[30],
+        stdnt_MothersInfoContact[30],
+        stdnt_FathersName[30],
+        stdnt_FathersInfoJob[30],
+        stdnt_FathersInfoContact[30],
+        stdnt_SourceInterest[30],
+        stdnt_LastSchoolYear[30],
+        stdnt_LastSchoolStrand[30],
         stdnt_Gender[6],
         stdnt_Birthday[30],
         stdnt_Nationality[30],
@@ -34,54 +46,64 @@ struct New_StudentRecords
         stdnt_Address[MAX_PATH],
         stdnt_Email[40],
         stdnt_POC_Emergency[30],
+        stdnt_StudentType[20],
         MainCourse_CodeName_Passer[40],
         MainCourse_FullName_Passer[40],
         Course_YearChoice[20],
-        Course_SemSelection[20];
-    long long int stdnt_PhoneNum, stdnt_MobileNum, stdnt_EmerNum;
+        Course_SemSelection[20],
+        Generated_stdnt_NewPass[10],
+        Generated_stdnt_NewUser[20],
+        Granted_ScholarshipStats[16],
+        Granted_ScholarshipDetails[65],
+        PaymentMethod[12];
+    int GradeLowest,
+        GradeHighest,
+        GradeGeneralAverage_LastSem,
+        Generated_StudentID;
+    long long int stdnt_NumGenerated;
 };
 // Structure For Old Student Checker Credentials
 struct Old_StudentRecords
 {
-    int stdnt_old_StudentIdentity;
-    char stdnt_old_Username[20], stdnt_old_Password[32], stdnt_old_UserPersonalName[20];
+    int stdnt_StudentID;
+    char stdnt_Username[20], stdnt_Password[32], stdnt_UserPersonalName[20];
 };
 // used To Receive Only True
 struct Enrollment_InformationReceiver
 {
     char *Subject_CodeName_Receiver[12];
     char *Subject_FullName_Receiver[12];
-    char *Subject_Include_Receiver[12];
+    char *Subject_ScheduleDay_Receiver[12];
     char *Subject_LinearTime_Receiver[12];
+    int Subject_Units_Receiver[12];
+    int Subject_Candidates;
+    int Subjects_Selected;
 };
-/*struct Subject_ContainerData {
-    char *Subject_CodeName[12];
-    char *Subject_FullName[12];
-    char *Subject_Parameters[2];
-    char *Subject_LinearTime[12];
-    char *SbjSel_Stats[12];
-};*/
-struct New_StudentRecords NewStudent_Data;
-struct Enrollment_InformationReceiver ReceiverData;
 
-void gotoxy(int x, int y); //Custom Function To Call Gotoxy. @Conio.h cannot be used for Windows.
-int Main_Menu();           // Call For Main Menu
-void Func_OldStdnt_ERLM(); // Old Student Function Prototype
-int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldData);
+struct OnHold_DataRecords OnProcess_StudentData;
+struct Enrollment_InformationReceiver ERLM_DataReceiver;
+struct Old_StudentRecords OldDataProcess_StudentData;
+void SetCursorCoord_XY(int x, int y); //Custom Function To Call SetCursorCoord_XY. @Conio.h cannot be used for Windows.
+int Main_Menu();                      // Call For Main Menu
+//void Func_OldStdnt_ERLM();            // Old Student Function Prototype
+//int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldData);
+
 //Function Prototype on Ascending Order
 void Func_NewStdnt_FillUp();
 int Func_NewStdnt_InfoCheck();
 int Func_NewStdnt_CourseReg();
-int Func_NewStdnt_Eng_YearSemSelect();
-//int Func_NewStdnt_Arch_YearSemSelect(char *MainCourse_CodeName_Passer);
-int Func_NewStdnt_Eng_Subject_Select();  // Seperated To Differentiate it's Options
-int Func_NewStdnt_Arch_Subject_Select(); // Seperated To Differentiate it's Options
-int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12], int Subject_WholeSize);
-//int Func_Stdnt_ScholarshipCheck(/*struct Enrollment_InformationReceiver Data_Received, int Final_Comp_SelectedSubjects*/);
+int Func_NewStdnt_YearSemSelect();
+int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12]);
+int Func_Stdnt_ScholarshipCheck();
 void Func_Mode_Of_Payment();
-void PrintDocument_FinalTranscript(/*struct New_StudentRecords NewData_Receiver*/);
-void Func_ERLM_Recheck();
+void Func_PrintDocument_FinalTranscript();
+void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates);
 
+void Func_ERLM_Check();
+
+void GenerateUserandPass();
+char GenerateFileName();
+void Func_EndofProcess();
 //int ReceiveData();
 
 int main()
@@ -92,111 +114,115 @@ int main()
 }
 int Main_Menu()
 {
+    char *Subject_CodeName[12] = {"PHILO 001", "HUM 001", "HUM 002", "ARCH 005-8"};
+    char *Subject_FullName[12] = {"PHILOSOPHY", "HUMANITIES", "SOCIOLOGY OF ANTHROPOLOGY", "ARCHITECTURAL DESIGN 9", "SPECIALIZATION 2", "ARCHITECTURE COMPREHENSIVE COURSE"};
+    char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
+    int Subject_Units[12] = {3, 3, 3, 5, 3, 3};
     SetConsoleTitle(PRODUCT_NAME);
     system("CLS");
     while (1)
     { // This will loop forever because wtf is 1?
         int Selection_1 = 0;
         system("CLS");
-        gotoxy(30, 3);
+        SetCursorCoord_XY(30, 3);
         printf("\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 4);
+        SetCursorCoord_XY(30, 4);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 5);
-        printf("\xBA \xDD Version " VERSION_NUMBER "\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 6);
-        printf("\xBA \xDD " PRODUCT_NAME "\t\t       \xBA");
-        gotoxy(30, 7);
+        SetCursorCoord_XY(30, 5);
+        printf("\xBA \xDD Version " VERSION_NUMBER "\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(30, 6);
+        printf("\xBA \xDD " PRODUCT_NAME "    \xBA");
+        SetCursorCoord_XY(30, 7);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 8);
+        SetCursorCoord_XY(30, 8);
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 10);
+        SetCursorCoord_XY(30, 10);
         printf("\xC9\xCD\xCD \xDD Main Menu \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 11);
+        SetCursorCoord_XY(30, 11);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 12);
+        SetCursorCoord_XY(30, 12);
         printf("\xBA [1] \xDD Old Student\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 13);
+        SetCursorCoord_XY(30, 13);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 14);
+        SetCursorCoord_XY(30, 14);
         printf("\xBA [2] \xDD New Student\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 15);
+        SetCursorCoord_XY(30, 15);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 16);
+        SetCursorCoord_XY(30, 16);
         printf("\xBA [3] \xDD Reprint Enrollment Student Form | Registration Form\t\t\t\t\t       \xBA");
-        gotoxy(30, 17);
+        SetCursorCoord_XY(30, 17);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 18);
+        SetCursorCoord_XY(30, 18);
         printf("\xBA [4] \xDD Manage Enrollment\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 19);
+        SetCursorCoord_XY(30, 19);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 20);
+        SetCursorCoord_XY(30, 20);
         printf("\xBA [5] \xDD Exit Application\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 21);
+        SetCursorCoord_XY(30, 21);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        gotoxy(30, 22);
+        SetCursorCoord_XY(30, 22);
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 24);
-        printf("\xC8\xAF Please enter your decision [1 - 5] \xDD\xAF ");
+        SetCursorCoord_XY(30, 24);
+        printf("\xC8\xAF Press a key that corresponds your decision [1 - 5] \xDD\xAF ");
         switch (Selection_1 = getche())
         {
         case '1':
-            Func_OldStdnt_ERLM();
+            //Func_OldStdnt_ERLM();
             break;
         case '2':
             Func_NewStdnt_FillUp();
             break;
         case '3':
-            Func_ERLM_Recheck();
+            Func_ERLM_Check();
             break;
         case '4':
-            gotoxy(30, 26);
+            SetCursorCoord_XY(30, 26);
             printf("\xC9\xCD\xCD \xDD Warning! \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-            gotoxy(30, 27);
+            SetCursorCoord_XY(30, 27);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 28);
+            SetCursorCoord_XY(30, 28);
             printf("\xBA Access Denied! Please rerun the program with '/mgr_md' in order to access this function!\t       \xBA");
-            gotoxy(30, 29);
-            printf("\xBA Press any key to terminate the program...\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 30);
+            SetCursorCoord_XY(30, 29);
+            printf("\xBA Press any keyboard key to terminate the program...\t\t\t\t\t\t\t       \xBA");
+            SetCursorCoord_XY(30, 30);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 31);
+            SetCursorCoord_XY(30, 31);
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
             getch();
             exit(0); // Gracefully Terminate A Program / Process
         case '5':
             SetConsoleTitle("Terminating Enrollment System | LM Enrollment System");
-            gotoxy(30, 26);
-            printf("\xC9\xCD\xCD \xDD Information \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-            gotoxy(30, 27);
+            SetCursorCoord_XY(30, 26);
+            printf("\xC9\xCD\xCD \xDD INFORMATION \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+            SetCursorCoord_XY(30, 27);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 28);
+            SetCursorCoord_XY(30, 28);
             printf("\xBA \xAF Terminating LM Enrollment System...\t\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 29);
+            SetCursorCoord_XY(30, 29);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 30);
+            SetCursorCoord_XY(30, 30);
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
             Sleep(2500);
             return EXIT_SUCCESS;
         case '6':
-            //Func_SubjectUnit_Selection();
+            Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
         default:
-            gotoxy(30, 26);
+            SetCursorCoord_XY(30, 26);
             printf("\xC9\xCD\xCD \xDD Warning! \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-            gotoxy(30, 27);
+            SetCursorCoord_XY(30, 27);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 28);
+            SetCursorCoord_XY(30, 28);
             puts("\xBA \xAF Unrecognized Input!\t\t\t\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 29);
+            SetCursorCoord_XY(30, 29);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            gotoxy(30, 30);
+            SetCursorCoord_XY(30, 30);
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
             Sleep(1500);
             continue;
         }
     }
 }
-void Func_OldStdnt_ERLM()
+/*void Func_OldStdnt_ERLM()
 {
     struct Old_StudentRecords OldData;
     FILE *FileDatabase_ERLM;
@@ -244,7 +270,7 @@ int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
         printf("-----------------------------");
         printf("Hello and Welcome %c", OldStudent_Continuation.stdnt_old_StudentIdentity);
         printf("-----------------------------");
-        Sleep(2000);
+        Sleep(1750);
         printf("Name %s | Student Number: %i", OldStudent_Continuation.stdnt_old_UserPersonalName, OldStudent_Continuation.stdnt_old_StudentIdentity);
         printf("Your Current Level is %c", ENRL_Stats_CurrentLevel);
         printf("Enrollment Eligibility %c", ENRL_Stats_Eligible);
@@ -258,100 +284,213 @@ int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
         return FUNCTION_UNFINISHED;
     }
 }
-
+*/
 /////////////////////////////////////////////////////////////////////////////////////
 void Func_NewStdnt_FillUp()
 {
     // Initialize This From Struct Variable
-    NewStudent_Data.stdnt_PhoneNum = 0;
-    NewStudent_Data.stdnt_MobileNum = 0;
-    NewStudent_Data.stdnt_EmerNum = 0;
+    int FillUp_Stage = 0;
     system("CLS");
     SetConsoleTitle(FUNCTION_STEP1);
-    gotoxy(30, 3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-    gotoxy(30, 4);
-    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 5);
-    printf("\xBA [ \xDD [1st Step \xAF Filling up Information] | 2nd | 3rd | 4th | 5th | Confirm | End]\t\t           \xBA\n");
-    gotoxy(30, 6);
-    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 7);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-    gotoxy(30, 9);
-    printf("\xC9\xCD\xCD \xDD Information \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-    gotoxy(30, 10);
-    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 11);
-    printf("\xBA \xAF Please provide your information to let us identify you as a future student!\t\t\t\t   \xBA");
-    gotoxy(30, 12);
-    printf("\xBA \xDD NOTE \xDD \xAF Please input your information accurately!\t\t\t\t\t\t\t   \xBA");
-    gotoxy(30, 13);
-    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 14);
-    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-    gotoxy(30, 16);
-    printf("\xFE\xCD\xCD IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    gotoxy(30, 18);
-    printf("  [1] First Name \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_FName, sizeof(NewStudent_Data.stdnt_FName), stdin);
-    strtok(NewStudent_Data.stdnt_FName, "\n");
-    gotoxy(30, 20);
-    printf("  [2] Middle Name \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_MName, sizeof(NewStudent_Data.stdnt_MName), stdin);
-    strtok(NewStudent_Data.stdnt_MName, "\n");
-    gotoxy(30, 22);
-    printf("  [3] Last Name \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_LName, sizeof(NewStudent_Data.stdnt_LName), stdin);
-    strtok(NewStudent_Data.stdnt_LName, "\n");
-    gotoxy(30, 24);
-    printf("\xFE\xCD\xCD GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    gotoxy(30, 26);
-    printf("  [4] Gender \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_Gender, sizeof(NewStudent_Data.stdnt_Gender), stdin);
-    strtok(NewStudent_Data.stdnt_Gender, "\n");
-    gotoxy(30, 28);
-    printf("  [5] Birthday \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_Birthday, sizeof(NewStudent_Data.stdnt_Birthday), stdin);
-    strtok(NewStudent_Data.stdnt_Birthday, "\n");
-    gotoxy(30, 30);
-    printf("  [6] Home (Main) Address \xDD\xAF "); //Include City and Village, ZIP CODE
-    fgets(NewStudent_Data.stdnt_Address, sizeof(NewStudent_Data.stdnt_Address), stdin);
-    strtok(NewStudent_Data.stdnt_Address, "\n");
-    gotoxy(30, 32);
-    printf("  [7] Nationality \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_Nationality, sizeof(NewStudent_Data.stdnt_Nationality), stdin);
-    strtok(NewStudent_Data.stdnt_Nationality, "\n");
-    printf("\n");
-    gotoxy(30, 34);
-    printf("\xFE\xCD\xCD TECHNICAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    gotoxy(30, 36);
-    printf("  [8] Mobile Number \xDD\xAF ");
-    scanf("%lld", &NewStudent_Data.stdnt_MobileNum);
-    gotoxy(30, 38);
-    printf("  [9] Phone Number \xDD\xAF ");
-    scanf("%lld", &NewStudent_Data.stdnt_PhoneNum);
-    gotoxy(30, 40);
-    printf("  [10] Emergency Number and Emergency Point of Contact (Seperated)");
-    gotoxy(30, 42);
-    printf("  [10.1] Input Emergency Number \xDD\xAF ");
-    scanf("%lld", &NewStudent_Data.stdnt_EmerNum);
-    gotoxy(30, 44);
-    fflush(stdin); // UNDEFINED BEHAVIOR BUT NEEDED TO REMOVE \0 AT THE END OF THE SCANF INPUT
-    printf("  [10.2] Input Name Emergency Point of Contact \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_POC_Emergency, sizeof(NewStudent_Data.stdnt_POC_Emergency), stdin);
-    strtok(NewStudent_Data.stdnt_POC_Emergency, "\n");
-    gotoxy(30, 46);
-    printf("  [11] Personal Email \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_Email, sizeof(NewStudent_Data.stdnt_Email), stdin);
-    strtok(NewStudent_Data.stdnt_Email, "\n");
-    gotoxy(30, 48);
-    printf("  [12] Behavioral Issues \xDD\xAF ");
-    fgets(NewStudent_Data.stdnt_SpecialBehavioral, sizeof(NewStudent_Data.stdnt_SpecialBehavioral), stdin);
-    strtok(NewStudent_Data.stdnt_SpecialBehavioral, "\n");
-    gotoxy(30, 50);
+    while (1)
+    {
+        system("CLS");
+        SetCursorCoord_XY(30, 3);
+        printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 4);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 5);
+        printf("\xBA [ \xDD\xAF [1st Step of Part 1 \xAF Filling up Student Information] \xAF 2nd \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF End]\t   \xBA\n");
+        SetCursorCoord_XY(30, 6);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 7);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(30, 9);
+        printf("\xC9\xCD\xCD \xDD Information \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 10);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 11);
+        printf("\xBA \xAF Please provide your information to let us identify you as a future student!\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 12);
+        printf("\xBA \xDD NOTE \xDD \xAF Please input your information accurately before pressing enter!\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 13);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 14);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        if (FillUp_Stage == 0)
+        {
+            SetCursorCoord_XY(30, 16);
+            printf("\xFE\xCD\xCD IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+            SetCursorCoord_XY(30, 18);
+            printf("\xAF [1] Enrollee's First Name");
+            SetCursorCoord_XY(30, 20);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_FName, sizeof(OnProcess_StudentData.stdnt_FName), stdin);
+            strtok(OnProcess_StudentData.stdnt_FName, "\n");
+            SetCursorCoord_XY(30, 22);
+            printf("\xAF [2] Enrollee's Middle Name");
+            SetCursorCoord_XY(30, 24);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_MName, sizeof(OnProcess_StudentData.stdnt_MName), stdin);
+            strtok(OnProcess_StudentData.stdnt_MName, "\n");
+            SetCursorCoord_XY(30, 26);
+            printf("\xAF [3] Enrollee's Last Name ");
+            SetCursorCoord_XY(30, 28);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_LName, sizeof(OnProcess_StudentData.stdnt_LName), stdin);
+            strtok(OnProcess_StudentData.stdnt_LName, "\n");
+            SetCursorCoord_XY(30, 30);
+            printf("\xAF [4] Father's Name \xDD [Surname, First Name]");
+            SetCursorCoord_XY(30, 32);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_FathersName, sizeof(OnProcess_StudentData.stdnt_FathersName), stdin);
+            strtok(OnProcess_StudentData.stdnt_FathersName, "\n");
+            SetCursorCoord_XY(30, 34);
+            printf("\xAF [5] Father's Current Occupation");
+            SetCursorCoord_XY(30, 36);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_FathersInfoJob, sizeof(OnProcess_StudentData.stdnt_FathersInfoJob), stdin);
+            strtok(OnProcess_StudentData.stdnt_FathersInfoJob, "\n");
+            SetCursorCoord_XY(30, 38);
+            printf("\xAF [6] Father's Contact Number \xDD [Telephone is Applicable, Mobile # Preferred]");
+            SetCursorCoord_XY(30, 40);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_FathersInfoContact, sizeof(OnProcess_StudentData.stdnt_FathersInfoContact), stdin);
+            strtok(OnProcess_StudentData.stdnt_FathersInfoContact, "\n");
+            SetCursorCoord_XY(30, 42);
+            printf("\xAF [7] Mother's Name \xDD [Surname, FirstName]");
+            SetCursorCoord_XY(30, 44);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_MothersName, sizeof(OnProcess_StudentData.stdnt_MothersName), stdin);
+            strtok(OnProcess_StudentData.stdnt_MothersName, "\n");
+            SetCursorCoord_XY(30, 46);
+            printf("\xAF [8] Mother's Current Occupation");
+            SetCursorCoord_XY(30, 48);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_MothersInfoJob, sizeof(OnProcess_StudentData.stdnt_MothersInfoJob), stdin);
+            strtok(OnProcess_StudentData.stdnt_MothersInfoJob, "\n");
+            SetCursorCoord_XY(30, 50);
+            printf("\xAF [9] Mother's Contact Number \xDD [Telephone is Applicable, Mobile # Preferred]");
+            SetCursorCoord_XY(30, 52);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_MothersInfoContact, sizeof(OnProcess_StudentData.stdnt_MothersInfoContact), stdin);
+            strtok(OnProcess_StudentData.stdnt_MothersInfoContact, "\n");
+            SetCursorCoord_XY(30, 54);
+            printf("\xFE\xCD\xCD USER INPUT DONE FOR IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+            Sleep(3000);
+            FillUp_Stage++;
+            continue;
+        }
+        else if (FillUp_Stage == 1)
+        {
+            SetCursorCoord_XY(30, 16);
+            printf("\xFE\xCD\xCD GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+            SetCursorCoord_XY(30, 18);
+            printf("\xAF [1] Gender \xDD [Male or Female]");
+            SetCursorCoord_XY(30, 20);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_Gender, sizeof(OnProcess_StudentData.stdnt_Gender), stdin);
+            strtok(OnProcess_StudentData.stdnt_Gender, "\n");
+            SetCursorCoord_XY(30, 22);
+            printf("\xAF [2] Birthday \xDD [Month | Day, Year IN Word]");
+            SetCursorCoord_XY(30, 24);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_Birthday, sizeof(OnProcess_StudentData.stdnt_Birthday), stdin);
+            strtok(OnProcess_StudentData.stdnt_Birthday, "\n");
+            SetCursorCoord_XY(30, 26);
+            printf("\xAF [3] Permanent Address");
+            SetCursorCoord_XY(30, 27);
+            printf("Syntax \xDD\xAF [House #, Residential Name, Strt #, Brgy Name, City, ZIP Code, Metro Manila or Any Province Name]"); //Include City and Village, ZIP CODE
+            SetCursorCoord_XY(30, 29);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_Address, sizeof(OnProcess_StudentData.stdnt_Address), stdin);
+            strtok(OnProcess_StudentData.stdnt_Address, "\n");
+            SetCursorCoord_XY(30, 31);
+            printf("\xAF [4] Nationality");
+            SetCursorCoord_XY(30, 33);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_Nationality, sizeof(OnProcess_StudentData.stdnt_Nationality), stdin);
+            strtok(OnProcess_StudentData.stdnt_Nationality, "\n");
+            SetCursorCoord_XY(30, 35);
+            printf("\xAF [5] Mobile Number");
+            SetCursorCoord_XY(30, 37);
+            printf("\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_MobileNum, sizeof(OnProcess_StudentData.stdnt_MobileNum), stdin);
+            strtok(OnProcess_StudentData.stdnt_MobileNum, "\n");
+            fflush(stdin); // Flushes \n on ScanF to prevent fgets to be skipped
+            SetCursorCoord_XY(30, 39);
+            printf("\xAF [6] House Telephone Number");
+            SetCursorCoord_XY(30, 41);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_PhoneNum, sizeof(OnProcess_StudentData.stdnt_PhoneNum), stdin);
+            strtok(OnProcess_StudentData.stdnt_PhoneNum, "\n");
+            fflush(stdin); // Flushes \n on ScanF to prevent fgets to be skipped
+            SetCursorCoord_XY(30, 43);
+            printf("\xAF [7] Emergency Number and Emergency Point of Contact (Seperated)");
+            SetCursorCoord_XY(30, 45);
+            printf("\xAF [7.1] Input Emergency Number");
+            SetCursorCoord_XY(30, 47);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_EmerNum, sizeof(OnProcess_StudentData.stdnt_EmerNum), stdin);
+            strtok(OnProcess_StudentData.stdnt_EmerNum, "\n");
+            fflush(stdin); // Flushes \n on ScanF to prevent fgets to be skipped
+            SetCursorCoord_XY(30, 49);
+            printf("\xAF [7.2] Input Name Emergency Point of Contact");
+            SetCursorCoord_XY(30, 51);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_POC_Emergency, sizeof(OnProcess_StudentData.stdnt_POC_Emergency), stdin);
+            strtok(OnProcess_StudentData.stdnt_POC_Emergency, "\n");
+            SetCursorCoord_XY(30, 53);
+            printf("\xFE\xCD\xCD USER INPUT DONE FOR GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+            Sleep(3000);
+            FillUp_Stage++;
+            continue;
+        }
+        else if (FillUp_Stage == 2)
+        {
+            SetCursorCoord_XY(30, 16);
+            printf("\xFE\xCD\xCD TECHNICAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+            SetCursorCoord_XY(30, 18);
+            printf("\xAF [1] Source of Interest in this Institution \xDD [Any Reason]");
+            SetCursorCoord_XY(30, 20);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_SourceInterest, sizeof(OnProcess_StudentData.stdnt_SourceInterest), stdin);
+            strtok(OnProcess_StudentData.stdnt_SourceInterest, "\n");
+            SetCursorCoord_XY(30, 22);
+            printf("\xAF [2] Last School Year Attended \xDD [School Name (Abbrv. Acceptable), SchoolYear, Level. Add Comma as Seperator]");
+            SetCursorCoord_XY(30, 24);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_LastSchoolYear, sizeof(OnProcess_StudentData.stdnt_LastSchoolYear), stdin);
+            strtok(OnProcess_StudentData.stdnt_LastSchoolYear, "\n");
+            SetCursorCoord_XY(30, 26);
+            printf("\xAF [3] For Senior High School Student, Strand Taken [Put None, if not a SHS Student.]");
+            SetCursorCoord_XY(30, 28);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_LastSchoolStrand, sizeof(OnProcess_StudentData.stdnt_LastSchoolStrand), stdin);
+            strtok(OnProcess_StudentData.stdnt_LastSchoolStrand, "\n");
+            SetCursorCoord_XY(30, 30);
+            printf("\xAF [4] Personal Email");
+            SetCursorCoord_XY(30, 32);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_Email, sizeof(OnProcess_StudentData.stdnt_Email), stdin);
+            strtok(OnProcess_StudentData.stdnt_Email, "\n");
+            SetCursorCoord_XY(30, 34);
+            printf("\xAF [5] Behavioral Issues");
+            SetCursorCoord_XY(30, 36);
+            printf("\xC8\xAF INPUT \xDD\xAF ");
+            fgets(OnProcess_StudentData.stdnt_SpecialBehavioral, sizeof(OnProcess_StudentData.stdnt_SpecialBehavioral), stdin);
+            strtok(OnProcess_StudentData.stdnt_SpecialBehavioral, "\n");
+            FillUp_Stage++;
+            break;
+        }
+        else
+        {
+            break;
+        }
+    }
+    SetCursorCoord_XY(30, 38);
     printf("\xFE\xCD\xCD USER INPUT DONE \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    Sleep(2000);
+    Sleep(1750);
     Func_NewStdnt_InfoCheck();
 }
 
@@ -359,78 +498,86 @@ int Func_NewStdnt_InfoCheck()
 {
     char Data_Confirmation;
     system("CLS");
-    gotoxy(30, 3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-    gotoxy(30, 4);
+    SetCursorCoord_XY(30, 3);
+    printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(30, 4);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 5);
-    printf("\xBA [ \xDD [1st Step \xAF Student Data Information Check] | 2nd | 3rd | 4th | 5th | Confirm | End]\t\t   \xBA\n");
-    gotoxy(30, 6);
+    SetCursorCoord_XY(30, 5);
+    printf("\xBA [ \xDD\xAF [1st Step of Part 2 \xAF Student Data Information Check] \xAF 2nd \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF End]\t   \xBA\n");
+    SetCursorCoord_XY(30, 6);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 7);
+    SetCursorCoord_XY(30, 7);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-    gotoxy(30, 9);
-    printf("\xFE\xCD\xCD GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    gotoxy(30, 11);
-    printf("\xBA [1] First Name \xDD\xAF %s", NewStudent_Data.stdnt_FName);
-    gotoxy(30, 13);
-    printf("\xBA [2] Middle Name \xDD\xAF %s", NewStudent_Data.stdnt_MName);
-    gotoxy(30, 15);
-    printf("\xBA [3] Last Name \xDD\xAF %s", NewStudent_Data.stdnt_LName);
-    gotoxy(30, 17);
-    printf("\xFE\xCD\xCD IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    gotoxy(30, 19);
-    printf("\xBA [4] Gender \xDD\xAF %s", NewStudent_Data.stdnt_Gender);
-    gotoxy(30, 21);
-    printf("\xBA [5] Birthday \xDD\xAF %s", NewStudent_Data.stdnt_Birthday);
-    gotoxy(30, 23);
-    printf("\xBA [6] Home (Main) Address \xDD\xAF %s", NewStudent_Data.stdnt_Address); //Include City and Village, ZIP CODE
-    gotoxy(30, 25);
-    printf("\xBA [7] Nationality \xDD\xAF %s", NewStudent_Data.stdnt_Nationality);
-    gotoxy(30, 27);
+    SetCursorCoord_XY(30, 9);
+    printf("\xFE\xCD\xCD IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(30, 11);
+    printf("\xAF [1] Enrollee's Name \xDD\xAF %s, %s %s", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName);
+    SetCursorCoord_XY(30, 13);
+    printf("\xAF [2] [ Parent ] Mother's Information \xAF %s %s %s", OnProcess_StudentData.stdnt_MothersName, OnProcess_StudentData.stdnt_MothersInfoJob, OnProcess_StudentData.stdnt_MothersInfoContact);
+    SetCursorCoord_XY(30, 15);
+    printf("\xAF [3] [ Parent ] Father's Information \xAF %s %s %s", OnProcess_StudentData.stdnt_FathersName, OnProcess_StudentData.stdnt_FathersInfoJob, OnProcess_StudentData.stdnt_FathersInfoContact);
+    SetCursorCoord_XY(30, 17);
+    printf("\xFE\xCD\xCD GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(30, 19);
+    printf("\xAF [4] Gender \xDD\xAF %s", OnProcess_StudentData.stdnt_Gender);
+    SetCursorCoord_XY(30, 21);
+    printf("\xAF [5] Birthday \xDD\xAF %s", OnProcess_StudentData.stdnt_Birthday);
+    SetCursorCoord_XY(30, 23);
+    printf("\xAF [6] Permanent Address");
+    SetCursorCoord_XY(30, 25);
+    printf("\xC8\xAF %s", OnProcess_StudentData.stdnt_Address); //Include City and Village, ZIP CODE
+    SetCursorCoord_XY(30, 27);
+    printf("\xAF [7] Nationality \xDD\xAF %s", OnProcess_StudentData.stdnt_Nationality);
+    SetCursorCoord_XY(30, 29);
+    printf("\xAF [8] Mobile Number \xDD\xAF %s", OnProcess_StudentData.stdnt_MobileNum);
+    SetCursorCoord_XY(30, 31);
+    printf("\xAF [9] Phone Number \xDD\xAF %s", OnProcess_StudentData.stdnt_PhoneNum);
+    SetCursorCoord_XY(30, 33);
+    printf("\xAF [10] Emergency Number and Emergency Point of Contact \xDD\xAF %s \xDD %s", OnProcess_StudentData.stdnt_EmerNum, OnProcess_StudentData.stdnt_POC_Emergency);
+    SetCursorCoord_XY(30, 35);
     printf("\xFE\xCD\xCD TECHNICAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    gotoxy(30, 29);
-    printf("\xBA [8] Mobile Number \xDD\xAF %lld", NewStudent_Data.stdnt_MobileNum);
-    gotoxy(30, 31);
-    printf("\xBA [9] Phone Number \xDD\xAF %lld", NewStudent_Data.stdnt_PhoneNum);
-    gotoxy(30, 33);
-    printf("\xBA [10] Emergency Number and Emergency Point of Contact \xDD\xAF %lld \xDD %s", NewStudent_Data.stdnt_EmerNum, NewStudent_Data.stdnt_POC_Emergency);
-    gotoxy(30, 35);
-    printf("\xBA [11] Personal Email \xDD\xAF %s", NewStudent_Data.stdnt_Email);
-    gotoxy(30, 37);
-    printf("\xBA [12] Behavioral Issues \xDD\xAF %s", NewStudent_Data.stdnt_SpecialBehavioral);
-    gotoxy(30, 39);
+    SetCursorCoord_XY(30, 37);
+    printf("\xAF [11] Source of Interest in this Institution \xDD\xAF %s", OnProcess_StudentData.stdnt_SourceInterest);
+    SetCursorCoord_XY(30, 39);
+    printf("\xAF [12] Last School Year Attended \xDD\xAF %s", OnProcess_StudentData.stdnt_LastSchoolYear);
+    SetCursorCoord_XY(30, 41);
+    printf("\xAF [13] For Senior High School Student, Strand Taken \xDD\xAF %s", OnProcess_StudentData.stdnt_LastSchoolStrand);
+    SetCursorCoord_XY(30, 43);
+    printf("\xAF [14] Personal Email \xDD\xAF %s", OnProcess_StudentData.stdnt_Email);
+    SetCursorCoord_XY(30, 45);
+    printf("\xAF [15] Behavioral Issues \xDD\xAF %s", OnProcess_StudentData.stdnt_SpecialBehavioral);
+    SetCursorCoord_XY(30, 47);
     printf("\xC9\xCD\xCD \xDD Question \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-    gotoxy(30, 40);
+    SetCursorCoord_XY(30, 48);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 41);
+    SetCursorCoord_XY(30, 49);
     printf("\xBA \xAF Are the sure the following encoded data is correct and accurate?\t\t\t\t\t   \xBA");
-    gotoxy(30, 42);
+    SetCursorCoord_XY(30, 50);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 43);
+    SetCursorCoord_XY(30, 51);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-    gotoxy(30, 45);
-    printf("\xC8\xAF Press a key for your desired decision [|Y|es or |N|o] \xDD\xAF ");
+    SetCursorCoord_XY(30, 52);
+    printf("\xC8\xAF Press a key that corresponds your decision [|Y|es or |N|o] \xDD\xAF ");
     Data_Confirmation = getche();
     if (Data_Confirmation == 'Y' || Data_Confirmation == 'y')
     {
-        gotoxy(30, 45);
+        SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD INFO \xDD Data Received, Proceeding to Step 2 \xDD Course Registration...");
-        Sleep(2000);
+        Sleep(1750);
         Func_NewStdnt_CourseReg();
     }
     else if (Data_Confirmation == 'N' || Data_Confirmation == 'n')
     {
-        gotoxy(30, 45);
+        SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD INFO \xDD Returning To Step 1 \xDD Filling up Personal Information...");
         Sleep(3000);
         Func_NewStdnt_FillUp();
     }
     else
     {
-        gotoxy(30, 47);
-        printf("\xAF \xDD ERROR \xDD Unrecognized Input!");
-        Sleep(2000);
+        SetCursorCoord_XY(30, 54);
+        printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
+        Sleep(1750);
         Func_NewStdnt_InfoCheck();
     }
 }
@@ -442,166 +589,186 @@ int Func_NewStdnt_CourseReg()
     int BranchBase_Accepter = 0, MainCourse_Accepter = 0;
     char *MainCourse_CodeName[8] = {"BSCE", "BSCpE", "BSEE", "BSECE", "BSEnSE", "BSIE", "BSME", "Arch"};
     char *MainCourse_FullName[8] = {"Civil Engineering", "Computer Engineering", "Electrical Engineering", "Electronics Engineering", "Environmental and Sanitary Engineering", "Industrial Engineering", "Mechanical Engineering", "Architecture"};
-    gotoxy(30, 3);
-    printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-    gotoxy(30, 4);
+    SetCursorCoord_XY(30, 3);
+    printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(30, 4);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 5);
-    printf("\xBA \xDD [2nd Step \xAF Course Registration] | 3rd | 4th | 5th | Confirm | End]\t\t\t\t\t   \xBA"); //3RD IS SCHOLARSHIP, 4TH IS MODE OF PAYMENT
-    gotoxy(30, 6);
+    SetCursorCoord_XY(30, 5);
+    printf("\xBA [1st \xAF \xDD\xAF [2nd Step of Part 1 \xAF Branch Course Selection] \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF End]\t\t   \xBA");
+    SetCursorCoord_XY(30, 6);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 7);
+    SetCursorCoord_XY(30, 7);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-    gotoxy(30, 9);
-    printf("\xC9\xCD\xCD \xDD Information \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-    gotoxy(30, 10);
+    SetCursorCoord_XY(30, 9);
+    printf("\xC9\xCD\xCD \xDD Take This Note \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(30, 10);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 11);
-    printf("\xBA Please fill up your course to take and year that you want to take into.\t\t\t\t           \xBA");
-    gotoxy(30, 12);
-    printf("\xBA \xDD NOTE \xDD \xAF Please choose your course wisely, there is no going back!\t\t\t\t\t   \xBA");
-    gotoxy(30, 13);
+    SetCursorCoord_XY(30, 11);
+    printf("\xBA Please choose your branch course that you want to get into / take into.\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 12);
+    printf("\xBA \xDD WARN \xDD \xAF Please choose your branch course wisely, there is no going back when you enroll successfully!   \xBA");
+    SetCursorCoord_XY(30, 13);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 14);
+    SetCursorCoord_XY(30, 14);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-    gotoxy(30, 16);
+    SetCursorCoord_XY(30, 16);
     printf("\xC9\xCD\xCD \xDD PLEASE CHOOSE A BRANCH BASE COURSE \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-    gotoxy(30, 17);
+    SetCursorCoord_XY(30, 17);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 18);
+    SetCursorCoord_XY(30, 18);
     printf("\xBA \t[1] \xDD College of Engineering \t\t       \xDD\t [2] \xDD College of Architecture\t\t   \xBA");
-    gotoxy(30, 19);
+    SetCursorCoord_XY(30, 19);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-    gotoxy(30, 20);
+    SetCursorCoord_XY(30, 20);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-    gotoxy(30, 22);
-    printf("\xC8\xAF Press a key for your desired decision [1 - 2] \xDD\xAF ");
+    SetCursorCoord_XY(30, 22);
+    printf("\xC8\xAF Press a key that corresponds your decision [1 - 2] \xDD\xAF ");
     switch (BranchBase_Accepter = getche())
     {
     case '1':
-        system("CLS");
-        gotoxy(30, 3);
-        printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 4);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 5);
-        printf("\xBA \xDD [2nd Step \xAF Course Registration] | 3rd | 4th | 5th | Confirm | End]\t\t\t\t\t   \xBA"); //3RD IS SCHOLARSHIP, 4TH IS MODE OF PAYMENT
-        gotoxy(30, 6);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 7);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 9);
-        printf("\xC9\xCD\xCD CHOICE YOUR MAIN / DESIRED COURSE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 10);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 11);
-        printf("\xBA \xAF [1] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[0], MainCourse_CodeName[0]);
-        gotoxy(30, 12);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 13);
-        printf("\xBA \xAF [2] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[1], MainCourse_CodeName[1]);
-        gotoxy(30, 14);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 15);
-        printf("\xBA \xAF [3] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[2], MainCourse_CodeName[2]);
-        gotoxy(30, 16);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 17);
-        printf("\xBA \xAF [4] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[3], MainCourse_CodeName[3]);
-        gotoxy(30, 18);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 19);
-        printf("\xBA \xAF [5] \xDD %s \xDD %s\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[4], MainCourse_CodeName[4]);
-        gotoxy(30, 20);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 21);
-        printf("\xBA \xAF [6] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[5], MainCourse_CodeName[5]);
-        gotoxy(30, 22);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 23);
-        printf("\xBA \xAF [7] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[6], MainCourse_CodeName[6]);
-        gotoxy(30, 24);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 25);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 27);
-        printf("\xC8\xAF Press a key for your desired decision [1 - 7] \xDD\xAF "); // Fix this also
-        switch (MainCourse_Accepter = getche())
+        SetCursorCoord_XY(30, 24);
+        printf("\xAF \xDD INFO \xDD You have chosen 'College of Engineering' as a branch base course...");
+        Sleep(1750);
+        while (1)
         {
-        case '1':
-            gotoxy(30, 27);
-            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Year Selection...", MainCourse_FullName[0]);
-            Sleep(2000);
-            strcpy(NewStudent_Data.MainCourse_CodeName_Passer, MainCourse_CodeName[0]);
-            strcpy(NewStudent_Data.MainCourse_FullName_Passer, MainCourse_FullName[0]);
-            Func_NewStdnt_Eng_YearSemSelect();
-        case '2':
-            gotoxy(30, 27);
-            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Year Selection...", MainCourse_FullName[1]);
-            Sleep(2000);
-            strcpy(NewStudent_Data.MainCourse_CodeName_Passer, MainCourse_CodeName[1]);
-            strcpy(NewStudent_Data.MainCourse_FullName_Passer, MainCourse_FullName[1]);
-            Func_NewStdnt_Eng_YearSemSelect();
-        case '3':
-            gotoxy(30, 27);
-            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Year Selection...", MainCourse_FullName[2]);
-            Sleep(2000);
-            strcpy(NewStudent_Data.MainCourse_CodeName_Passer, MainCourse_CodeName[2]);
-            strcpy(NewStudent_Data.MainCourse_FullName_Passer, MainCourse_FullName[2]);
-            Func_NewStdnt_Eng_YearSemSelect();
-        case '4':
-            gotoxy(30, 27);
-            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Year Selection...", MainCourse_FullName[3]);
-            Sleep(2000);
-            strcpy(NewStudent_Data.MainCourse_CodeName_Passer, MainCourse_CodeName[3]);
-            strcpy(NewStudent_Data.MainCourse_FullName_Passer, MainCourse_FullName[3]);
-            Func_NewStdnt_Eng_YearSemSelect();
-        case '5':
-            gotoxy(30, 27);
-            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Year Selection...", MainCourse_FullName[4]);
-            Sleep(2000);
-            strcpy(NewStudent_Data.MainCourse_CodeName_Passer, MainCourse_CodeName[4]);
-            strcpy(NewStudent_Data.MainCourse_FullName_Passer, MainCourse_FullName[4]);
-            Func_NewStdnt_Eng_YearSemSelect();
-        case '6':
-            gotoxy(30, 27);
-            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Year Selection...", MainCourse_FullName[5]);
-            Sleep(2000);
-            strcpy(NewStudent_Data.MainCourse_CodeName_Passer, MainCourse_CodeName[5]);
-            strcpy(NewStudent_Data.MainCourse_FullName_Passer, MainCourse_FullName[5]);
-            Func_NewStdnt_Eng_YearSemSelect();
-        case '7':
-            gotoxy(30, 27);
-            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Year Selection...", MainCourse_FullName[6]);
-            Sleep(2000);
-            strcpy(NewStudent_Data.MainCourse_CodeName_Passer, MainCourse_CodeName[6]);
-            strcpy(NewStudent_Data.MainCourse_FullName_Passer, MainCourse_FullName[6]);
-            Func_NewStdnt_Eng_YearSemSelect();
+            system("CLS");
+            SetCursorCoord_XY(30, 3);
+            printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+            SetCursorCoord_XY(30, 4);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 5);
+            printf("\xBA [1st \xAF \xDD\xAF [2nd Step of Part 2 \xAF Main Course Selection] \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF End]\t\t   \xBA");
+            SetCursorCoord_XY(30, 6);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 7);
+            printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+            SetCursorCoord_XY(30, 9);
+            printf("\xC9\xCD\xCD \xDD CHOICE YOUR MAIN / DESIRED COURSE \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+            SetCursorCoord_XY(30, 10);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 11);
+            printf("\xBA \xAF [1] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[0], MainCourse_CodeName[0]);
+            SetCursorCoord_XY(30, 12);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 13);
+            printf("\xBA \xAF [2] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[1], MainCourse_CodeName[1]);
+            SetCursorCoord_XY(30, 14);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 15);
+            printf("\xBA \xAF [3] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[2], MainCourse_CodeName[2]);
+            SetCursorCoord_XY(30, 16);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 17);
+            printf("\xBA \xAF [4] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[3], MainCourse_CodeName[3]);
+            SetCursorCoord_XY(30, 18);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 19);
+            printf("\xBA \xAF [5] \xDD %s \xDD %s\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[4], MainCourse_CodeName[4]);
+            SetCursorCoord_XY(30, 20);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 21);
+            printf("\xBA \xAF [6] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[5], MainCourse_CodeName[5]);
+            SetCursorCoord_XY(30, 22);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 23);
+            printf("\xBA \xAF [7] \xDD %s \xDD %s\t\t\t\t\t\t\t\t\t   \xBA", MainCourse_FullName[6], MainCourse_CodeName[6]);
+            SetCursorCoord_XY(30, 24);
+            printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+            SetCursorCoord_XY(30, 25);
+            printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+            SetCursorCoord_XY(30, 27);
+            printf("\xC8\xAF Press a key that corresponds your decision [1 - 7] \xDD\xAF "); // Fix this also
+            switch (MainCourse_Accepter = getche())
+            {
+            case '1':
+                SetCursorCoord_XY(30, 29);
+                printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[0]);
+                Sleep(1750);
+                strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[0]);
+                strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[0]);
+                Func_NewStdnt_YearSemSelect();
+                break;
+            case '2':
+                SetCursorCoord_XY(30, 29);
+                printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[1]);
+                Sleep(1750);
+                strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[1]);
+                strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[1]);
+                Func_NewStdnt_YearSemSelect();
+                break;
+            case '3':
+                SetCursorCoord_XY(30, 29);
+                printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[2]);
+                Sleep(1750);
+                strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[2]);
+                strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[2]);
+                Func_NewStdnt_YearSemSelect();
+                break;
+            case '4':
+                SetCursorCoord_XY(30, 29);
+                printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[3]);
+                Sleep(1750);
+                strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[3]);
+                strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[3]);
+                Func_NewStdnt_YearSemSelect();
+                break;
+            case '5':
+                SetCursorCoord_XY(30, 29);
+                printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[4]);
+                Sleep(1750);
+                strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[4]);
+                strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[4]);
+                Func_NewStdnt_YearSemSelect();
+                break;
+            case '6':
+                SetCursorCoord_XY(30, 29);
+                printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[5]);
+                Sleep(1750);
+                strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[5]);
+                strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[5]);
+                Func_NewStdnt_YearSemSelect();
+                break;
+            case '7':
+                SetCursorCoord_XY(30, 29);
+                printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[6]);
+                Sleep(1750);
+                strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[6]);
+                strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[6]);
+                Func_NewStdnt_YearSemSelect();
+                break;
+            default:
+                SetCursorCoord_XY(30, 29);
+                printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
+                Sleep(1750);
+                continue;
+            }
         }
     case '2':
-        gotoxy(30, 27);
-        printf("\xAF \xDD INFO \xDD Architecture is already declared as main course. Proceeding to Year Selection!");
-        Sleep(2000);
-        strcpy(NewStudent_Data.MainCourse_CodeName_Passer, MainCourse_CodeName[7]);
-        strcpy(NewStudent_Data.MainCourse_FullName_Passer, MainCourse_FullName[7]);
-        //Func_NewStdnt_Arch_YearSemSelect();
+        SetCursorCoord_XY(30, 24);
+        printf("\xAF \xDD INFO \xDD Architecture is basically indentified as a main course. Proceeding To Part 3 of Step 2...");
+        Sleep(1750);
+        strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[7]);
+        strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[7]);
+        Func_NewStdnt_YearSemSelect();
     default:
-        gotoxy(30, 27);
-        printf("\xAF \xDD ERROR \xDD Unrecognized Input!"); //FIX THE OUTPUT OF THIS ONE
-        Sleep(2000);
+        SetCursorCoord_XY(30, 24);
+        printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
+        Sleep(1750);
         Func_NewStdnt_CourseReg();
     }
 }
-// Engineering Subject Set Functions
-int Func_NewStdnt_Eng_YearSemSelect()
+int Func_NewStdnt_YearSemSelect()
 {
-    SetConsoleTitle(FUNCTION_STEP2_1);
     system("CLS");
-    int YearSelection_Accepter = 0, YearSelection_Accepter_Sem = 0, OldStudentParameter = 0;
+    SetConsoleTitle(FUNCTION_STEP2_1);
+    int YearSelection_Accepter = 0,
+        YearSelection_Accepter_Sem = 0,
+        OldStudentParameter = 0;
     static long long int Old_StudentID = 0;
     char DataCheck;
-    char *ERLM_Selection[5] = {"1st Year College", "2nd Year College", "3rd Year College", "4th Year College", "Architecture"};
-    char *ERLM_Selection_Sem[2] = {"First Semester", "Second Semester"};
+    char *ERLM_Selection[5] = {"1st Year College", "2nd Year College", "3rd Year College", "4th Year College", "5th Year College"},
+         *ERLM_Selection_Sem[2] = {"First Semester", "Second Semester"};
+
     if (OldStudentParameter == 1)
     {
         // Insert Check Database Here
@@ -616,93 +783,94 @@ int Func_NewStdnt_Eng_YearSemSelect()
     //Check At User.
     while (1)
     {
-        fflush(stdin);
-        gotoxy(30, 3);
-        printf("\xC9\xCD\xCD CURRENT PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 4);
+        system("CLS");
+        SetCursorCoord_XY(30, 3);
+        printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 4);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 5);
-        printf("\xBA [1st | \xDD [2nd Step \xAF Course Registration \xAF Year Selection] | 3rd | 4th | 5th | Confirm | End]\t           \xBA\n");
-        gotoxy(30, 6);
+        SetCursorCoord_XY(30, 5);
+        printf("\xBA [1st \xAF \xDD\xAF [2nd Step of Part 3 \xAF Course Level Selection] \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF End]\t\t   \xBA");
+        SetCursorCoord_XY(30, 6);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 7);
+        SetCursorCoord_XY(30, 7);
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 9);
-        printf("\xFE\xCD\xCD \xDD Current Choices \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-        gotoxy(30, 11);
-        printf(" \xAF Course Name and Course Code \xAF %s \xDD %s", NewStudent_Data.MainCourse_CodeName_Passer, NewStudent_Data.MainCourse_FullName_Passer);
-        gotoxy(30, 12);
-        printf(" \xAF Student Name \xAF  %s, %s %s", NewStudent_Data.stdnt_LName, NewStudent_Data.stdnt_FName, NewStudent_Data.stdnt_MName);
-        gotoxy(30, 13);
-        printf(" \xAF Student Number \xAF %ld", Old_StudentID);
-        gotoxy(30, 15);
+        SetCursorCoord_XY(30, 9);
+        printf("\xFE\xCD\xCD \xDD Current Choices \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetCursorCoord_XY(30, 11);
+        printf(" \xDD\xAF Course Name and Course Code \xAF %s \xDD %s", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_FullName_Passer);
+        SetCursorCoord_XY(30, 12);
+        printf(" \xDD\xAF Student Name \xAF %s, %s %s", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName);
+        SetCursorCoord_XY(30, 13);
+        printf(" \xDD\xAF Student Number \xAF %ld", Old_StudentID);
+        SetCursorCoord_XY(30, 15);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetCursorCoord_XY(30, 17);
+        printf("\xC9\xCD\xCD \xDD SELECTIONS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 18);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 19);
+        printf("\xBA \xAF [1] 1st Year College \t\t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 20);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 21);
+        printf("\xBA \xAF [2] 2nd Year College \t\t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 22);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 23);
+        printf("\xBA \xAF [3] 3rd Year College \t\t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 24);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 25);
+        printf("\xBA \xAF [4] 4th Year College \t\t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 26);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 27);
+        printf("\xBA \xAF [5] 5th Year College \t\t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 28);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 29);
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 17);
-        printf("\xFF\xCD\xCD Selections \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFF");
-        gotoxy(30, 18);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 19);
-        printf("\xBA \xAF [1] 1st Year College \t\t\t\t \xBA");
-        gotoxy(30, 20);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 21);
-        printf("\xBA \xAF [2] 2nd Year College \t\t\t\t \xBA");
-        gotoxy(30, 22);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 23);
-        printf("\xBA \xAF [3] 3rd Year College \t\t\t\t \xBA");
-        gotoxy(30, 24);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 25);
-        printf("\xBA \xAF [4] 4th Year College \t\t\t\t \xBA");
-        gotoxy(30, 26);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 27);
-        printf("\xBA \xAF [5] 5th Year College \t\t\t\t \xBA");
-        gotoxy(30, 28);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 29);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 30);
-        printf("\xC8\xAF Press a key for your Desired College Year Level [1 - 5] \xAF ");
+        SetCursorCoord_XY(30, 31);
+        printf("\xC8\xAF Press a key that corresponds your Desired College Year Level [1 - 5] \xAF ");
         switch (YearSelection_Accepter = getche())
         {
         case '1':
             YearSelection_Accepter = 0;
-            gotoxy(30, 32);
-            printf("You have selected %s", ERLM_Selection[YearSelection_Accepter]);
+            SetCursorCoord_XY(30, 33);
+            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
+            Sleep(1750);
             break;
         case '2':
-            //(int)YearSelection_Accepter_Eng;
             YearSelection_Accepter = 1;
-            gotoxy(30, 32);
-            printf("You have selected %s", ERLM_Selection[YearSelection_Accepter]);
+            SetCursorCoord_XY(30, 33);
+            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
+            Sleep(1750);
             break;
         case '3':
-            //(int)YearSelection_Accepter_Eng;
             YearSelection_Accepter = 2;
-            gotoxy(30, 32);
-            printf("You have selected %s", ERLM_Selection[YearSelection_Accepter]);
+            SetCursorCoord_XY(30, 33);
+            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
+            Sleep(1750);
             break;
         case '4':
-            //(int)YearSelection_Accepter_Eng;
             YearSelection_Accepter = 3;
-            gotoxy(30, 32);
-            printf("You have selected %s", ERLM_Selection[YearSelection_Accepter]);
+            SetCursorCoord_XY(30, 33);
+            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
+            Sleep(1750);
             break;
         case '5':
-            //(int)YearSelection_Accepter_Eng;
             YearSelection_Accepter = 4;
-            gotoxy(30, 32);
-            printf("You have selected %s", ERLM_Selection[YearSelection_Accepter]);
+            SetCursorCoord_XY(30, 33);
+            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
+            Sleep(1750);
             break;
         default:
-            gotoxy(30, 32);
-            printf("Your input is invalid from the choices...");
-            Sleep(2000);
+            SetCursorCoord_XY(30, 33);
+            printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
+            Sleep(1750);
             break;
         }
-        if (YearSelection_Accepter == 0 || YearSelection_Accepter == 1 || YearSelection_Accepter == 2 || YearSelection_Accepter == 3)
+        if (YearSelection_Accepter >= 0 && YearSelection_Accepter <= 5)
         {
             break;
         }
@@ -711,36 +879,68 @@ int Func_NewStdnt_Eng_YearSemSelect()
             continue;
         }
     }
-
-    Sleep(2000);
     system("CLS");
-    fflush(stdin);
-
     while (1)
     {
         system("CLS");
-        printf("--! 1st | [2nd Step - Course Registration | Year Select] | 3rd | 4th | 5th | Confirm | End --!\n\n");
-        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n");
-        printf("\tCODENAME\t|\tNAME\t");
-        printf("%s\t | \t%s,%s %s\t\t", NewStudent_Data.MainCourse_CodeName_Passer, NewStudent_Data.stdnt_LName, NewStudent_Data.stdnt_FName, NewStudent_Data.stdnt_MName);
-        printf("\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n\n");
-        fflush(stdin);
-        printf("[1] | First Semester\n");
-        printf("[2] | Second Semester\n");
-        printf("Please choose your Desired Semester [1 - 2] \xAF ");
+        SetCursorCoord_XY(30, 3);
+        printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 4);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 5);
+        printf("\xBA [1st \xAF \xDD\xAF [2nd Step of Part 4 \xAF Semester Selection] \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF End]\t\t           \xBA");
+        SetCursorCoord_XY(30, 6);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 7);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(30, 9);
+        printf("\xFE\xCD\xCD \xDD Current Choices \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetCursorCoord_XY(30, 11);
+        printf(" \xDD\xAF Course Name and Course Code \xAF %s \xDD %s", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_FullName_Passer);
+        SetCursorCoord_XY(30, 12);
+        printf(" \xDD\xAF Desired Year and Desired Semester \xAF %s \xDD %s", ERLM_Selection[YearSelection_Accepter], "Not Yet Selected");
+        SetCursorCoord_XY(30, 13);
+        printf(" \xDD\xAF Student Name \xAF %s, %s %s", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName);
+        SetCursorCoord_XY(30, 14);
+        printf(" \xDD\xAF Student Number \xAF %ld", Old_StudentID);
+        SetCursorCoord_XY(30, 16);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetCursorCoord_XY(30, 18);
+        printf("\xC9\xCD\xCD \xDD SELECTIONS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 19);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 20);
+        printf("\xBA \xAF [1] \xAF First Semester \t\t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 21);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 22);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 23);
+        printf("\xBA \xAF [2] \xAF Second Semester \t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 24);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 25);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(30, 27);
+        printf(" \xAF Please choose your Desired Semester [1 - 2] \xAF ");
         switch (YearSelection_Accepter_Sem = getche())
         {
         case '1':
             YearSelection_Accepter_Sem = 0;
-            printf("You have selected %s", ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
+            SetCursorCoord_XY(30, 29);
+            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 5...", ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
+            Sleep(1750);
             break;
         case '2':
+            SetCursorCoord_XY(30, 30);
             YearSelection_Accepter_Sem = 1;
-            printf("You have selected %s", ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
+            printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 5...", ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
+            Sleep(1750);
             break;
         default:
-            printf("Your input is invalid from the choices...");
-            Sleep(2000);
+            SetCursorCoord_XY(30, 30);
+            printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
+            Sleep(1750);
             break;
         }
         if (YearSelection_Accepter_Sem == 0 || YearSelection_Accepter_Sem == 1)
@@ -753,843 +953,843 @@ int Func_NewStdnt_Eng_YearSemSelect()
         }
     }
 
-    Sleep(2000);
     system("CLS");
 
     while (1)
     {
-        printf("\xCD\xCD\xCD CONFIRMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\n\n");
-        printf("Are you sure is this correct?\n\n");
-        printf("\xCD\xCD COURSE NAME \t\t|\t\t YEAR LEVEL && SEMESTER \t\t|\t\t COURSE CODE \n");
-        printf("%s \t\t|\t\t %s | %s \t\t|\t\t %s\n", NewStudent_Data.MainCourse_FullName_Passer, ERLM_Selection[YearSelection_Accepter], ERLM_Selection_Sem[YearSelection_Accepter_Sem], NewStudent_Data.MainCourse_CodeName_Passer);
+        system("CLS");
+        SetCursorCoord_XY(30, 3);
+        printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 4);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 5);
+        printf("\xBA [1st \xAF \xDD\xAF [2nd Step of Part 5 \xAF Data Finalization Checkpoint] \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF End]\t   \xBA");
+        SetCursorCoord_XY(30, 6);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 7);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(30, 9);
+        printf("\xFE\xCD\xCD \xDD Current Choices \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetCursorCoord_XY(30, 11);
+        printf(" \xDD\xAF Course Name and Course Code \xAF %s \xDD %s", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_FullName_Passer);
+        SetCursorCoord_XY(30, 12);
+        printf(" \xDD\xAF Desired Year and Desired Semester \xAF %s \xDD %s", ERLM_Selection[YearSelection_Accepter], ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
+        SetCursorCoord_XY(30, 13);
+        printf(" \xDD\xAF Student Name \xAF %s, %s %s", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName);
+        SetCursorCoord_XY(30, 14);
+        printf(" \xDD\xAF Student Number \xAF %ld", Old_StudentID);
+        SetCursorCoord_XY(30, 16);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetCursorCoord_XY(30, 18);
+        printf("\xC9\xCD\xCD \xDD CONFIRMATION AND FEW NOTES TO KNOW \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 19);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 20);
+        printf("\xBA \xDD QUESTION \xDD Are you sure you have picked the right options?\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 21);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 22);
+        printf("\xBA \xDD NOTE #1  \xDD If you are a newcoming student, default value of new students is 2018000.\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 23);
+        printf("\xBA \xDD NOTE #2  \xDD If you have mistakes, then you will have to reselect courses, year, semester again.\t   \xBA");
+        SetCursorCoord_XY(30, 24);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 25);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(30, 27);
+        printf("\xC8\xAF Press a key that corresponds your decision [|Y|es or |N|o] \xDD\xAF ");
         switch (DataCheck = getche())
         {
         case 'Y':
         case 'y':
-            printf("Data Inputted | Yes. -> Going To The Next Step");
-            // Pass This Already in Struct to lessen the difficutly to check what to pass when User Press 3 on Subject Unit Selection Function
-            strcpy(NewStudent_Data.Course_YearChoice, ERLM_Selection[YearSelection_Accepter]);
-            strcpy(NewStudent_Data.Course_SemSelection, ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
-
-            if (strcmp(NewStudent_Data.MainCourse_CodeName_Passer, "BSCE") == 0)
+            SetCursorCoord_XY(30, 29);
+            printf("\xDD INFO \xDD Data Temporarily Recorded \xAF Processing Data..."); // Pass This Already in Struct to lessen the difficutly to check what to pass when User Press 3 on Subject Unit Selection Function
+            SetCursorCoord_XY(30, 30);
+            printf("\xDD SUCCESS \xDD Data Processed. Proceeding to Step 3 \xAF Subject Enrollment Selection");
+            strcpy(OnProcess_StudentData.Course_YearChoice, ERLM_Selection[YearSelection_Accepter]);
+            strcpy(OnProcess_StudentData.Course_SemSelection, ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
+            Sleep(1800);
+            if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSCE") == 0)
             {
-                if (strcmp(NewStudent_Data.Course_YearChoice, "1st Year College") == 0)
+                if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        char *Subject_CodeName[12] = {"ENGL 001", "FIL 001", "MATH 001", "MATH 002", "COE 001", "CHEM 001", " AR 001 ", " PE 001 ", " NSTP 001 ", " ----", " ----", " ----"};
-                        char *Subject_FullName[12] = {"---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------"};
-                        char *Subject_LinearTime[12] = {"8:00AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "1:30PM - 4:30PM", "7:30AM - 9:30AM", "9:30AM - 12:00PM", "4:30PM - :5:30PM", "4:30PM - 6:30PM", "5:30PM - 6:30PM"};
+                        char *Subject_CodeName[12] = {"ENGL 001", "FIL 001", "MATH 001", "MATH 002", "COE 001", "CHEM 001", "AR 001", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "ENGINEERING ORIENTATION", "GENERAL CHEMISTRY", "ENGINEERING DRAWING 1", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "1:30PM - 4:30PM", "7:30AM - 9:30AM", "9:30AM - 12:00PM"};
                         int Subject_Units[12] = {3, 3, 3, 3, 1, 3, 0, 2, 3};
-                        int Subject_WholeSize = 12;
-                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        char *Subject_CodeName[12] = {"ENGL 001", "FIL 001", "MATH 001", "MATH 002", "COE 001", "CHEM 001", " AR 001 ", " PE 001 ", " NSTP 001 ", " ----", " ----", " ----"};
-                        char *Subject_FullName[12] = {"---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------"};
-                        char *Subject_LinearTime[12] = {"9:00AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "1:30PM - 4:30PM", "7:30AM - 9:30AM", "9:30AM - 12:00PM", "4:30PM - :5:30PM", "4:30PM - 6:30PM", "5:30PM - 6:30PM"};
+                        char *Subject_CodeName[12] = {"ENGL 001", "FIL 001", "MATH 001", "MATH 002", "COE 001", "CHEM 001", "AR 001", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"COMMUNICATION ARTS 2", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "COMPUTER FUNDAMENTALS", "ADVANCED ALGEBRA", "ANALYTIC GEOMETRY", "SOLID MENSURATION", "INTRODUCTION TO PHILOSOPHY", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30PM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
                         int Subject_Units[12] = {3, 3, 3, 3, 1, 3, 0, 2, 3};
-                        int Subject_WholeSize = 12;
-                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "2nd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"ENGL 003", "HUM 002", "SOCSC 001", "MATH 007", "CHEM 002", "SOCSC 002", "SOCSC 003", "PE 003"};
+                        char *Subject_FullName[12] = {"TECHNICAL COMMUNICATION", "LOGIC", "ECONOMICS", "AGRARIAN REFORM AND TAXATION", "DIFFERENTIAL CALCULUS", "ENVIRONMENTAL ENGINEERING", "SOCIETY AND CULTURE W/ FAMILY PLANNING", "PHILIPPINES HISTORY W/ POLITICS & GOVERNANCE", "INDIVIDUAL / DUAL SPORTS"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30PM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 4, 3, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"SOCSC 005", "HUM 003", "SOCSC 004", "MATH 008", "PHYS 001", "CS 100 A", "MATH 009", "PE 004"};
+                        char *Subject_FullName[12] = {"LIFE AND WORKS OF RIZAL", "ETHICS", "GENERAL PSYCHOLOGY", "INTEGRAL CALCULUS", "CALCULUS-BASED PHYSICS 1", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "PROBABILITY AND STATISTICS", "SPORTS AND GAMES"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30PM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 4, 3, 1, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "3rd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"PHYS 002", "CPE 003", "MATH 010", "CE 301", "IE 002", "CE 001", "ME 005", "MATH 013", "CE 300"};
+                        char *Subject_FullName[12] = {"CALCULUS-BASED PHYSICS 2", "COMPUTER-AIDED DRAFTING", "DIFFERENTIAL EQUATIONS", "ENGINEERING GEOLOGY", "SAFETY MANAGEMENT", "STATICS OF RIGID BODIES", "ENGINEERING ECONOMY", "LINEAR ALGEBRA W/ MATLAB", "ELEMENTARY SURVEYING"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30PM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 0, 3, 3, 2, 3, 3, 2, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 011 A", "CE 002", "CE 003", "ME 004", "EE 006", "IE 001", "CE 303", "CE 304"};
+                        char *Subject_FullName[12] = {"ADV. ENGRG. MATH W/ NUM METHODS", "DYNAMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "THERMODYNAMICS", "BASIC ELECTRICAL ENGINEERING", "ENGINEERING MANAGEMENT", "HIGHER SURVEYING", "INTEGRATION COURSE FOR CE 1"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 5, 3, 3, 3, 2, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "4th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CE 400", "CE 401", "CE 402", "CE 403", "CE 404", "CE 405", "CE 406"};
+                        char *Subject_FullName[12] = {"HIGHWAY ENGINEERING", "SOIL MECHANICS", "FLUID MECHANICS", "ENGINEERING SURVEYS", "STRUCTURAL THEORY 1", "CONSTRUCTION MATERIALS AND TESTING", "BUILDING DESIGN 1"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 2, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CE 407", "CE 408", "CE 409", "CE 410", "CE 411", "CE 412", "CE 413", "CE 414"};
+                        char *Subject_FullName[12] = {"EARTHQUAKE ENGINEERING", "TRANSPORTATION ENGINEERING", "STRUCTURAL THEORY 2", "HYDROLOGY", "HYDRAULICS ENGINEERING", "TIMBER DESIGN", "BUILDING DESIGN 2", "INTEGRATION COURSE FOR CE 2"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 1, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-            }
-            else if (strcmp(NewStudent_Data.MainCourse_CodeName_Passer, "BSCpE") == 0)
-            {
-                if (strcmp(NewStudent_Data.Course_YearChoice, "1st Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CE 407", "CE 408", "CE 409", "CE 410", "CE 411", "CE 412", "CE 413", "CE 414"};
+                        char *Subject_FullName[12] = {"EARTHQUAKE ENGINEERING", "TRANSPORTATION ENGINEERING", "STRUCTURAL THEORY 2", "HYDROLOGY", "HYDRAULICS ENGINEERING", "TIMBER DESIGN", "BUILDING DESIGN 2", "INTEGRATION COURSE FOR CE 2"};
+                        char *Subject_LinearTime[12] = {"7:30 - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30PM - 1:30PM", "1:30PM-  2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 1, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize)
-                    }
-                }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "2nd Year College") == 0)
-                {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
-                    {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
-                    }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
-                    {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
-                    }
-                }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "3rd Year College") == 0)
-                {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
-                    {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
-                    }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
-                    {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
-                    }
-                }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "4th Year College") == 0)
-                {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
-                    {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
-                    }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
-                    {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CE 501", "CE 502", "CE 503", "CE 504", "CE 505", "CE 506", "CE 507"};
+                        char *Subject_FullName[12] = {"PLANT VISITS & SEMINARS FOR CE", "REINFORCED CONCRETE DESIGN", "WATER & WASTE WATER ENGINEERING", "STRUCTURAL MATRIX ANALYSIS", "CONSTRUCTION METHODS & PROJECT MANAGEMENT", "CE DESIGN PROJECTS 1", "WATER RESOURCES ENGINEERING"};
+                        char *Subject_LinearTime[12] = {"7:30 - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30 PM", "12:30PM - 1:30PM", "1:30PM-2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {1, 6, 3, 3, 4, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
-            else if (strcmp(NewStudent_Data.MainCourse_CodeName_Passer, "BSEE") == 0)
+            else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSCpE") == 0)
             {
-                if (strcmp(NewStudent_Data.Course_YearChoice, "1st Year College") == 0)
+                if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 001", "COE 001", "CPE 001", "ENGL 001", "FIL 001", "MATH 001", "MATH 002", "PE 001", "NSTP 001"};
-                        //char *Subject_FullName[12] = {"GENERAL CHEMISTRY", "ENGINEERING ORIENTATION", "COMPUTER FUNDAMENTALS", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {4, 1, 1, 3, 3, 3, 3, 2, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "CHEM 001", "CPE 001", "COE 001", "ENGL 001", "FIL 001", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "GENERAL CHEMISTRY", "COMPUTER FUNDAMENTALS", "ENGINEERING ORIENTATION", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30 - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 4, 1, 1, 3, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"AR 001", "ENGL 002", "FIL 002", "HUM 001", "HUM 002", "MATH 003", "MATH 004", "MATH 005", "PE 002", "NSTP 002"};
-                        //char *Subject_FullName[12] = {"ENGINEERING DRAWING", "COMMUNICATION ARTS 2", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "INTRODUCTION TO PHILOSOPHY", "LOGIC", "ADVANCED ALGEBRA", "ANALYTIC GEOMETRY", "SOLID MENSURATION", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM"};
-                        //int Subject_Units[12] = {1, 3, 3, 3, 3, 2, 3, 2, 2, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 003", "MATH 004", "MATH 005", "AR 001", "CS 100A", "HUM 001", "ENGL 002", "FIL 002", "PE 002", "NSTP 002"};
+                        char *Subject_FullName[12] = {"ADVANCED ALGEBRA", "ANALYTIC GEOMETRY", "SOLID MENSURATION", "ENGINEERING DRAWING", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "INTRODUCTION TO PHILOSOPHY", "COMMUNICATION ARTS 2", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30 - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {2, 3, 2, 1, 2, 3, 3, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "2nd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 002", "CS 100A", "ENGL 003", "MATH 006", "MATH 007", " SOCSC 001", "SOCSC 002", "PE 003"};
-                        //char *Subject_FullName[12] = {"ENVIRONMENTAL ENGINEERING", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "TECHNICAL COMMUNICATIONS", "DISCRETE MATHEMATICS", "DIFFERENTIAL CALCULUS", "ECONOMICS, AGRARIAN REFORM AND TAXATIONS", "SOCIETY AND CULTURE WITH FAMILY PLANNING", "INDIVIDUAL/DUAL SPORTS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 2, 3, 3, 4, 3, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "CHEM 001", "CPE 001", "COE 001", "ENGL 001", "FIL 001", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGO..", "GENERAL CHEMISTRY", "COMPUTER FUNDAMENTALS", "ENGINEERING ORIENTATION", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30 - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 4, 1, 1, 3, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"HUM 003", "MATH 008", "MATH 009", "PHYS 001", "SOCSC 003", "SOCSC 004", "PE 004"};
-                        //char *Subject_FullName[12] = {"ETHICS", "INTEGRAL CALCULUS", "PROBABILITY AND STATISTICS", "CALCULUS-BASED PHYSICS 1", "PHILIPPINES HISTORY WITH POLITICS AND GOVERNANCE", "GENERAL PSYCHOLOGY", "SPORTS AND GAMES"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 4, 3, 4, 3, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 008", "MATH 009", "PHYS 001", "CS 201A", "CPE 201", "SOCSC 003", "HUM 002", "PE 004"};
+                        char *Subject_FullName[12] = {"INTEGRAL CALCULUS", "PROBABILITY AND STATISTICS", "CALCULUS-BASED PHYSICS 1", "DATA STRUCTURES AND ALGORITHM ANALYSIS", "COMPUTER SYSTEMS ADMIN. AND TROUBLESHOOTING", "PHILIPPINES HISTORY W/ POLITICS & GOVERNANCE", "LOGIC", "SPORTS AND GAMES"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30 - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {4, 3, 4, 4, 2, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "3rd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CE 001", "CPE 003", "1E 001", "1E 002", "MATH 010", "ME 005", "PHYS 002", "SOCSC 005", "EE 300"};
-                        //char *Subject_FullName[12] = {"STATICS OF RIGID BODIES", "COMPUTER-AIDED DRAFTING", "SAFETY MANAGEMENT", "DIFFERENTIAL EQUATIONS", "ENGINEERING ECONOMY", "CALCULUS-BASED PHYSICS 2", "LIFE AND WORKS OF RIZAL", "RESEARCH METHODS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {3, 1, 3, 2, 3, 3, 4, 3, 1};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 010", "PHYS 002", "CE 001", "CHEM 002", "IE 002", "ME 005", "HUM 003", "SOCSC 004", "CPE 301", "CPE 304"};
+                        char *Subject_FullName[12] = {"DIFFERENTIAL EQUATIONS", "CALCULUS-BASED PHYSICS 2", "STATICS OF RIGID BODIES", "ENVIRONMENTAL ENGINEERING", "SAFETY MANAGEMENT", "ENGINEERING ECONOMY", "ETHICS", "GENERAL PSYCHOLOGY", "DATABASE MANAGEMENT SYSTEMS 1", "COMPUTER ENGINEERING DRAFTING & DESIGN"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30 - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 4, 3, 3, 2, 3, 3, 3, 1, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"EE 002", "EE 301", "EE 302", "ECE 001", "ECE 302", "CE 002", "CE 003A", "MATH 011", "ME 004"};
-                        //char *Subject_FullName[12] = {"ELECTRICAL CIRCUITS 1", "INTEGRATION COURSE FOR MATHEMATICS", "ELECTRICAL ENGINEERING SAFETY", "ELECTRONIC DEVICES AND CIRCUITS", "ELECTROMAGNETICS", "DYNAMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "ADVANCED ENGINEERING MATHEMATICS", "THERMODYNAMICS 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {4, 2, 1, 4, 3, 3, 3, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 011", "SOCSC 005", "CE 002", "CE 003A", "IE 001", "ECE 001", "EE 002", "CPE 302", "CPE 303"};
+                        char *Subject_FullName[12] = {"ADVANCED ENGINEERING MATHEMATICS", "LIFE AND WORKS OF RIZAL", "DYNAMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "ENGINEERING MANAGEMENT", "ELECTRONIC DEVICES AND CIRCUITS", "ELECTRICAL CIRCUITS 1", "COMPUTER NETWORKS 1", "DATABASE MANAGEMENT SYSTEMS 2"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 4, 4, 3, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "4th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"EE 003", "EE 401", "ECE 402", "CE 402A", "CHEM 004", " CPE 004", "MATH 012", "1E 301A"};
-                        //char *Subject_FullName[12] = {"ELECTRICAL CIRCUITS 2", "DC MACHINERY", "ELECTRONIC CIRCUIT ANALYSIS AND DESIGN", "FLUID MECHANICS", "MATERIALS SCIENCE AND ENGINEERING", "LOGIC CIRCUITS AND SWITCHING THEORY", "NUMERICAL METHODS", "APPLIED STATISTICS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {4, 4, 4, 3, 3, 4, 4, 1};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CPE 411", "EE 003", "ECE 401", "ECE 402", "CPE 004", "CPE 401", "CPE ELEC 1"};
+                        char *Subject_FullName[12] = {"SYSTEMS ANALYSIS AND DESIGN", "ELECTRICAL CIRCUITS 2", "SIGNALS, SPECTRA, SIGNAL PROCESSING", "ELECTRONIC CIRCUIT ANALYSIS AND DESIGN", "LOGIC CIRCUITS AND SWITCHING THEORY", "COMPUTER NETWORKS 2", "CPE ELECTIVE 1"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 4, 4, 4, 4, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"EE 402", "EE 403", "EE 404", "EE 405", "EE 406", "ECE 004", "ECE 006", "CPE 006", "EE 407"};
-                        //char *Subject_FullName[12] = {"EE LAWS, ETHICS, CODES AND STANDARDS", "AC MACHINERY", "INTEGRATION COURSE FOR ENGINNERING SCIENCES", "TRANSFORMER AND AC APPARATUSES", "ELECTRICAL CIRCUITS 3", "PRINCIPLES OF COMMUNICATION", "FEEDBACK AND CONTROL SYSTEMS", "MICROPROCESSOR SYSTEMS", "EE RESEARCH 2 (RESEARCH PROJECT)"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {2, 4, 2, 3, 3, 4, 4, 4, 1};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"COE 002A", "ECE 004A", "ECE 006", "CPE 005", "CPE 402", "CPE 404", "CPE ELEC 2"};
+                        char *Subject_FullName[12] = {"INTRODUCTION TO INTELLECTUAL PROPERTY", "PRINCIPLES OF COMMUNICATIONS", "FEEDBACK AND CONTROL SYSTEMS", "COMP. SYSTEM ORG W/ ASSEMBLY LANGUAGE", "ADVANCED LOGIC CIRCUITS", "COMPUTER NETWORKS 3", "CPE ELECTIVE 2"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {1, 3, 4, 4, 4, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "5th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"EE 501", "EE 502", "EE 503", "EE 504", "--", "--", "ECE 003", "EE 505"};
-                        //char *Subject_FullName[12] = {"POWER SYSTEM ANALYSIS AND DESIGN", "ILLUMINATION ENGINEERING DESIGN", "ELECTRICAL SYSTEM DESIGN", "ELECTRICAL EQUIPMENT OPERATION MAINTENANCE", "EE ELECTIVE 1", "EE ELECTIVE 2", "INDUSTRIAL ELECTRONICS", "DESIGN PROJECT 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {4, 3, 4, 3, 3, 3, 4, 1};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CPE 506", "IE 004", "ECE 504A", "CPE 006", "CPE 501", "CPE 502", "CPE 503", "CPE ELEC 3"};
+                        char *Subject_FullName[12] = {"SOFTWARE ENGINEERING", "ENGINEERING ENTREPRENEURSHIP", "DATA COMMUNICATIONS", "MICROPROCESSOR SYSTEMS", "COMPUTER NETWORKS DESIGN", "PLANT VISITS AND SEMINARS FOR CPE", "DESIGN PROJECT 1", "CPE ELECTIVE 3"};
+                        char *Subject_LinearTime[12] = {"7:30AM -8:30AM", "8:30-9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30PM- 1:30PM", "1:30-2:30 PM", "2:30PM-3:30 PM", "3:30PM-4:30 PM"};
+                        int Subject_Units[12] = {3, 3, 3, 4, 3, 1, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"EE 506", "EE 507", "EE 508", "EE 509", "EE 510", "--", "--", "ITE 002A", "EE 511"};
-                        //char *Subject_FullName[12] = {"ELECTRICAL TRANSPORTATION AND DISTRIBUTION SYSTEM AND DESIGN", "PLANT VISITS AND SEMINARS FOR EE", "POWER PLANT ENGINEERING AND SUBSTATION DESIGN", "INTEGRATION COURSE FOR EE 3", "INSTRUMENTATION AND CONTROL", "EE ELECTIVE 3", "EE ELECTIVE 4", "INFORMATION TECHNOLOGY", "DESIGN PROJECT 2"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {4, 1, 3, 2, 3, 3, 3, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CPE 507", "CPE 504", "CPE 505", "CPE 508", "CPE 500"};
+                        char *Subject_FullName[12] = {"OPERATING SYSTEMS", "COMPUTER SYSTEMS ARCHITECTURE", "ENGINEERING ETHICS AND COMPUTER LAWS", "DESIGN PROJECT 2", "ON-THE-JOB TRAINING"};
+                        char *Subject_LinearTime[12] = {"7:30-8:30AM", "8:30-9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30PM- 1:30PM"};
+                        int Subject_Units[12] = {4, 4, 2, 2, 5};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
-            else if (strcmp(NewStudent_Data.MainCourse_CodeName_Passer, "BSECE") == 0)
+            else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSEE") == 0)
             {
-                if (strcmp(NewStudent_Data.Course_YearChoice, "1st Year College") == 0)
+                if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "CHEM 001", "CPE 001", "ENGL 001", "FIL 001", "COE 001", "PE 001", "NSTP 001"};
-                        //char *Subject_FullName[12] = {"PLANE AND SPHERICAL TROGONOMETRY", "GENERAL CHEMISTRY", "COMPUTER FUNDAMENTALS", "COMMUNICATION ARTS 001", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "ENGINEERING ORIENTATION", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {3, 3, 4, 1, 3, 3, 1, 2, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 001", "COE 001", "CPE 001", "ENGL 001", "FIL 001", "MATH 001", "MATH 002", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"GENERAL CHEMISTRY", "ENGINEERING ORIENTATION", "COMPUTER FUNDAMENTALS", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGO", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {4, 1, 1, 3, 3, 3, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"MATH 003", "MATH 004", "MATH 005", "AR 001", "CS 100A", "HUM 001", "HUM 002", "ENGL 002", "FIL 002", "PE 002", "NSTP 001"};
-                        //char *Subject_FullName[12] = {"ADVANCED ALGEBRA", "ANALYTICAL GEOMETRY", "SOLID MEASURATION", "ENGINEERING DRAWING", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "INTRODUCTION TO PHILOSOPHY", "LOGIC", "COMMUNICATION ARTS 2", "PAGBASA AT PAGSULAT TINGO SA PANANALIKSIK", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM", "7:00PM - 8:00PM"};
-                        //int Subject_Units[12] = {2, 3, 2, 1, 2, 3, 3, 3, 3, 2, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"AR 001", "ENGL 002", "FIL 002", "HUM 001", "HUM 002", "MATH 003", "MATH 004", "MATH 005", "PE 002", "NSTP 002"};
+                        char *Subject_FullName[12] = {"ENGINEERING DRAWING", "COMMUNICATION ARTS 2", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "INTRODUCTION TO PHILOSOPHY", "LOGIC", "ADVANCED ALGEBRA", "ANALYTIC GEOMETRY", "SOLID MENSURATION", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM"};
+                        int Subject_Units[12] = {1, 3, 3, 3, 3, 2, 3, 2, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "2nd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"MATH 006", "MATH 007", "MATH 014", "CHEM 002", "CPE 003", "SOCSC 001", "SOCSC 002", "SOCSC 003", "PE 003"};
-                        //char *Subject_FullName[12] = {"DISCRETE MATHEMATICS", "DIFFERENTIAL CALCULUS", "FUNDAMENTALS OF MATLAB PROGRAMMING", "ENVIRONMENTAL ENGINEERING", "COMPUTER-AIDED DRAFTING", "ECONOMICS, AGRARIAN REFORM AND TAXATION", "SOCIETY AND CULTURE WITH FAMILY PLANNING", "PHILIPPINE HISTORY WITH POLITICS AND GOVERNANCE", "INDIVIDUAL/DUAL SPORTS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {3, 4, 1, 3, 1, 3, 3, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 002", "CS 100A", "ENGL 003", "MATH 006", "MATH 007", " SOCSC 001", "SOCSC 002", "PE 003"};
+                        char *Subject_FullName[12] = {"ENVIRONMENTAL ENGINEERING", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "TECHNICAL COMMUNICATIONS", "DISCRETE MATHEMATICS", "DIFFERENTIAL CALCULUS", "ECONOMICS, AGRARIAN REFORM AND TAXATIONS", "SOCIETY AND CULTURE W/ FAMILY PLANNING", "INDIVIDUAL / DUAL SPORTS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 2, 3, 3, 4, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ECE 100", "MATH 008", "MATH 009", "PHYS 001", "HUM 003", "SOCSC 004", "SOCSC 005", "ENGL 003", "PE 004"};
-                        //char *Subject_FullName[12] = {"FUNDAMENTALS OF LABVIEW PROGRAMMING", "INTEGRAL CALCULUS", "PROBABILITY AND STATISTICS", "CALCULUS-BASED PHYSICS 1", "ETHICS", "GENERAL PSYCHOLOGY", "LIFE AND WORKS OF RIZAL", "TECHNICAL COMMUNICATION", "SPORTS AND GAMES"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {1, 4, 3, 4, 3, 3, 3, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"HUM 003", "MATH 008", "MATH 009", "PHYS 001", "SOCSC 003", "SOCSC 004", "PE 004"};
+                        char *Subject_FullName[12] = {"ETHICS", "INTEGRAL CALCULUS", "PROBABILITY AND STATISTICS", "CALCULUS-BASED PHYSICS 1", "PHILIPPINES HISTORY W/ POLITICS & GOVERNANCE", "GENERAL PSYCHOLOGY", "SPORTS AND GAMES"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 4, 3, 4, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "3rd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ECE 301", "CPE 005B", "CE 001", "IE 001", "IE 002", "ME 005", "MATH 010", "PHYS 002"};
-                        //char *Subject_FullName[12] = {"VECTOR ANALYSIS", "COMPUTER ORGANIZATION AND ARCHITECTURE", "STATICS OF RIGID BODIES", "ENGINEERING MANAGEMENT", "SAFETY MANAGEMENT", "ENGINEERING ECONOMY", "DIFFERENTIAL EQUATIONS", "CALCULUS-BASED PHYSICS 2"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 4, 3, 3, 2, 3, 3, 4};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CE 001", "CPE 003", "1E 001", "1E 002", "MATH 010", "ME 005", "PHYS 002", "SOCSC 005", "EE 300"};
+                        char *Subject_FullName[12] = {"STATICS OF RIGID BODIES", "COMPUTER-AIDED DRAFTING", "SAFETY MANAGEMENT", "DIFFERENTIAL EQUATIONS", "ENGINEERING ECONOMY", "CALCULUS-BASED PHYSICS 2", "LIFE AND WORKS OF RIZAL", "RESEARCH METHODS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 1, 3, 2, 3, 3, 4, 3, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ECE 001", "ECE 302", "ECE 303", "EE 002", "CE 002", "CE 003A", "CHEM 004", "MATH 011"};
-                        //char *Subject_FullName[12] = {"ELECTRONIC DEVICES AND CIRCUITS", "ELECTROMAGNETICS", "INTEGRATION COURSE 1 FOR ECE", "ELECTRICAL CIRCUITS 1", "DYANMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "MATERIALS SCIENCE AND ENGINEERING", "ADVANCE ENGINEERING MATHEMATICS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {4, 3, 2, 4, 3, 3, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"EE 002", "EE 301", "EE 302", "ECE 001", "ECE 302", "CE 002", "CE 003A", "MATH 011", "ME 004"};
+                        char *Subject_FullName[12] = {"ELECTRICAL CIRCUITS 1", "INTEGRATION COURSE FOR MATHEMATICS", "ELECTRICAL ENGINEERING SAFETY", "ELECTRONIC DEVICES AND CIRCUITS", "ELECTROMAGNETICS", "DYNAMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "ADVANCED ENGINEERING MATHEMATICS", "THERMODYNAMICS 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {4, 2, 1, 4, 3, 3, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "4th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"--", "ECE 402", "ECE 401", "EE 003", "CPE 004", "MATH 012", "ME 004"};
-                        //char *Subject_FullName[12] = {"ECE ELECTIVE 1", "ELECTRONIC CIRCUIT ANALYSIS AND DESIGN", "SIGNALS, SPECTRA, SIGNAL PROCESSING", "ELECTRICAL CIRCUITS 2", "LOGIC CIRCUITS AND SWITCHING THEORY", "NUMERICAL METHODS", "THERMODYNAMICS 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 4, 4, 4, 4, 4, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"EE 003", "EE 401", "ECE 402", "CE 402A", "CHEM 004", " CPE 004", "MATH 012", "1E 301A"};
+                        char *Subject_FullName[12] = {"ELECTRICAL CIRCUITS 2", "DC MACHINERY", "ELECTRONIC CIRCUIT ANALYSIS AND DESIGN", "FLUID MECHANICS", "MATERIALS SCIENCE AND ENGINEERING", "LOGIC CIRCUITS AND SWITCHING THEORY", "NUMERICAL METHODS", "APPLIED STATISTICS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {4, 4, 4, 3, 3, 4, 4, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"--", "ECE 003", "ECE 004", "ECE 006", "ECE 403", "EE 408", "CPE 006"};
-                        //char *Subject_FullName[12] = {"ECE ELECTIVE 2", "INDUSTRIAL ELECTRONICS", "PRINCIPLES OF COMMUNICATIONS", "FEEDBACK AND CONTROL SYSTEMS", "INTEGRATION COURSE 2 FOR ECE", "ENERGY CONVERSION", "MICROPROCESSOR SYSTEMS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 4, 4, 4, 2, 4, 4};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"EE 402", "EE 403", "EE 404", "EE 405", "EE 406", "ECE 004", "ECE 006", "CPE 006", "EE 407"};
+                        char *Subject_FullName[12] = {"EE LAWS, ETHICS, CODES AND STANDARDS", "AC MACHINERY", "INTEGRATION COURSE FOR ENGINNERING SCIENCES", "TRANSFORMER AND AC APPARATUSES", "ELECTRICAL CIRCUITS 3", "PRINCIPLES OF COMMUNICATION", "FEEDBACK AND CONTROL SYSTEMS", "MICROPROCESSOR SYSTEMS", "EE RESEARCH 2 (RESEARCH PROJECT)"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {2, 4, 2, 3, 3, 4, 4, 4, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "5th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"--", "ECE 501", "ECE 502", "ECE 503", "ECE 504", "ECE 505", "COE 002"};
-                        //char *Subject_FullName[12] = {"ECE ELECTIVE 3", "DESIGN PROJECT 1", "DIGITAL COMMUNICATIONS", "TRANSMISSION MIDIA AND ANTENNA SYSTEMS", "DATA COMMUNICATIONS", "ECE LAWS,  ETHICS, CODES AND STANDARDS", "FUNDAMENTALS OF INTELLECTUAL PROPERTY"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 1, 4, 4, 4, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"EE 501", "EE 502", "EE 503", "EE 504", "???", "???", "ECE 003", "EE 505"};
+                        char *Subject_FullName[12] = {"POWER SYSTEM ANALYSIS AND DESIGN", "ILLUMINATION ENGINEERING DESIGN", "ELECTRICAL SYSTEM DESIGN", "ELECTRICAL EQUIPMENT OPERATION MAINTENANCE", "EE ELECTIVE 1", "EE ELECTIVE 2", "INDUSTRIAL ELECTRONICS", "DESIGN PROJECT 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {4, 3, 4, 3, 3, 3, 4, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"--", "ECE 506", "ECE 507", "ECE 508", "ECE 509"};
-                        //char *Subject_FullName[12] = {"ECE ELECTIVE 4", "DESIGN PROJECT 2", "INTEGRATION COURSE 3 FOR ECE", "PLANT VISITS AND SEMINARS FOR ECE", "WIRELESS COMMUNICATIONS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM"};
-                        //int Subject_Units[12] = {3, 4, 4, 4, 2, 4, 4};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"EE 506", "EE 507", "EE 508", "EE 509", "EE 510", "???", "???", "ITE 002A", "EE 511"};
+                        char *Subject_FullName[12] = {"ELECTRICAL TRANSPORTATION AND DISTRIBUTION SYSTEM AND DESIGN", "PLANT VISITS AND SEMINARS FOR EE", "POWER PLANT ENGINEERING AND SUBSTATION DESIGN", "INTEGRATION COURSE FOR EE 3", "INSTRUMENTATION AND CONTROL", "EE ELECTIVE 3", "EE ELECTIVE 4", "INFORMATION TECHNOLOGY", "DESIGN PROJECT 2"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {4, 1, 3, 2, 3, 3, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
-            else if (strcmp(NewStudent_Data.MainCourse_CodeName_Passer, "BSEnSE") == 0)
+            else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSECE") == 0)
             {
-                if (strcmp(NewStudent_Data.Course_YearChoice, "1st Year College") == 0)
+                if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "CHEM 001", "CPE 001", "ENGL 001", "FIL 001", "COE 001", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"PLANE AND SPHERICAL TRIGONOMETRY", "GENERAL CHEMISTRY", "COMPUTER FUNDAMENTALS", "COMMUNICATION ARTS 001", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "ENGINEERING ORIENTATION", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 3, 4, 1, 3, 3, 1, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 003", "MATH 004", "MATH 005", "AR 001", "CS 100A", "HUM 001", "HUM 002", "ENGL 002", "FIL 002", "PE 002", "NSTP 001"};
+                        char *Subject_FullName[12] = {"ADVANCED ALGEBRA", "ANALYTICAL GEOMETRY", "SOLID MEASURATION", "ENGINEERING DRAWING", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "INTRODUCTION TO PHILOSOPHY", "LOGIC", "COMMUNICATION ARTS 2", "PAGBASA AT PAGSULAT TINGO SA PANANALIKSIK", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM", "7:00PM - 8:00PM"};
+                        int Subject_Units[12] = {2, 3, 2, 1, 2, 3, 3, 3, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "2nd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 006", "MATH 007", "MATH 014", "CHEM 002", "CPE 003", "SOCSC 001", "SOCSC 002", "SOCSC 003", "PE 003"};
+                        char *Subject_FullName[12] = {"DISCRETE MATHEMATICS", "DIFFERENTIAL CALCULUS", "FUNDAMENTALS OF MATLAB PROGRAMMING", "ENVIRONMENTAL ENGINEERING", "COMPUTER-AIDED DRAFTING", "ECONOMICS, AGRARIAN REFORM AND TAXATION", "SOCIETY AND CULTURE W/ FAMILY PLANNING", "PHILIPPINES HISTORY W/ POLITICS & GOVERNANCE", "INDIVIDUAL / DUAL SPORTS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 4, 1, 3, 1, 3, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"ECE 100", "MATH 008", "MATH 009", "PHYS 001", "HUM 003", "SOCSC 004", "SOCSC 005", "ENGL 003", "PE 004"};
+                        char *Subject_FullName[12] = {"FUNDAMENTALS OF LABVIEW PROGRAMMING", "INTEGRAL CALCULUS", "PROBABILITY AND STATISTICS", "CALCULUS-BASED PHYSICS 1", "ETHICS", "GENERAL PSYCHOLOGY", "LIFE AND WORKS OF RIZAL", "TECHNICAL COMMUNICATION", "SPORTS AND GAMES"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {1, 4, 3, 4, 3, 3, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "3rd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"ECE 301", "CPE 005B", "CE 001", "IE 001", "IE 002", "ME 005", "MATH 010", "PHYS 002"};
+                        char *Subject_FullName[12] = {"VECTOR ANALYSIS", "COMPUTER ORGANIZATION AND ARCHITECTURE", "STATICS OF RIGID BODIES", "ENGINEERING MANAGEMENT", "SAFETY MANAGEMENT", "ENGINEERING ECONOMY", "DIFFERENTIAL EQUATIONS", "CALCULUS-BASED PHYSICS 2"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 4, 3, 3, 2, 3, 3, 4};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"ECE 001", "ECE 302", "ECE 303", "EE 002", "CE 002", "CE 003A", "CHEM 004", "MATH 011"};
+                        char *Subject_FullName[12] = {"ELECTRONIC DEVICES AND CIRCUITS", "ELECTROMAGNETICS", "INTEGRATION COURSE 1 FOR ECE", "ELECTRICAL CIRCUITS 1", "DYANMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "MATERIALS SCIENCE AND ENGINEERING", "ADVANCE ENGINEERING MATHEMATICS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {4, 3, 2, 4, 3, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "4th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"???", "ECE 402", "ECE 401", "EE 003", "CPE 004", "MATH 012", "ME 004"};
+                        char *Subject_FullName[12] = {"ECE ELECTIVE 1", "ELECTRONIC CIRCUIT ANALYSIS AND DESIGN", "SIGNALS, SPECTRA, SIGNAL PROCESSING", "ELECTRICAL CIRCUITS 2", "LOGIC CIRCUITS AND SWITCHING THEORY", "NUMERICAL METHODS", "THERMODYNAMICS 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 4, 4, 4, 4, 4, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"???", "ECE 003", "ECE 004", "ECE 006", "ECE 403", "EE 408", "CPE 006"};
+                        char *Subject_FullName[12] = {"ECE ELECTIVE 2", "INDUSTRIAL ELECTRONICS", "PRINCIPLES OF COMMUNICATIONS", "FEEDBACK AND CONTROL SYSTEMS", "INTEGRATION COURSE 2 FOR ECE", "ENERGY CONVERSION", "MICROPROCESSOR SYSTEMS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 4, 4, 4, 2, 4, 4};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "5th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"???", "ECE 501", "ECE 502", "ECE 503", "ECE 504", "ECE 505", "COE 002"};
+                        char *Subject_FullName[12] = {"ECE ELECTIVE 3", "DESIGN PROJECT 1", "DIGITAL COMMUNICATIONS", "TRANSMISSION MIDIA AND ANTENNA SYSTEMS", "DATA COMMUNICATIONS", "ECE LAWS,  ETHICS, CODES AND STANDARDS", "FUNDAMENTALS OF INTELLECTUAL PROPERTY"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 1, 4, 4, 4, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {};
-                        //char *Subject_FullName[12] = {};
-                        //char *Subject_LinearTime[12] = {};
-                        //int Subject_Units[12] = {};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"???", "ECE 506", "ECE 507", "ECE 508", "ECE 509"};
+                        char *Subject_FullName[12] = {"ECE ELECTIVE 4", "DESIGN PROJECT 2", "INTEGRATION COURSE 3 FOR ECE", "PLANT VISITS AND SEMINARS FOR ECE", "WIRELESS COMMUNICATIONS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM"};
+                        int Subject_Units[12] = {3, 4, 4, 4, 2, 4, 4};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
-            else if (strcmp(NewStudent_Data.MainCourse_CodeName_Passer, "BSIE") == 0)
+            else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSEnSE") == 0)
             {
-                if (strcmp(NewStudent_Data.Course_YearChoice, "1st Year College") == 0)
+                if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 001", "COE 001", "CPE 001", "ENGL 001", "FIL 001", "MATH 001", "MATH 002", "PE 001", "NSTP 001"};
-                        //char *Subject_FullName[12] = {"GENERAL CHEMISTRY", "ENGINEERING ORIENTATION", "COMPUTER FUNDAMENTALS", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", " COLLEGE ALGREBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "PHYSICAL FITNES", "NATIONAL SERVICE TRAINING PROGRAM 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {4, 1, 1, 3, 3, 3, 3, 2, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "CHEM 001", "AR 001", "COE 001", "ENGL 001", "FIL 001", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "GENERAL CHEMISTRY", "ENGINEERING DRAWING", "ENGINEERING ORIENTATION", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 0, 1, 3, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"AR 001", "ENGL 002", "FIL 002", "HUM 001", "HUM 002", "MATH 003", "MATH 004", "MATH 005", "PE 002", "NSTP 002"};
-                        //char *Subject_FullName[12] = {"ENGINEERING DRAWING", "COMMJUNICATION ARTS 2", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "INTRODUCTION TO PHILOSOPHY", "LOGIC", "ADVANCED ALGEBRA", "ANALYTIC GEOMETRY", "SOLID MENSURATION", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM"};
-                        //int Subject_Units[12] = {1, 3, 3, 3, 3, 2, 3, 2, 2, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 003", "MATH 004", "MATH 005", "CPE 001", "ENGL 002", "FIL 002", "HUM 001", "PE 002", "NSTP 002"};
+                        char *Subject_FullName[12] = {"ADVANCED ALGEBRA", "ANALYTIC GEOMETRY", "SOLID MENSURATION", "COMPUTER FUNDAMENTALS", "COMMUNICATION ARTS 2", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "INTRODUCTION TO PHILOSOPHY", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {2, 3, 2, 0, 3, 3, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "2nd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CS 100A", "ENGL 003", "MATH 006", "MATH 007", "MATH 013", "PE 003", "SOCSC 001", "SOSCS 001"};
-                        //char *Subject_FullName[12] = {"FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "TECHINICAL COMMUNICATIONS", "DISCRETE MATHEMATICS", "DIFFERENTIAL CALCULUS", "LINEAR ALGEBRA WITH MATLAB", "INDIVIDUAL/DUAL SPORTS", "ECONOMICS, AGRARIAN REFORM AND TAXATION", "SOCIETY AND CULTURE WITH FAMILY PLANNING"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {2, 3, 3, 4, 3, 2, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 007", "CHEM 002", "ENGL 003", "HUM 002", "SOCSC 001", "SOCSC 002", "SOCSC 003", "PE 003"};
+                        char *Subject_FullName[12] = {"DIFFERENTIAL CALCULUS", "PRINCIPLES OF ORGANIC AND INORGANIC CHEMISTRY", "TECHNICAL COMMUNICATION", "LOGIC", "ECONOMICS", "AGRARIAN REFORM AND TAXATION", "SOCIETY AND CULTURE W/ FAMILY PLANNING", "PHILIPPINES HISTORY W/ POLITICS & GOVERNANCE", "INDIVIDUAL / DUAL SPORTS"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {4, 3, 3, 3, 3, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CPE 003", "HUM 003", "MATH 008", "MATH 009", "PE 004", "PHYS 001", "SOCSC 003", "SOSCS 004"};
-                        //char *Subject_FullName[12] = {"COMPUTER-AIDED DRAFTING", "ETHICS", "INTEGRA; CALCULUS", "PROBABILITY AND STATISTICS", "SPORTS AND GAMES", "CALCULUS-BASED PHYSICS 1", "PHILIPPINE HISTORY WITH POLITICS AND GOVERNANCE", "GENERAL PSYCHOLOGY"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {1, 3, 4, 3, 2, 4, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 008", "MATH 009", "PHYS 001", "CS 100A,", "HUM 003", "SOCSC 004", "SOCSC 005", "PE 004"};
+                        char *Subject_FullName[12] = {"INTEGRAL CALCULUS", "PROBABILITY AND STATISTIS", "CALCULUS-BASED PHYSICS 1", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "ETHICS", "GENERAL PSYCHOLOGY", "LIFE AND WORKS OF RIZAL", "SPORTS AND GAMES"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {4, 3, 3, 1, 3, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "3rd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CE 001", "IE 001", "IE 300", "IE 301", "IE 302", "PHYS 002", "MATH 010", "SOCSC 006"};
-                        //char *Subject_FullName[12] = {"STATICS OF RIGID BODIES", "ENGINEERING MANAGEMENT", "INDUSTRIAL PSYCHOLOGY", "ADVANCED STATISTICS FOR INDUSTRIAL ENGINEERING", "INDUSTRILA MATERIALS AND PROCESSES", "CALCULUS-BASED PHYSICS 2", "DIFFERENTIAL EQUATIONS", "PRINCIPLES OF ECONOMICS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 3, 3, 4, 3, 3};
-                        //int Subject_WholeSize = ;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 010", "PHYS 002", "CPE 003", "CE 001", "IE 002", "ME 005", "CE 300", "CE 301", "CHEM 003A"};
+                        char *Subject_FullName[12] = {"DIFFERENTIAL EQUATIONS", "CALCULUS-BASED PHYSICS 2", "COMPUTER-AIDED DRAFTING", "STATICS OF RIGID BODIES", "SAFETY MANAGEMENT", "ENGINEERING ECONOMY", "ELEMENTARY SURVEYING", "ENGINEERING GEOLOGY", "ENVIRONMENTAL AND SANITARY CHEMISTRY"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 4, 1, 3, 2, 3, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"AC 004", "CE 002", "CE 003A", "IE 002", "IE 303", "IE 304", "MATH 011", "ME 005"};
-                        //char *Subject_FullName[12] = {"FINANCIAL ACCOUNTING", "DYNAMICS OF RIGID BODIES", "MECHANICS OF FORMIDABLE BODIES", "SAFETY MANAGEMENT", "METHODS ENGENNERING", "QUALITY MANAGEMENT SYSTEMS", "ADVANCED ENGINEERING MATHEMATICS", "ENGINEERING ECONOMY"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 2, 5, 3, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"MATH 011A", "CE 002", "CE 003", "CE 303", "IE 001", "CHEM 006", "ME 004", "ENSE 300"};
+                        char *Subject_FullName[12] = {"ADV. ENGRG. MATH W/ NUM METHODS", "DYNAMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "HIGHER SURVEYING", "ENGINEERING MANAGEMENT", "ENVIRONMENTAL ENGINEERING", "THERMODYNAMICS", "MICROBIOLOGY AND PARASITOLOGY FOR ENSE"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 3, 4};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "4th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"AC 005", "IE 003", "IE 004", "IE 401", "IE 402", "IE 403", "ME 004"};
-                        //char *Subject_FullName[12] = {"MANAGERIAL ACCOUNTING", "OPERATIONS RESEARCH 1", "ENGINEERING ENTREPRENEURSHIP", "ERGONOMICS", "INDUSTRIAL QUALITY CONTROL", "STRATEGIC PLANNING", "THERMODYNAMICS 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CE 401", "CE 402", "CE 403", "CE 404", "EE 001A", "ENSE 400", "ENSE 401", "ENSE 411"};
+                        char *Subject_FullName[12] = {"GEOTECHNICAL ENGINEERING (SOIL MECHANICS)", "FLUID MECHANICS", "ENGINEERING SURVEYING", "STRUCTURAL THEORY 1", "BASIC ELECTRICAL ENGINEERING", "PUBLIC HEALTH ENGINEERING", "ECOLOGY AND ENVIRONMENTAL POLLUTION", "SPECIAL TOPICS 1 ENSE"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {4, 3, 4, 4, 3, 3, 2, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 002", "EE 001", "IE 404", "IE 405", "IE 406", "IE 407", "IE 408", "SOSCS 005"};
-                        //char *Subject_FullName[12] = {"ENVIRONMENTAL ENGINEERING", "BASIC ELECTRICAL ENGINEERING", "OPERATIONS RESEARCH 2", "PROJECT FEASIBILITY", "PRODUCTION SYSTEMS", "PRODUCTION SYSTEMS", "PRINCIPLES OF LOGISTICS", "PROJECT MANAGEMENT", " LIFE AND WORKS RIZAL"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CE 405", "CE 411", "ENSE 402", "ENSE 403", "ENSE 404", "ENSE 405", "ENSE 406", "ENSE 410"};
+                        char *Subject_FullName[12] = {"CONSTRUCTION MATERIALS AND TESTING", "HYDRAULICS ENGINEERING", "AIR POLLUTION FUNDAMENTALS", "SOLID WASTE MANAGEMENT", "ENVIRONMENTAL PLANNING", "LAWS AND IMPACT ASSESSMENT", "DESIGN OF SANITARY ENGINEERING STRUCTURES", "OCCUPATIONAL SAFETY AND HEALTH,HYDROLOGY"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30PM", "12:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {3, 3, 3, 2, 3, 2, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "5th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"IE 501", "IE 502", "IE 503", "IE 504", "IE 505", "IS 001"};
-                        //char *Subject_FullName[12] = {"UNDERGRADUATE RESEARCH FOR INDUSTRAIL ENGINEERING", "IE DESIGN PROJECT 1", "PLANT VISITS AND SEMINARS FOR INDUSTRIAL ENGINEERING", "MULTI-CRITERIA DECISON MAKING", "SYSTEMS ENGINEERING", "INFORMATION SYSTEMS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
-                        //int Subject_Units[12] = {3, 3, 1, 3, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"ENSE 501", "ENSE 502", "ENSE 503", "ENSE 504", "ENSE 505", "ENSE 506", "ENSE 507", "ENSE 508"};
+                        char *Subject_FullName[12] = {"PLANT VISITS & SEMINARS FOR ENSE", "SEWERAGE & DRAINAGE ENGINEERING", "ENSE LAWS, ETHICS, CODES, AND STANDARDS", "ENVIRONMENTAL ENGINEERING LABORATORY", "SANITARY SCIENCE, FIRE PROTECTION AND PLUMBING", "RESEARCH IN A.W.N.S POLLUTIONS", "CONSTRUCTION METHODS & PROJECT MANAGEMENT", "WATER SUPPLY ENGINEERING"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30 PM", "12:30PM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {1, 3, 3, 1, 4, 3, 4, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"IE 500", "IE  506", "IE 507", "IE 508"};
-                        //char *Subject_FullName[12] = {"ON-THE-JOB TRAINING FOR INDUSTRIAL ENGINEERING", "IE DESIGN PROJECT 2", "FACILITIES DESIGN", "ENGINEERING VALUES AND ETHICS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM"};
-                        //int Subject_Units[12] = {5, 2, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"ENSE 509", "ENSE 510", "ENSE 511", "ENSE 512", "ENSE 513", "ENSE 514"};
+                        char *Subject_FullName[12] = {"WATER PURIFICATION PROCESS DESIGN", "SEWAGE & INDUSTRIAL WASTEWATER TREATMENT DESG", "RISK & BENEFIT ANALYSIS IN ENSE", "ENSE PLANNING AND DESIGN", "GROUND WATER AND SOIL POLLUTION REMEDIATION", "SPECIAL TOPICS 2 ENSE"};
+                        char *Subject_LinearTime[12] = {"7:30AM - 8:30AM", "8:30AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 12:30 PM", "12:30PM - 1:30PM", "1:30 PM- 2:30PM", "2:30PM - 3:30PM", "3:30PM - 4:30PM"};
+                        int Subject_Units[12] = {4, 5, 3, 3, 3, 1};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
-            else if (strcmp(NewStudent_Data.MainCourse_CodeName_Passer, "BSME") == 0)
+            else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSIE") == 0)
             {
-                if (strcmp(NewStudent_Data.Course_YearChoice, "1st Year College") == 0)
+                if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ENGL 001", "FIL 001", "MATH 001", "MATH 002", "CHEM 001", "COE 001", "CPE 001", "PE 001", "NSTP 001"};
-                        //char *Subject_FullName[12] = {"COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "GENERAL CHEMISTRY", "ENGINEERING ORIENTATION", "COMPUTER FUNDAMENTALS", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 3, 4, 1, 1, 2, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 001", "COE 001", "CPE 001", "ENGL 001", "FIL 001", "MATH 001", "MATH 002", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"GENERAL CHEMISTRY", "ENGINEERING ORIENTATION", "COMPUTER FUNDAMENTALS", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", " COLLEGE ALGREBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "PHYSICAL FITNES", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {4, 1, 1, 3, 3, 3, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ENGL 002", "FIL 002", "AR 001", "CHEM 101", "MATH 003", "MATH 004", "MATH 005", "HUM 001", "PE 001", "NSTP 002"};
-                        //char *Subject_FullName[12] = {"COMMUNICATION ARTS 002", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "ENGINEERING DRAWING", "GENERAL CHEMISTRY CALCULATIONS", "ADVANCED ALGEBRA", "ANALYTICAL GEOMETRY", "SOLID MENSURATION", "INTRODUCTION TO PHILOSOPHY", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING 2"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM"};
-                        //int Subject_Units[12] = {3, 3, 1, 3, 2, 3, 2, 3, 2, 3};
-                        //int Subject_WholeSize = 11;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"AR 001", "ENGL 002", "FIL 002", "HUM 001", "HUM 002", "MATH 003", "MATH 004", "MATH 005", "PE 002", "NSTP 002"};
+                        char *Subject_FullName[12] = {"ENGINEERING DRAWING", "COMMJUNICATION ARTS 2", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "INTRODUCTION TO PHILOSOPHY", "LOGIC", "ADVANCED ALGEBRA", "ANALYTIC GEOMETRY", "SOLID MENSURATION", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING PROGRAM 2"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM"};
+                        int Subject_Units[12] = {1, 3, 3, 3, 3, 2, 3, 2, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "2nd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 002", "CS 100A", "ENGL 003", "HUM 002", "MATH 007", "MATH 013", "SOCSC 001", "SOCSC 002", "PE 003"};
-                        //char *Subject_FullName[12] = {"ENVIRONMENTAL ENGINEERING", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "TECHNICAL COMMUNICATION", "LOGIC", "DIFFERENTIAL CALCULUS", "LINEAR ALGEBRA WITH MATLAB", "ECONOMICS, AGRARIAN AND REFORM AND TAXATION", "SOCIETY AND CULTURE WITH FAMILY PLANNING", "INDIVIDUAL/DUAL SPORTS"};
-                        //char *Subject_LinearTime[12] = {3, 2, 3, 3, 4, 3, 3, 3, 2};
-                        //int Subject_Units[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CS 100A", "ENGL 003", "MATH 006", "MATH 007", "MATH 013", "PE 003", "SOCSC 001", "SOSCS 001"};
+                        char *Subject_FullName[12] = {"FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "TECHINICAL COMMUNICATIONS", "DISCRETE MATHEMATICS", "DIFFERENTIAL CALCULUS", "LINEAR ALGEBRA W/ MATLAB", "INDIVIDUAL / DUAL SPORTS", "ECONOMICS, AGRARIAN REFORM AND TAXATION", "SOCIETY AND CULTURE W/ FAMILY PLANNING"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {2, 3, 3, 4, 3, 2, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 201", "HUM 003", "MATH 008", "MATH 009", "PHYS 001", "SOCSC 003", "PE 004"};
-                        //char *Subject_FullName[12] = {"ANALYTICAL CHEMISTRY", "ETHICS", "INTEGRAL CALCULUS", "PROBABILITY AND STATISTICS", "CALCULUS-BASED PHYSICS 001", "PHILIPPINE HISTORY WITH POLITICS GOVERNANCE", "SPORTS AND GAMES"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {5, 3, 4, 3, 4, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CPE 003", "HUM 003", "MATH 008", "MATH 009", "PE 004", "PHYS 001", "SOCSC 003", "SOSCS 004"};
+                        char *Subject_FullName[12] = {"COMPUTER-AIDED DRAFTING", "ETHICS", "INTEGRA; CALCULUS", "PROBABILITY AND STATISTICS", "SPORTS AND GAMES", "CALCULUS-BASED PHYSICS 1", "PHILIPPINES HISTORY W/ POLITICS & GOVERNANCE", "GENERAL PSYCHOLOGY"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {1, 3, 4, 3, 2, 4, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "3rd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 301", "CHEM 003", "CE 001", "CPE 003", "IE 001", "MATH 010", "PHYS 002", "CHE 303"};
-                        //char *Subject_FullName[12] = {"PHYSICAL CHEMISTRY", "ORGANIC CHEMISTRY", "STATICS OF RIGID BODIES", "COMPUTER-AIDED DRAFTING", "ENGINEERING MANAGEMENT", "DIFFERENTIAL EQUATIONS", "CALCULUS-BASED PHYSICS 2", "CHE CALCULATIONS 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM"};
-                        //int Subject_Units[12] = {4, 5, 3, 1, 3, 3, 4, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CE 001", "IE 001", "IE 300", "IE 301", "IE 302", "PHYS 002", "MATH 010", "SOCSC 006"};
+                        char *Subject_FullName[12] = {"STATICS OF RIGID BODIES", "ENGINEERING MANAGEMENT", "INDUSTRIAL PSYCHOLOGY", "ADVANCED STATISTICS FOR INDUSTRIAL ENGINEERING", "INDUSTRILA MATERIALS AND PROCESSES", "CALCULUS-BASED PHYSICS 2", "DIFFERENTIAL EQUATIONS", "PRINCIPLES OF ECONOMICS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 4, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 302", "CHEM 322", "CE 002", "CE 003A", "EE 005", "CHEM 004", "MATH 011", "CHE 304"};
-                        //char *Subject_FullName[12] = {"PHYSICAL CHEMISTRY FOR ENGINEERS 2", "CHE CALCULATIONS 2", "DYNAMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "BASIC ELECTRICAL AND ELECTRONICS ENGINEERNG", "MATERIALS SCIENCE AND ENGINEERING", "ADVANCED ENGINEERING MATHEMATICS", "INTEGRATION COURSE 1 FOR CHE"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {4, 3, 3, 3, 3, 3, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"AC 004", "CE 002", "CE 003A", "IE 002", "IE 303", "IE 304", "MATH 011", "ME 005"};
+                        char *Subject_FullName[12] = {"FINANCIAL ACCOUNTING", "DYNAMICS OF RIGID BODIES", "MECHANICS OF FORMIDABLE BODIES", "SAFETY MANAGEMENT", "METHODS ENGENNERING", "QUALITY MANAGEMENT SYSTEMS", "ADVANCED ENGINEERING MATHEMATICS", "ENGINEERING ECONOMY"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 2, 5, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "4th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHEM 005", "IE 002", "CHE 402", "CHE 403", "CHE 404", "CHE 405", "MATH 012", "ME 005", "SOCSC 004"};
-                        //char *Subject_FullName[12] = {"INDUSTRIAL CHEMISTRY FOR CHE", "SAFETY MANAGEMENT", "INTRODUCTION TO BIOTECHNOLOGY", "PRINCIPLES OF TRANSPORT PROCESSES", "CHE RESEARCH 1", "CHE THERMODYNAMICS 1", "NUMERICAL METHODS", "ENGINEERING ECONOMY", "GENERAL PSYCHOLOGY"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {3, 2, 3, 3, 2, 3, 4, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"AC 005", "IE 003", "IE 004", "IE 401", "IE 402", "IE 403", "ME 004"};
+                        char *Subject_FullName[12] = {"MANAGERIAL ACCOUNTING", "OPERATIONS RESEARCH 1", "ENGINEERING ENTREPRENEURSHIP", "ERGONOMICS", "INDUSTRIAL QUALITY CONTROL", "STRATEGIC PLANNING", "THERMODYNAMICS 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHE 406", "CHE 407", "CHE 408", "CHE 409", "CHE 410", "CHE 411", "CHE 412", "ECE 006", "CHE 413"};
-                        //char *Subject_FullName[12] = {"MOMENTUM TRANSFER", "CHE THEMODYNAMICS 2", "HEAT AND MASS TRANSFER", "UNIT OPERATIONS LABORATORY 1", "CHEMICAL PROCESS INDUTRIES", "CHEMICAL REACTION ENGINEERING", "CHE RESEARCH 2", "FEEDBACK AND CONTROL SYSTEMS", "INTEGRATION COURSE 2 FOR CHE"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 1, 3, 4, 1, 4, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 002", "EE 001", "IE 404", "IE 405", "IE 406", "IE 407", "IE 408", "SOSCS 005"};
+                        char *Subject_FullName[12] = {"ENVIRONMENTAL ENGINEERING", "BASIC ELECTRICAL ENGINEERING", "OPERATIONS RESEARCH 2", "PROJECT FEASIBILITY", "PRODUCTION SYSTEMS", "PRODUCTION SYSTEMS", "PRINCIPLES OF LOGISTICS", "PROJECT MANAGEMENT", " LIFE AND WORKS RIZAL"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "5th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {3, 1, 3, 2, 2, 3, 2, 1, 2, 3};
-                        //char *Subject_FullName[12] = {"CHE 501", "CHE 502", "CHE 503", "CHE 504", "CHE 505", "CHE 506", "CHE 507", "CHE 508", "CHE 509", "SOCSC 005"};
-                        //char *Subject_LinearTime[12] = {"SEPARATION PROCESSES", "UNIT OPERATIONS LABORATORY 2", "BIOCHEMICAL ENGINEERING", "SAFETY IN THE PROCESS INDUSTRY", "EQUIPMENT DESIGN", "INTRODUCTION TO POLYMER ENGINEERING", "CHE LAWS, ETHICS, CODES AND STANDARDS", "COMPUTER APPLICATIONS IN CHE", "INTRODUCTION TO PARTICLE TECHNOLOGY", "LIFE AND WORKS OF RIZAL"};
-                        //int Subject_Units[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM"};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"IE 501", "IE 502", "IE 503", "IE 504", "IE 505", "IS 001"};
+                        char *Subject_FullName[12] = {"UNDERGRADUATE RESEARCH FOR INDUSTRAIL ENGINEERING", "IE DESIGN PROJECT 1", "PLANT VISITS AND SEMINARS FOR INDUSTRIAL ENGINEERING", "MULTI-CRITERIA DECISON MAKING", "SYSTEMS ENGINEERING", "INFORMATION SYSTEMS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
+                        int Subject_Units[12] = {3, 3, 1, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CHE 510", "CHE 511", "CHE 512", "CHE 513", "CHE 514", "CHE 515", "IE 003"};
-                        //char *Subject_FullName[12] = {"INDUSTRIAL WASTE MANAGEMENT AND CONTROL", "CHE PLANT DESIGN", "PLASTICS TECHNOLOGY", "MOLECULAR BIOLOGY", "INTEGRATION COURSE 3 FOR CHE", "PLANT VISITS AND SEMINARS FOR CHE", "OPERATIONS RESEARCH 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 3, 2, 1, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"IE 500", "IE  506", "IE 507", "IE 508"};
+                        char *Subject_FullName[12] = {"ON-THE-JOB TRAINING FOR INDUSTRIAL ENGINEERING", "IE DESIGN PROJECT 2", "FACILITIES DESIGN", "ENGINEERING VALUES AND ETHICS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM"};
+                        int Subject_Units[12] = {5, 2, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
-            else if (strcmp(NewStudent_Data.MainCourse_CodeName_Passer, "Arch") == 0)
+            else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSME") == 0)
             {
-                if (strcmp(NewStudent_Data.Course_YearChoice, "1st Year College") == 0)
+                if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "ENGL 001", "FIL 001", "ARCH 005", "ARCH 007", "ARCH 003", "PE 001", "NSTP 001", "NONE", "NONE", "NONE"};
-                        //char *Subject_FullName[12] = {"COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO 1", "ARCHITURAL DESIGN 1", "ARCHITECTURAL VISUAL COMMUNICATIONS 1", "THEORY OF ARCHITECTURE 1", "PHYSICAL FITNESS 1", "NATIONAL SERVICE TRAINING PROGRAM 1", "NOT AVAILABLE", "NOT AVAILABLE", "NOT AVAILABLE"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM", "N/A - N/A"};
-                        //int Subject_Units[12] = {3, 3, 3, 3, 2, 3, 2, 2, 2, 3, 0, 0};
-                        //int Subject_WholeSize = 8;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"ENGL 001", "FIL 001", "MATH 001", "MATH 002", "CHEM 001", "COE 001", "CPE 001", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO", "COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "GENERAL CHEMISTRY", "ENGINEERING ORIENTATION", "COMPUTER FUNDAMENTALS", "PHYSICAL FITNESS", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 4, 1, 1, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"MATH 004", "MATH 005", "PHYS 001", "ENGL 002", "FIL 002", "ARCH 005-1", "ARCH 007-1", "ARCH 003-1", "PE 002", "NSTP 002", "NONE", "NONE", "NONE"};
-                        //char *Subject_FullName[12] = {"ANALYTIC GEOMETRY", "SOLID MENSURATION", "PHYSICS 1", "COMMUNICATION ARTS 2", "KOMUNIKASYON SA AKADEMIKONG FIIPINO 2", "ARCHITECTURAL DESIGN 2", "ARCHITECTURAL VISUAL COMMUNICATIONS 3", "ARCHITECTURAL VISUAL COMMUNICATIONS 4", "THEORY OF ARCHITECTURE 2", "RHYTHMIC ACTIVITIES", "NATIONAL SERVCE TRAINING PROGRAM 2"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM", "7:00PM - 8:00PM"};
-                        //int Subject_Units[12] = {2, 2, 3, 3, 3, 2, 3, 2, 3, 2, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"ENGL 002", "FIL 002", "AR 001", "CHEM 101", "MATH 003", "MATH 004", "MATH 005", "HUM 001", "PE 001", "NSTP 002"};
+                        char *Subject_FullName[12] = {"COMMUNICATION ARTS 002", "PAGBASA AT PAGSULAT TUNGO SA PANANALIKSIK", "ENGINEERING DRAWING", "GENERAL CHEMISTRY CALCULATIONS", "ADVANCED ALGEBRA", "ANALYTICAL GEOMETRY", "SOLID MENSURATION", "INTRODUCTION TO PHILOSOPHY", "RHYTHMIC ACTIVITIES", "NATIONAL SERVICE TRAINING 2"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM"};
+                        int Subject_Units[12] = {3, 3, 1, 3, 2, 3, 2, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "2nd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"MATH 007", "PHYS 002", "SOCSC 002", "ARCH 005-2", "ARCH 001", "ARCH 003-2", "ARCH 002", "ARCH 009", "PE 003"};
-                        //char *Subject_FullName[12] = {"DIFFERENTIAL CALCULUS", "PHYSICS 2", "SOCIETY AND CULTURE WITH FAMILY PLANNING", "ARCHITECTURAL DESIGN 3", "BUILDING TECHNOLOGY 1", "ARCHITECTURAL VISUAL COMMUNICATIONS 5", "ARCHITECTURAL INTERIORS", "HISTORY OF ARCHITECTURE ", "INDIVIDUALDUAL SPORTS"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 3, 3, 2, 3, 3, 2};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 002", "CS 100A", "ENGL 003", "HUM 002", "MATH 007", "MATH 013", "SOCSC 001", "SOCSC 002", "PE 003"};
+                        char *Subject_FullName[12] = {"ENVIRONMENTAL ENGINEERING", "FUNDAMENTALS OF PROGRAMMING AND ALGORITHM", "TECHNICAL COMMUNICATION", "LOGIC", "DIFFERENTIAL CALCULUS", "LINEAR ALGEBRA W/ MATLAB", "ECONOMICS, AGRARIAN AND REFORM AND TAXATION", "SOCIETY AND CULTURE W/ FAMILY PLANNING", "INDIVIDUAL / DUAL SPORTS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 2, 3, 3, 4, 3, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"CE 001", "ARCH 011", "PSYH 001", "ARCH 005-3", "ARCH 001-1", "ARCH 015", "ARCH 010", "ARCH 009-1", "PE 004"};
-                        //char *Subject_FullName[12] = {"STATICS OF RIGID BODIES", "SURVEYING", "GENERAL PSYCHOLOGY", "ARCHITECTURAL DESIGN 4", "BUILDING TECHNOLOGY 2", "BUILDING UTILITIES 1", "TROPICAL DESIGN", "HISTORY OF ARCHITECTURE 2", "SPORTS AND GAMES"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 3, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 201", "HUM 003", "MATH 008", "MATH 009", "PHYS 001", "SOCSC 003", "PE 004"};
+                        char *Subject_FullName[12] = {"ANALYTICAL CHEMISTRY", "ETHICS", "INTEGRAL CALCULUS", "PROBABILITY AND STATISTICS", "CALCULUS-BASED PHYSICS 001", "PHILIPPINE HISTORY W/ POLITICS GOVERNANCE", "SPORTS AND GAMES"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {5, 3, 4, 3, 4, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "3rd Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ARCH 013", "CPE 003", "ARCH 005-4", "ARCH 001-2", "ARCH 015-1", "ARCH 009-2", "ARCH 014"};
-                        //char *Subject_FullName[12] = {"STRENGTH OF MATERIALS", "COMPUTER-AIDED DRAFTING", "ARCHITECTURAL DESIGN 5", "BUILDING TECHNOLOGY 3", "BUILDING UTILITIES 3", "HISTORY OF ARCHITECTURE 3", "PROFESSIONAL PRACTICE 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {3, 3, 4, 3, 3, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 301", "CHEM 003", "CE 001", "CPE 003", "IE 001", "MATH 010", "PHYS 002", "CHE 303"};
+                        char *Subject_FullName[12] = {"PHYSICAL CHEMISTRY", "ORGANIC CHEMISTRY", "STATICS OF RIGID BODIES", "COMPUTER-AIDED DRAFTING", "ENGINEERING MANAGEMENT", "DIFFERENTIAL EQUATIONS", "CALCULUS-BASED PHYSICS 2", "CHE CALCULATIONS 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM"};
+                        int Subject_Units[12] = {4, 5, 3, 1, 3, 3, 4, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ARCH 005-5", "ARCH 016", "ARCH 017", "ARCH 001-2", "ARCH 015-2", "ARCH 009-3", "ARCH 014-1", "ARCH 007"};
-                        //char *Subject_FullName[12] = {"ARCHITECTURAL DESIGN 6", "BUILDING INFORMATION MODELLING", "THEORY OF STRUCTURE", "BUILDING TECHNOLOGY 4", "BUILDING UTILITIES 3", "HISTORY OF ARCHITECTURE 4", "PROFESSIONAL PRACTICE 2", "PLANNING 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {4, 3, 3, 3, 3, 2, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 302", "CHEM 322", "CE 002", "CE 003A", "EE 005", "CHEM 004", "MATH 011", "CHE 304"};
+                        char *Subject_FullName[12] = {"PHYSICAL CHEMISTRY FOR ENGINEERS 2", "CHE CALCULATIONS 2", "DYNAMICS OF RIGID BODIES", "MECHANICS OF DEFORMABLE BODIES", "BASIC ELECTRICAL AND ELECTRONICS ENGINEERNG", "MATERIALS SCIENCE AND ENGINEERING", "ADVANCED ENGINEERING MATHEMATICS", "INTEGRATION COURSE 1 FOR CHE"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {4, 3, 3, 3, 3, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "4th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ENGL 003", "LIT 001", "ARCH 020", "ARCH 005-6", "ARCH 001-3", "ARCH 007-1"};
-                        //char *Subject_FullName[12] = {"COMMUNICATION ARTS 3", "LITERATURE 1", "STEEL AND TIMBER DESIGN", "ARCHITECTURAL DESIGN 7", "BUILDING TECHONOLOGY 5", "PLANNING 2"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 5, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHEM 005", "IE 002", "CHE 402", "CHE 403", "CHE 404", "CHE 405", "MATH 012", "ME 005", "SOCSC 004"};
+                        char *Subject_FullName[12] = {"INDUSTRIAL CHEMISTRY FOR CHE", "SAFETY MANAGEMENT", "INTRODUCTION TO BIOTECHNOLOGY", "PRINCIPLES OF TRANSPORT PROCESSES", "CHE RESEARCH 1", "CHE THERMODYNAMICS 1", "NUMERICAL METHODS", "ENGINEERING ECONOMY", "GENERAL PSYCHOLOGY"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 2, 3, 3, 2, 3, 4, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"ARCH 005-7", "ARCH 018", "ARCH 007-2", "ARCH 014-2", "ARCH 021", "ARCH 100A", "--"};
-                        //char *Subject_FullName[12] = {"ARCHITECTURAL DESIGN 8", "HOUSING", "PLANNING 3", "PROFESSIONAL PRACTICE 3", "ARCHITETURAL STRUCTURES", "RESEARCH METHODS FOR ARCHITECTURE", "SPECIALIZATION 1"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
-                        //int Subject_Units[12] = {5, 3, 3, 3, 5, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHE 406", "CHE 407", "CHE 408", "CHE 409", "CHE 410", "CHE 411", "CHE 412", "ECE 006", "CHE 413"};
+                        char *Subject_FullName[12] = {"MOMENTUM TRANSFER", "CHE THEMODYNAMICS 2", "HEAT AND MASS TRANSFER", "UNIT OPERATIONS LABORATORY 1", "CHEMICAL PROCESS INDUTRIES", "CHEMICAL REACTION ENGINEERING", "CHE RESEARCH 2", "FEEDBACK AND CONTROL SYSTEMS", "INTEGRATION COURSE 2 FOR CHE"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 1, 3, 4, 1, 4, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
-                else if (strcmp(NewStudent_Data.Course_YearChoice, "5th Year College") == 0)
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th Year College") == 0)
                 {
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "First Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"PHILO 001", "HUM 001", "HUM 002", "ARCH 005-8", "--", "--"};
-                        //char *Subject_FullName[12] = {"PHILOSOPHY", "HUMANITIES", "SOCIOLOGY OF ANTHROPOLOGY", "ARCHITECTURAL DESIGN 9", "SPECIALIZATION 2", "ARCHITECTURE COMPREHENSIVE COURSE"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 5, 3, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHE 501", "CHE 502", "CHE 503", "CHE 504", "CHE 505", "CHE 506", "CHE 507", "CHE 508", "CHE 509", "SOCSC 005"};
+                        char *Subject_FullName[12] = {"SEPARATION PROCESSES", "UNIT OPERATIONS LABORATORY 2", "BIOCHEMICAL ENGINEERING", "SAFETY IN THE PROCESS INDUSTRY", "EQUIPMENT DESIGN", "INTRODUCTION TO POLYMER ENGINEERING", "CHE LAWS, ETHICS, CODES AND STANDARDS", "COMPUTER APPLICATIONS IN CHE", "INTRODUCTION TO PARTICLE TECHNOLOGY", "LIFE AND WORKS OF RIZAL"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM"};
+                        int Subject_Units[12] = {3, 1, 3, 2, 2, 3, 2, 1, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
-                    if (strcmp(NewStudent_Data.Course_SemSelection, "Second Semester") == 0)
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
-                        //char *Subject_CodeName[12] = {"SOSCS 005", "SOCSC 002", "SOCSC 003", "ARCH 005-9", "--"};
-                        //char *Subject_FullName[12] = {"LIFE AND WORKS OF RIZAL", "TAXATION AND AGRARIAN REFORM", "POLITICS AND GOVERNANCE WITH NEW CONSTITUTION", "ARCHITECTURAL DESIGN 10", "SPECIALIZATION 3"};
-                        //char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM- 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
-                        //int Subject_Units[12] = {3, 3, 3, 5, 3};
-                        //int Subject_WholeSize = 1;
-                        //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units, Subject_WholeSize);
+                        char *Subject_CodeName[12] = {"CHE 510", "CHE 511", "CHE 512", "CHE 513", "CHE 514", "CHE 515", "IE 003"};
+                        char *Subject_FullName[12] = {"INDUSTRIAL WASTE MANAGEMENT AND CONTROL", "CHE PLANT DESIGN", "PLASTICS TECHNOLOGY", "MOLECULAR BIOLOGY", "INTEGRATION COURSE 3 FOR CHE", "PLANT VISITS AND SEMINARS FOR CHE", "OPERATIONS RESEARCH 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 2, 1, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                }
+            }
+            else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "Arch") == 0)
+            {
+                if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
+                {
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "ENGL 001", "FIL 001", "ARCH 005", "ARCH 007", "ARCH 003", "PE 001", "NSTP 001"};
+                        char *Subject_FullName[12] = {"COLLEGE ALGEBRA", "PLANE AND SPHERICAL TRIGONOMETRY", "COMMUNICATION ARTS 1", "KOMUNIKASYON SA AKADEMIKONG FILIPINO 1", "ARCHITURAL DESIGN 1", "ARCHITECTURAL VISUAL COMMUNICATIONS 1", "THEORY OF ARCHITECTURE 1", "PHYSICAL FITNESS 1", "NATIONAL SERVICE TRAINING PROGRAM 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 2, 3, 2, 2, 2, 3, 0, 0};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"MATH 004", "MATH 005", "PHYS 001", "ENGL 002", "FIL 002", "ARCH 005-1", "ARCH 007-1", "ARCH 003-1", "PE 002", "NSTP 002"};
+                        char *Subject_FullName[12] = {"ANALYTIC GEOMETRY", "SOLID MENSURATION", "PHYSICS 1", "COMMUNICATION ARTS 2", "KOMUNIKASYON SA AKADEMIKONG FIIPINO 2", "ARCHITECTURAL DESIGN 2", "ARCHITECTURAL VISUAL COMMUNICATIONS 3", "ARCHITECTURAL VISUAL COMMUNICATIONS 4", "THEORY OF ARCHITECTURE 2", "RHYTHMIC ACTIVITIES", "NATIONAL SERVCE TRAINING PROGRAM 2"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM", "6:00PM - 7:00PM", "7:00PM - 8:00PM"};
+                        int Subject_Units[12] = {2, 2, 3, 3, 3, 2, 3, 2, 3, 2, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                }
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd Year College") == 0)
+                {
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"MATH 007", "PHYS 002", "SOCSC 002", "ARCH 005-2", "ARCH 001", "ARCH 003-2", "ARCH 002", "ARCH 009", "PE 003"};
+                        char *Subject_FullName[12] = {"DIFFERENTIAL CALCULUS", "PHYSICS 2", "SOCIETY AND CULTURE W/ FAMILY PLANNING", "ARCHITECTURAL DESIGN 3", "BUILDING TECHNOLOGY 1", "ARCHITECTURAL VISUAL COMMUNICATIONS 5", "ARCHITECTURAL INTERIORS", "HISTORY OF ARCHITECTURE ", "INDIVIDUALDUAL SPORTS"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 2, 3, 3, 2};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"CE 001", "ARCH 011", "PSYH 001", "ARCH 005-3", "ARCH 001-1", "ARCH 015", "ARCH 010", "ARCH 009-1", "PE 004"};
+                        char *Subject_FullName[12] = {"STATICS OF RIGID BODIES", "SURVEYING", "GENERAL PSYCHOLOGY", "ARCHITECTURAL DESIGN 4", "BUILDING TECHNOLOGY 2", "BUILDING UTILITIES 1", "TROPICAL DESIGN", "HISTORY OF ARCHITECTURE 2", "SPORTS AND GAMES"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM", "4:00PM - 5:00PM", "5:00PM - 6:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 3, 3, 3, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                }
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd Year College") == 0)
+                {
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"ARCH 013", "CPE 003", "ARCH 005-4", "ARCH 001-2", "ARCH 015-1", "ARCH 009-2", "ARCH 014"};
+                        char *Subject_FullName[12] = {"STRENGTH OF MATERIALS", "COMPUTER-AIDED DRAFTING", "ARCHITECTURAL DESIGN 5", "BUILDING TECHNOLOGY 3", "BUILDING UTILITIES 3", "HISTORY OF ARCHITECTURE 3", "PROFESSIONAL PRACTICE 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {3, 3, 4, 3, 3, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"ARCH 005-5", "ARCH 016", "ARCH 017", "ARCH 001-2", "ARCH 015-2", "ARCH 009-3", "ARCH 014-1", "ARCH 007"};
+                        char *Subject_FullName[12] = {"ARCHITECTURAL DESIGN 6", "BUILDING INFORMATION MODELLING", "THEORY OF STRUCTURE", "BUILDING TECHNOLOGY 4", "BUILDING UTILITIES 3", "HISTORY OF ARCHITECTURE 4", "PROFESSIONAL PRACTICE 2", "PLANNING 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {4, 3, 3, 3, 3, 2, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                }
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th Year College") == 0)
+                {
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"ENGL 003", "LIT 001", "ARCH 020", "ARCH 005-6", "ARCH 001-3", "ARCH 007-1"};
+                        char *Subject_FullName[12] = {"COMMUNICATION ARTS 3", "LITERATURE 1", "STEEL AND TIMBER DESIGN", "ARCHITECTURAL DESIGN 7", "BUILDING TECHONOLOGY 5", "PLANNING 2"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 5, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"ARCH 005-7", "ARCH 018", "ARCH 007-2", "ARCH 014-2", "ARCH 021", "ARCH 100A", "???"};
+                        char *Subject_FullName[12] = {"ARCHITECTURAL DESIGN 8", "HOUSING", "PLANNING 3", "PROFESSIONAL PRACTICE 3", "ARCHITETURAL STRUCTURES", "RESEARCH METHODS FOR ARCHITECTURE", "SPECIALIZATION 1"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM", "3:00PM - 4:00PM"};
+                        int Subject_Units[12] = {5, 3, 3, 3, 5, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                }
+                else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th Year College") == 0)
+                {
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "First Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"PHILO 001", "HUM 001", "HUM 002", "ARCH 005-8"};
+                        char *Subject_FullName[12] = {"PHILOSOPHY", "HUMANITIES", "SOCIOLOGY OF ANTHROPOLOGY", "ARCHITECTURAL DESIGN 9", "SPECIALIZATION 2", "ARCHITECTURE COMPREHENSIVE COURSE"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 5, 3, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                    }
+                    if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
+                    {
+                        char *Subject_CodeName[12] = {"SOSCS 005", "SOCSC 002", "SOCSC 003", "ARCH 005-9", "???"};
+                        char *Subject_FullName[12] = {"LIFE AND WORKS OF RIZAL", "TAXATION AND AGRARIAN REFORM", "POLITICS AND GOVERNANCE W/ NEW CONSTITUTION", "ARCHITECTURAL DESIGN 10", "SPECIALIZATION 3"};
+                        char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
+                        int Subject_Units[12] = {3, 3, 3, 5, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
@@ -1602,838 +1802,1105 @@ int Func_NewStdnt_Eng_YearSemSelect()
             }
         case 'N':
         case 'n':
-            printf("Going back...");
-            Sleep(2000);
-            continue;
-            //Func_NewStdnt_Eng_YearSelect(NewData, MainCourse_CodeName_Passer, MainCourse_FullName_Passer);
+            SetCursorCoord_XY(30, 29);
+            printf("\xAF \xDD INFO \xDD Reinitializing function to go back...");
+            Sleep(1750);
+            Func_NewStdnt_YearSemSelect();
+            break;
         default:
-            printf("Your input is 'Out of Range' from the Choices!");
-            Sleep(2000);
+            SetCursorCoord_XY(30, 29);
+            printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
+            Sleep(1750);
             continue;
         }
         break;
     }
 }
 
-int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12], int Subject_WholeSize)
+int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12])
 {
     system("CLS");
     SetConsoleTitle(FUNCTION_STEP3);
-    int Subject_Selector,
-        Option_Selector,
+    int Subject_Selector = 0,
+        Option_Selector = 0,
         Final_Comp_SelectedSubjects = 0,
         Final_Comp_SemUnits = 0,
         Subject_Counter = 0,
-        SbjSel_Checker = 1,
-        FinalizeChecker,
+        Subject_Selection_Checker,
+        Transport_Element = 0,
+        Transport_PassElementTrue = 0,
         Subject_UnitsGuard_AntiDuplicate_Include[12] = {0},
         Subject_UnitsGuard_AntiDuplicate_Exclude[12] = {0},
-        Counter = 0;
-    int Test_1, Test_2, Test_3;
+        Nullifier_Parameter[12] = {0},
+        Counter = 0,
+        Setup_Counter = 0,
+        Subject_ExpectedCandidates = 0,
+        Subject_ExpectedSemUnits = 0,
+        Sizeof_SemSelection = strlen(OnProcess_StudentData.Course_SemSelection),
+        Sizeof_YearChoice = strlen(OnProcess_StudentData.Course_YearChoice),
+        Sizeof_FullNamePasser = strlen(OnProcess_StudentData.MainCourse_FullName_Passer);
     char Final_Decision_Selector;
+    // Default Placeholder for Selection
     char *Subject_Parameters[2] = {"Include", "Exclude"};
-    char *SbjSel_Stats[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
+    char *Subject_Status[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
     char *Subject_Include[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
+    char *Subject_ScheduleDay[12] = {"MoWeFr", "Tu", "MoSat", "MoWeFr", "We", "Th", "MoweFr", "TuTh", "TuTh", "FrSat", "We", "Sat"};
+    // Assign Null Pointer Elements to the following strings.
+    for (Setup_Counter = 0; Setup_Counter <= 11; Setup_Counter++)
+    {
+        if ((Subject_CodeName[Setup_Counter] == NULL) || (Subject_FullName[Setup_Counter] == NULL))
+        {
+            Subject_CodeName[Setup_Counter] = "NONE";
+            Subject_FullName[Setup_Counter] = "NOT AVAILABLE";
+            Subject_LinearTime[Setup_Counter] = "N/A - N/A";
+            Subject_ScheduleDay[Setup_Counter] = "N/A";
+            Subject_Units[Setup_Counter] = 0;
+            Nullifier_Parameter[Setup_Counter] = 1;
+        }
+        else if ((Subject_CodeName[Setup_Counter] != NULL) || (Subject_FullName[Setup_Counter] != NULL))
+        {
+            Nullifier_Parameter[Setup_Counter] = 0;
+            Subject_ExpectedCandidates += 1;
+            Subject_ExpectedSemUnits += Subject_Units[Setup_Counter];
+        }
+    }
+    // Let program calculate non-null element arrays to count for subject_whole size.
 
-    //char *Subject_CodeName[12] = {"MATH 001", "MATH 002", "CHEM 001", "AR 001", "COE 001", "ENGL 001", "FIL 001", "PE 001", "NSTP 001", "MATH 004", "CPE 001", "HUMMS 001"};
-    //char *Subject_FullName[12] = {"---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------", "---------"};
-    //char *Subject_Include[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
-    //char *Subject_LinearTime[12] = {"8:00AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "1:30PM - 4:30PM", "7:30AM - 9:30AM", "9:30AM - 12:00PM", "4:30PM - :5:30PM", "4:30PM - 6:30PM", "5:30PM - 6:30PM"};
-    //char *Subject_Parameters[2] = {"Include", "Exclude"};
-    //int Subject_Units[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    //char *SbjSel_Stats[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
-    //Receiver For The Next Function
     while (1)
     {
-        int Sbj_Stats_Increment = 0, Sbj_Stats_Decrement = 0, SbjSel_Stats_Exceptions = 0;
+        //Looping Variables Will Be Reinitialized Here
+        int Sbj_Stats_Increment = 0, Sbj_Stats_Decrement = 0, Subject_Receive_Exclude_Count = 0, Subject_Receive_Unknown_Count = 0;
         system("CLS");
-        gotoxy(30, 3);
-        printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 4);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 5);
-        printf("\xBA 1st | 2nd | \xDD [3rd \xAF Subject Enrollment Selection] | 4th | 5th | Confirm | End\t\t                   \xBA");
-        gotoxy(30, 6);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 7);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 8);
-        printf("\xC9\xCD\xCD \xDD SUBJECT LIST FOR 4TH YEAR MECHANICAL ENGINEERING \xAF SECOND SEMESTER \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 10);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 11);
-        printf("\xBA #    \xDD  STATUS  \xDD\tSUBJECT CODE - SUBJECT NAME\t  \xDD \tLINEAR TIME(START - END)    \xDD\t UNITS \t   \xBA\n");
-        gotoxy(30, 12);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 13);
-        printf("\xCC\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xB9");
-        gotoxy(30, 14);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 15);
-        printf("\xBA [1]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA", SbjSel_Stats[0], Subject_CodeName[0], Subject_FullName[0], Subject_LinearTime[0], Subject_Units[0]);
-        gotoxy(30, 16);
-        printf("\xBA [2]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA", SbjSel_Stats[1], Subject_CodeName[1], Subject_FullName[1], Subject_LinearTime[1], Subject_Units[1]);
-        gotoxy(30, 17);
-        printf("\xBA [3]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA", SbjSel_Stats[2], Subject_CodeName[2], Subject_FullName[2], Subject_LinearTime[2], Subject_Units[2]);
-        gotoxy(30, 18);
-        printf("\xBA [4]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[3], Subject_CodeName[3], Subject_FullName[3], Subject_LinearTime[3], Subject_Units[3]);
-        gotoxy(30, 19);
-        printf("\xBA [5]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[4], Subject_CodeName[4], Subject_FullName[4], Subject_LinearTime[4], Subject_Units[4]);
-        gotoxy(30, 20);
-        printf("\xBA [6]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[5], Subject_CodeName[5], Subject_FullName[5], Subject_LinearTime[5], Subject_Units[5]);
-        gotoxy(30, 21);
-        printf("\xBA [7]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[6], Subject_CodeName[6], Subject_FullName[6], Subject_LinearTime[6], Subject_Units[6]);
-        gotoxy(30, 22);
-        printf("\xBA [8]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[7], Subject_CodeName[7], Subject_FullName[7], Subject_LinearTime[7], Subject_Units[7]);
-        gotoxy(30, 23);
-        printf("\xBA [9]  \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[8], Subject_CodeName[8], Subject_FullName[8], Subject_LinearTime[8], Subject_Units[8]);
-        gotoxy(30, 24);
-        printf("\xBA [10] \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[9], Subject_CodeName[9], Subject_FullName[9], Subject_LinearTime[9], Subject_Units[9]);
-        gotoxy(30, 25);
-        printf("\xBA [11] \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[10], Subject_CodeName[10], Subject_FullName[10], Subject_LinearTime[10], Subject_Units[10]);
-        gotoxy(30, 26);
-        printf("\xBA [12] \xAF %s\t\xDD %s - %s \t\xDD\t %s \t\xDD\t %i\xBA \t ", SbjSel_Stats[11], Subject_CodeName[11], Subject_FullName[11], Subject_LinearTime[11], Subject_Units[11]);
-        gotoxy(30, 27);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 28);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 30);
-        printf("\xC9\xCD\xCD STATISTICS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-        gotoxy(30, 31);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 32);
-        printf("\xBA \xDD Total Included Subject/s \xAF %d \t \xDD Total Included Units \xAF %d", Final_Comp_SelectedSubjects, Final_Comp_SemUnits);
-        gotoxy(30, 33);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 34);
-        printf("\xCC\xCD\xCD OPTIONS FOR INPUT \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xB9");
-        gotoxy(30, 35);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 36);
-        printf("\xBA Input '1' To Include Subject/s     \t\xDD      Input '-1' To Include All Subject/s                         \xBA");
-        gotoxy(30, 37);
-        printf("\xBA Input '2' To Withdraw Subject/s \t\xDD      Input '-2' To Exclude All Subject/s                         \xBA");
-        gotoxy(30, 38);
-        printf("\xBA Input '3' to process the data. \t\t\t\t\t\t\t\t\t\t   \xBA");
-        gotoxy(30, 39);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
-        gotoxy(30, 40);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        gotoxy(30, 42);
-        printf("\xC8\xDD INPUT \xDD Please input your desired option and press ENTER \xAF ");
+        SetCursorCoord_XY(20, 3);
+        printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(20, 4);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 5);
+        printf("\xBA [1st \xAF 2nd \xAF \xDD\xAF [3rd Step \xAF Subject Enrollment Selection] \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF End]\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 6);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 7);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(20, 9);
+        printf("\xC9\xCD\xCD \xDD SEPERATOR INDICATORS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(20, 10);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 11);
+        printf("\xBA%6s   \xDD%7s  \xDE  %-63s\xDD%6s    \xDD%16s     \xDD%7s    \xBA", "[ # ]", "STATUS", "SUBJECT CODE - SUBJECT PRIMARY FULLNAME", "DAY", "LINEAR TIME", "UNITS");
+        SetCursorCoord_XY(20, 12);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 13);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 13);
+        printf("\xCC\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xB9");
+        SetCursorCoord_XY(20, 14);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 15);
+        printf("\xBA [ 1 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[0], Subject_CodeName[0], Subject_FullName[0], Subject_ScheduleDay[0], Subject_LinearTime[0], Subject_Units[0]);
+        SetCursorCoord_XY(20, 16);
+        printf("\xBA [ 2 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[1], Subject_CodeName[1], Subject_FullName[1], Subject_ScheduleDay[1], Subject_LinearTime[1], Subject_Units[1]);
+        SetCursorCoord_XY(20, 17);
+        printf("\xBA [ 3 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[2], Subject_CodeName[2], Subject_FullName[2], Subject_ScheduleDay[2], Subject_LinearTime[2], Subject_Units[2]);
+        SetCursorCoord_XY(20, 18);
+        printf("\xBA [ 4 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[3], Subject_CodeName[3], Subject_FullName[3], Subject_ScheduleDay[3], Subject_LinearTime[3], Subject_Units[3]);
+        SetCursorCoord_XY(20, 19);
+        printf("\xBA [ 5 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[4], Subject_CodeName[4], Subject_FullName[4], Subject_ScheduleDay[4], Subject_LinearTime[4], Subject_Units[4]);
+        SetCursorCoord_XY(20, 20);
+        printf("\xBA [ 6 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[5], Subject_CodeName[5], Subject_FullName[5], Subject_ScheduleDay[5], Subject_LinearTime[5], Subject_Units[5]);
+        SetCursorCoord_XY(20, 21);
+        printf("\xBA [ 7 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[6], Subject_CodeName[6], Subject_FullName[6], Subject_ScheduleDay[6], Subject_LinearTime[6], Subject_Units[6]);
+        SetCursorCoord_XY(20, 22);
+        printf("\xBA [ 8 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[7], Subject_CodeName[7], Subject_FullName[7], Subject_ScheduleDay[7], Subject_LinearTime[7], Subject_Units[7]);
+        SetCursorCoord_XY(20, 23);
+        printf("\xBA [ 9 ]   \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[8], Subject_CodeName[8], Subject_FullName[8], Subject_ScheduleDay[8], Subject_LinearTime[8], Subject_Units[8]);
+        SetCursorCoord_XY(20, 24);
+        printf("\xBA [ 10 ]  \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[9], Subject_CodeName[9], Subject_FullName[9], Subject_ScheduleDay[9], Subject_LinearTime[9], Subject_Units[9]);
+        SetCursorCoord_XY(20, 25);
+        printf("\xBA [ 11 ]  \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[10], Subject_CodeName[10], Subject_FullName[10], Subject_ScheduleDay[10], Subject_LinearTime[10], Subject_Units[10]);
+        SetCursorCoord_XY(20, 26);
+        printf("\xBA [ 12 ]  \xDD %-8s\xDE    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i      \xBA", Subject_Status[11], Subject_CodeName[11], Subject_FullName[11], Subject_ScheduleDay[11], Subject_LinearTime[11], Subject_Units[11]);
+        SetCursorCoord_XY(20, 27);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 28);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(20, 30);
+        printf("\xFE\xCD\xCD \xDD SELECTION STATISTICS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetCursorCoord_XY(20, 32);
+        printf("          %-40s \xAF %d / %d  \xDD %28s \xAF %d / %-2d", "Total Included Subject/s", Final_Comp_SelectedSubjects, Subject_ExpectedCandidates, "Total Included Units", Final_Comp_SemUnits, Subject_ExpectedSemUnits);
+        SetCursorCoord_XY(20, 33);
+        SetCursorCoord_XY(20, 33);
+        printf("          %-40s \xAF %-*s, %-*s \xDD %-*s", "Current list of subjects is only for", Sizeof_YearChoice, OnProcess_StudentData.Course_YearChoice, Sizeof_FullNamePasser, OnProcess_StudentData.MainCourse_FullName_Passer, Sizeof_SemSelection, OnProcess_StudentData.Course_SemSelection);
+        SetCursorCoord_XY(20, 35);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetCursorCoord_XY(20, 37);
+        printf("\xC9\xCD\xCD \xDD OPTIONS FOR INPUT \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(20, 38);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 39);
+        printf("\xBA         %-50s\xDD  %41s\t\t\t       \xBA", "Input '1' To Include Subject/s", "Input '4' To Include All Subject/s");
+        SetCursorCoord_XY(20, 40);
+        printf("\xBA         %-50s\xDD  %41s\t\t\t       \xBA", "Input '2' To Exclude Subject/s", "Input '5' To Exclude All Subject/s");
+        SetCursorCoord_XY(20, 41);
+        printf("\xBA         %-50s\xDD  %50s\t\t       \xBA", "Input '3' to process your encoded data.", "Input '6' To Reset Back To Default Settings");
+        SetCursorCoord_XY(20, 42);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        SetCursorCoord_XY(20, 43);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(20, 45);
+        printf("\xC8\xAF \xDD INPUT \xDD Please input your desired option and press ENTER \xDD\xAF ");
         scanf("%d", &Option_Selector);
         if (Option_Selector == 1)
         {
-            gotoxy(30, 44);
-            printf("Please select the subject number to be included \xAF ");
+            SetCursorCoord_XY(20, 47);
+            printf("\xC8\xAF \xDD QUESTION \xDD Please select the subject number to be included \xDD\xAF ");
             scanf("%d", &Subject_Selector);
             if (Subject_Selector == 1)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 2)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 3)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 4)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 5)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 6)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 7)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 8)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 9)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 10)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 11)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 12)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[0];
-                    Final_Comp_SelectedSubjects += 1;
-                    Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
+                        Final_Comp_SelectedSubjects += 1;
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else
             {
-                gotoxy(30, 45);
+                SetCursorCoord_XY(20, 48);
                 printf("\xDD WARNING \xAF You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Function...");
-                Sleep(2000);
+                Sleep(1750);
                 continue;
             }
         }
         else if (Option_Selector == 2)
         {
-            gotoxy(30, 44);
-            printf("\xDD INPUT \xAF Please select the subject number to be excluded \xAF ");
+            SetCursorCoord_XY(20, 47);
+            printf("\xC8\xAF \xDD QUESTION \xDDPlease select the subject number to be excluded \xAF ");
             scanf("%d", &Subject_Selector);
             if (Subject_Selector == 1)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 2)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 3)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 4)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 5)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 6)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 7)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 8)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 9)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 10)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 11)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
             else if (Subject_Selector == 12)
             {
-                if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
-                    Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                    Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
-                    if (Final_Comp_SelectedSubjects == 0)
-                    {
-                        Final_Comp_SelectedSubjects = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SelectedSubjects -= 1;
-                    }
-                    if (Final_Comp_SemUnits == 0)
-                    {
-                        Final_Comp_SemUnits = 0;
-                    }
-                    else
-                    {
-                        Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
-                    }
-                    SbjSel_Stats[Subject_Selector - 1] = Subject_Parameters[1];
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
+                    Sleep(1000);
                     continue;
                 }
                 else
                 {
-                    gotoxy(30, 45);
-                    printf("\xDD INFO \xAF Subject #%i | '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                    Sleep(500);
-                    continue;
+                    if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
+                    {
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        if (Final_Comp_SelectedSubjects == 0)
+                        {
+                            Final_Comp_SelectedSubjects = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SelectedSubjects -= 1;
+                        }
+                        if (Final_Comp_SemUnits == 0)
+                        {
+                            Final_Comp_SemUnits = 0;
+                        }
+                        else
+                        {
+                            Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
+                        }
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
+                    else
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
+                        Sleep(500);
+                        continue;
+                    }
                 }
             }
         }
@@ -2442,93 +2909,131 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
             fflush(stdin);
             while (1)
             {
-                gotoxy(30, 44);
-                printf("\xDD QUESTION \xAF Are you sure you picked the subjects that you wanted to take???");
-                gotoxy(30, 45);
-                printf("\xDD Choices \xAF [Y]es or [N]o \xAF");
-                scanf("%c", &Final_Decision_Selector);
-                if (Final_Decision_Selector == 'Y' || Final_Decision_Selector == 'y')
+                SetCursorCoord_XY(20, 47);
+                printf("\xDD QUESTION \xAF Are you sure that you picked the subjects that you wanted to take???");
+                SetCursorCoord_XY(20, 48);
+                printf("\xDD Pick your choice \xAF [Y]es or [N]o \xAF ");
+                Final_Decision_Selector = getche();
+                if ((Final_Decision_Selector == 'Y') || (Final_Decision_Selector == 'y'))
                 {
-                    while (SbjSel_Checker != 11)
+                    for (Subject_Selection_Checker = 0; Subject_Selection_Checker < Subject_ExpectedCandidates; Subject_Selection_Checker++)
                     {
-                        if (SbjSel_Stats_Exceptions == Subject_WholeSize)
+                        if (Subject_Status[Subject_Selection_Checker] == "Unknown")
                         {
-                            gotoxy(30, 46);
-                            printf("\xDD CRITICAL ERROR \xAF Are you even trying to enroll without any subjects!?");
-                            Sleep(5000);
-                            break;
+                            Subject_Receive_Unknown_Count += 1;
                         }
-                        else if (SbjSel_Stats[SbjSel_Checker - 1] == "Unknown")
+                        else if (Subject_Status[Subject_Selection_Checker] == "Exclude")
                         {
-                            gotoxy(30, 46);
-                            printf("\xDD ERROR \xAF You cannot leave subject/s to be 'Unknown'. Set them to exclude if you don't want to include it.");
-                            Sleep(3000);
-                            break;
-                        }
-                        else if (SbjSel_Stats[SbjSel_Checker - 1] == "Exclude")
-                        {
-                            SbjSel_Stats_Exceptions++;
-                        }
-                        else
-                        {
-                            gotoxy(30, 46);
-                            printf("\xDD PROCESS \xAF Copying Information....");
-                            for (FinalizeChecker = 0; FinalizeChecker <= Final_Comp_SelectedSubjects; FinalizeChecker++)
-                            {
-                                if (strcmp(SbjSel_Stats[FinalizeChecker], Subject_Parameters[0]) == 0)
-                                {
-                                    ReceiverData.Subject_CodeName_Receiver[FinalizeChecker] = Subject_CodeName[FinalizeChecker];
-                                    ReceiverData.Subject_FullName_Receiver[FinalizeChecker] = Subject_FullName[FinalizeChecker];
-                                    ReceiverData.Subject_LinearTime_Receiver[FinalizeChecker] = Subject_LinearTime[FinalizeChecker];
-                                }
-                            }
-                            //Func_Stdnt_ScholarshipCheck(/*Final_Comp_SelectedSubjects*/);
-                            //Func_Stdnt_ScholarshipCheck(ReceiverData, Final_Comp_SelectedSubjects);
-                            gotoxy(30, 47);
-                            printf("\xDD PROCESS \xAF Moving Foward to \xDD [ 4th ] Scholarship Check...");
-                            break;
+                            Subject_Receive_Exclude_Count += 1;
                         }
                     }
-                    continue; // Trick to go back to the Main Loop While(1) at the top...
+                    if (Subject_Receive_Exclude_Count == Subject_ExpectedCandidates)
+                    {
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xDD ERROR \xAF You cannot set all subject/s to be 'Exclude'. Are you trying to enroll without subjects!?");
+                        Sleep(5000);
+                        break;
+                    }
+                    else if (Subject_Receive_Exclude_Count < Subject_Receive_Unknown_Count)
+                    {
+
+                        SetCursorCoord_XY(20, 48);
+                        printf("\xDD ERROR \xAF You cannot leave subject/s to be 'Unknown'. Set them to exclude if you don't want to include it.");
+                        Sleep(3000);
+                        break;
+                    }
+                    else if ((Subject_Receive_Exclude_Count || Subject_Receive_Unknown_Count != Subject_ExpectedCandidates) || (Subject_Receive_Exclude_Count || Subject_Receive_Unknown_Count == 0))
+                    {
+                        SetCursorCoord_XY(20, 50);
+                        printf("\xDD INFO \xAF Processing Data...");
+                        //Transport_PassElementTrue = 0;
+                        for (Transport_Element = 0; Transport_Element <= Subject_ExpectedCandidates; Transport_Element++)
+                        {
+                            if (strcmp(Subject_Status[Transport_Element], Subject_Parameters[0]) == 0)
+                            {
+                                ERLM_DataReceiver.Subject_CodeName_Receiver[Transport_Element] = Subject_CodeName[Transport_Element];
+                                ERLM_DataReceiver.Subject_FullName_Receiver[Transport_Element] = Subject_FullName[Transport_Element];
+                                ERLM_DataReceiver.Subject_LinearTime_Receiver[Transport_Element] = Subject_LinearTime[Transport_Element];
+                                ERLM_DataReceiver.Subject_ScheduleDay_Receiver[Transport_Element] = Subject_ScheduleDay[Transport_Element];
+                                ERLM_DataReceiver.Subject_Units_Receiver[Transport_Element] = Subject_Units[Transport_Element];
+                                ERLM_DataReceiver.Subject_Candidates = Subject_ExpectedCandidates;
+                                ERLM_DataReceiver.Subjects_Selected = Final_Comp_SelectedSubjects;
+                                //Transport_PassElementTrue++;
+                            }
+                        }
+                        SetCursorCoord_XY(20, 51);
+                        printf("\xDD PROCESS \xAF Moving Foward in the Next Step...");
+                        Sleep(3000);
+                        Func_Final_Overview(Final_Comp_SelectedSubjects, Subject_ExpectedCandidates);
+                        break;
+                    }
+                }
+                else if ((Final_Decision_Selector == 'N') || (Final_Decision_Selector == 'n'))
+                {
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xDD PROCESS \xAF Going back to Subject Selection...");
+                    Sleep(1500);
+                    break;
                 }
                 else
                 {
-                    gotoxy(30, 46);
-                    printf("\xDD PROCESS \xAF Going back...");
+                    SetCursorCoord_XY(20, 48);
+                    printf("\xDD ERROR \xAF Sorry, I don't understand that...");
+                    Sleep(1500);
                     break;
                 }
             }
             continue;
         }
-        else if (Option_Selector == -1)
+        else if (Option_Selector == 7)
         {
-            gotoxy(30, 44);
+            Func_NewStdnt_CourseReg();
+        }
+        else if (Option_Selector == 4)
+        {
+            SetCursorCoord_XY(20, 47);
             printf("\xDD PROCESS \xAF Including All Available Subjects...");
             Final_Comp_SelectedSubjects = 0;
             Final_Comp_SemUnits = 0;
-            while (Sbj_Stats_Increment <= Subject_WholeSize)
+            while (Sbj_Stats_Increment < Subject_ExpectedCandidates)
             {
-                SbjSel_Stats[Sbj_Stats_Increment - 1] = Subject_Parameters[0];
+                Subject_Status[Sbj_Stats_Increment] = Subject_Parameters[0];
                 Final_Comp_SelectedSubjects += 1;
-                Final_Comp_SemUnits += Subject_Units[Sbj_Stats_Increment - 1];
-                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Increment - 1] = 1;
-                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Increment - 1] = 0;
+                Final_Comp_SemUnits += Subject_Units[Sbj_Stats_Increment];
+                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Increment] = 1;
+                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Increment] = 0;
                 Sbj_Stats_Increment++;
             }
             Sleep(1500);
             continue;
         }
-        else if (Option_Selector == -2)
+        else if (Option_Selector == 5)
         {
-            gotoxy(30, 44);
+            SetCursorCoord_XY(20, 47);
             printf("\xDD PROCESS \xAF Excluding All Available Subjects...");
             Final_Comp_SelectedSubjects = 0;
             Final_Comp_SemUnits = 0;
-            while (Sbj_Stats_Decrement <= Subject_WholeSize)
+            while (Sbj_Stats_Decrement < Subject_ExpectedCandidates)
             {
-                SbjSel_Stats[Sbj_Stats_Decrement - 1] = Subject_Parameters[1];
-                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Decrement - 1] = 0;
-                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement - 1] = 0;
+                Subject_Status[Sbj_Stats_Decrement] = Subject_Parameters[1];
+                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Decrement] = 0;
+                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement] = 0;
+                Sbj_Stats_Decrement++;
+            }
+            Sleep(1500);
+            continue;
+        }
+        else if (Option_Selector == 6)
+        {
+            SetCursorCoord_XY(20, 47);
+            printf("\xDD PROCESS \xAF Resetting Values Back to Default...");
+            Final_Comp_SelectedSubjects = 0;
+            Final_Comp_SemUnits = 0;
+            while (Sbj_Stats_Decrement < Subject_ExpectedCandidates)
+            {
+                Subject_Status[Sbj_Stats_Decrement] = "Unknown";
+                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Decrement] = 0;
+                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement] = 0;
                 Sbj_Stats_Decrement++;
             }
             Sleep(1500);
@@ -2536,71 +3041,529 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
         }
         else
         {
-            gotoxy(30, 44);
-            printf("\xDD WARNING \xAF You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Function...");
-            Sleep(2000);
+            SetCursorCoord_XY(20, 47);
+            printf("\xDD WARNING \xAF The button you pressed might be wrong. We can't go non-linear!");
+            Sleep(1750);
             continue;
         }
     }
 }
 //Continue Function...
 
-int Func_Stdnt_ScholarshipCheck()
-//struct Enrollment_InformationReceiver Data_Received, int Selected_CandiateSubjects
+void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates)
 {
-    // Displays Current Status
-    char Confirmation;
-    float GradeLowCheck = 0, GradeHighCheck = 0, GradeAverageCheck_1stSem = 0, GradeAverageCheck_2ndSem = 0;
-    printf("Do you want to apply for a scholarship?");
-    switch (Confirmation = getche())
+    SetConsoleTitle(FUNCTION_STEP4);
+    char *StudentType;
+    char *StatusTake;
+    int Subject_Pass_Reader = 0, Subject_Pass_Reader_Counter = 1, SetCoordinates_Dependent = 13;
+    if (Final_Comp_SelectedSubjects < Subject_ExpectedCandidates)
     {
-    case 'y': //Falls Through
-    case 'Y':
-        printf("What is your lowest grade?");
-        scanf("%f", &GradeLowCheck);
-        printf("What is your highest grade?");
-        scanf("%f", &GradeHighCheck);
-        printf("What is your average grade on 1st Semester");
-        scanf("%f", &GradeAverageCheck_1stSem);
-        printf("What is your average grade on 2nd Semester");
-        scanf("%f", &GradeAverageCheck_2ndSem);
-        // Checker
-        //printf("Grade Received. You have %i Percent Discount Scholarship! Proceeding...");
-        PrintDocument_FinalTranscript();
-    case 'n': // Falls Through
-    case 'N':
-        printf("Okay. Proceeding....");
-    default:
-        printf("Unrecognized Input!");
+        StudentType = "Irregular Student";
+        StatusTake = "Incomplete Take";
+        strcpy(OnProcess_StudentData.stdnt_StudentType, StudentType);
     }
-    /*
+    else
+    {
+        StudentType = "Regular Student";
+        StatusTake = "Complete Take";
+        strcpy(OnProcess_StudentData.stdnt_StudentType, StudentType);
+    }
     system("CLS");
-    int Parameters = 0;
-    printf("\xDD INFO \xAF We on the 4th Step of this!");
-    while (Parameters != Selected_CandiateSubjects)
+    SetCursorCoord_XY(30, 3);
+    printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(30, 4);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 5);
+    printf("\xBA [1st \xAF 2nd \xAF 3rd \xAF \xDD\xAF [4th Step \xAF Slight Overview Data] \xAF 5th \xAF Confirm \xAF End]\t\t\t\t   \xBA");
+    SetCursorCoord_XY(30, 6);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 7);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+    SetCursorCoord_XY(30, 9);
+    printf("\xC9\xCD\xCD \xDD INFORMATION SUMMARY \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(30, 10);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 11);
+    printf("\xBA \xAF Here are the list of your subjects that you will be taking with.\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 12);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    while (Subject_Pass_Reader < Subject_ExpectedCandidates)
     {
-        printf("%s | %s | %s\n", Data_Received.Subject_CodeName_Receiver[Parameters], Data_Received.Subject_FullName_Receiver[Parameters], Data_Received.Subject_LinearTime_Receiver[Parameters]);
-        Parameters++;
+        if ((ERLM_DataReceiver.Subject_CodeName_Receiver[Subject_Pass_Reader] == NULL) || (ERLM_DataReceiver.Subject_FullName_Receiver[Subject_Pass_Reader] == NULL) || (ERLM_DataReceiver.Subject_LinearTime_Receiver[Subject_Pass_Reader] == NULL))
+        {
+            Subject_Pass_Reader++;
+            continue;
+        }
+        else
+        {
+            SetCursorCoord_XY(30, SetCoordinates_Dependent);
+            if (Subject_Pass_Reader_Counter >= 10)
+            {
+                printf("\xBA  [ %d ]   %-10s -  %-51s \xDD %-18s\xDD     %-5i\xBA", Subject_Pass_Reader_Counter, ERLM_DataReceiver.Subject_CodeName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_FullName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_LinearTime_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_Units_Receiver[Subject_Pass_Reader]);
+                Subject_Pass_Reader++;
+                Subject_Pass_Reader_Counter++;
+                SetCoordinates_Dependent++;
+            }
+            else
+            {
+                printf("\xBA  [ %d ]    %-10s -  %-51s \xDD %-18s\xDD     %-5i\xBA", Subject_Pass_Reader_Counter, ERLM_DataReceiver.Subject_CodeName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_FullName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_LinearTime_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_Units_Receiver[Subject_Pass_Reader]);
+                Subject_Pass_Reader++;
+                Subject_Pass_Reader_Counter++;
+                SetCoordinates_Dependent++;
+                continue;
+            }
+        }
     }
+    SetCursorCoord_XY(30, SetCoordinates_Dependent);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(30, SetCoordinates_Dependent);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(30, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD \xDD ADDITIONALS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(30, SetCoordinates_Dependent);
+    printf("\xDD Student Type \xAF %s\t\xDD\t Subjects Enrolled \xAF %d / %d => %-28s", StudentType, Subject_Pass_Reader_Counter - 1, Subject_ExpectedCandidates, StatusTake);
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(30, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(30, SetCoordinates_Dependent);
+    printf("\xAF \xDD TAKE NOTE \xDD Here are the last information to be reviewed, press any key to continue.");
     getch();
-    return ERROR_SUCCESS;
-    */
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(30, SetCoordinates_Dependent);
+    printf("\xAF \xDD PROCESS \xDD Proceeding to Scholarship Prompt and Mode of Payment...");
+    Sleep(1750);
+    Func_Stdnt_ScholarshipCheck();
+}
+int Func_Stdnt_ScholarshipCheck()
+{
+    char Confirmation;
+    OnProcess_StudentData.GradeLowest = 0, OnProcess_StudentData.GradeHighest, OnProcess_StudentData.GradeGeneralAverage_LastSem = 0;
+    //char *OnProcess_StudentData.Granted_ScholarshipStats[0], *Granted_ScholarshipStats;
+    system("CLS");
+    SetCursorCoord_XY(30, 3);
+    printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(30, 4);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 5);
+    printf("\xBA [1st \xAF 2nd \xAF 3rd \xAF 4th \xDD\xAF [5th Step of Part 1 \xAF Scholarship Prompt] \xAF Confirm \xAF End]\t\t\t   \xBA");
+    SetCursorCoord_XY(30, 6);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 7);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+    SetCursorCoord_XY(30, 9);
+    printf("\xC9\xCD\xCD \xDD INFORMATION \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(30, 10);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 11);
+    printf("\xBA To get a scholarship discount, your grades must met the following\t\t\t\t\t   \xBA");
+    SetCursorCoord_XY(30, 12);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 13);
+    printf("\xBA \xAF 84.00%% - 85.99%% General Avg with Subject Minimum Grade of 82%% \t\t\t\t\t   \xBA");
+    SetCursorCoord_XY(30, 14);
+    printf("\xBA \xAF 86.00%% - 87.99%% General Avg with Subject Minimum Grade of 84%% \t\t\t\t\t   \xBA");
+    SetCursorCoord_XY(30, 15);
+    printf("\xBA \xAF 88.00%% - 88.99%% General Avg with Subject Minimum Grade of 86%% \t\t\t\t\t   \xBA");
+    SetCursorCoord_XY(30, 16);
+    printf("\xBA \xAF 89.00%% - 89.99%% General Avg with Subject Minimum Grade of 88%% \t\t\t\t\t   \xBA");
+    SetCursorCoord_XY(30, 17);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 18);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+    SetCursorCoord_XY(30, 20);
+    printf("\xFE\xCD\xCD \xDD QUESTIONS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(30, 22);
+    printf("\xAF \xDD QUESTION #1 \xDD What is your general average grade from your last semester?");
+    SetCursorCoord_XY(30, 23);
+    printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
+    scanf("%d", &OnProcess_StudentData.GradeGeneralAverage_LastSem);
+    fflush(stdin);
+    SetCursorCoord_XY(30, 25);
+    printf("\xAF \xDD QUESTION #2 \xDD What is your lowest grade on any subject?");
+    SetCursorCoord_XY(30, 26);
+    printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
+    scanf("%d", &OnProcess_StudentData.GradeLowest);
+    fflush(stdin);
+    SetCursorCoord_XY(30, 28);
+    printf("\xAF \xDD QUESTION #3 \xDD What is your highest grade on any subject?");
+    SetCursorCoord_XY(30, 29);
+    printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
+    scanf("%d", &OnProcess_StudentData.GradeHighest);
+    fflush(stdin);
+    if (OnProcess_StudentData.GradeLowest >= 82 && OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84)
+    {
+        SetCursorCoord_XY(30, 31);
+        printf("\xAF \xDD INFO \xDD Congratulations! You are eligible for scholarship!");
+        Sleep(1500);
+        if ((OnProcess_StudentData.GradeLowest >= 82) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 86))
+        {
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "50%% Discount");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "50%% Discount on Tuition Fee for one (1) semester | Entrance Scholarship");
+            SetCursorCoord_XY(30, 32);
+            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
+        }
+        else if ((OnProcess_StudentData.GradeLowest >= 84) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 86 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 88))
+        {
+            SetCursorCoord_XY(30, 32);
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "75%% Discount");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "75%% Discount on Tuition Fee for one (1) semester | Entrance Scholarship");
+            printf("\xA7 \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
+        }
+        else if ((OnProcess_StudentData.GradeLowest >= 86) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 88 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 89))
+        {
+            SetCursorCoord_XY(30, 32);
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "100%% Discount");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "Free tuition fee for one (1) semester | Entrance Scholarship");
+            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
+        }
+        else if ((OnProcess_StudentData.GradeLowest >= 88) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 89))
+        {
+            SetCursorCoord_XY(30, 32);
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "100%% + MISC.");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "Free tuition and basic miscellaneous fees for one (1) semester | Entrance Scholarship");
+            printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
+        }
+    }
+    else
+    {
+        SetCursorCoord_XY(30, 32);
+        printf("\xDD INFO \xAF Sorry, you are not allowed to take scholarship... But your encoded grade is still recorded...");
+        SetCursorCoord_XY(30, 34);
+        printf("\xDD INFO \xAF Proceeding to Mode of Payment...");
+        Sleep(1750);
+        Func_Mode_Of_Payment();
+    }
+    Sleep(1000);
+    while (1)
+    {
+        SetCursorCoord_XY(30, 34);
+        printf("\xAF \xDD FINAL QUESTION \xDD Do you want to apply for a scholarship? [Y or N] \xAF ");
+        switch (Confirmation = getche())
+        {
+        case 'Y':
+        case 'y': //Falls Through
+            SetCursorCoord_XY(30, 35);
+            printf("\xDD INFO \xAF Data Acquired. Good to know :). Proceeding to Mode of Payment...");
+            Sleep(1500);
+            //Func_Stdnt_ScholarshipCheck();
+            Func_Mode_Of_Payment();
+        case 'N':
+        case 'n': // Falls Through
+            SetCursorCoord_XY(30, 35);
+            printf("\xDD INFO \xAF Scholarship Grant Aborted :(. Proceeding to Mode of Payment...");
+            strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "NULL");
+            Sleep(1500);
+            Func_Mode_Of_Payment();
+            break;
+        default:
+            SetCursorCoord_XY(30, 35);
+            printf("\xDD ERROR \xAF Sorry, I don't understand that...");
+            Sleep(1500);
+            continue;
+        }
+    }
 }
 
 void Func_Mode_Of_Payment()
 {
+    while (1)
+    {
+        char Selection;
+        system("CLS");
+        SetCursorCoord_XY(30, 3);
+        printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 4);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 5);
+        printf("\xBA [1st \xAF 2nd \xAF 3rd \xAF 4th \xAF \xDD\xAF [5th Step of Part 2 \xAF Mode of Payment] \xAF Confirm \xAF End]\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 6);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 7);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(30, 9);
+        printf("\xC9\xCD\xCD \xDD SELECTIONS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+        SetCursorCoord_XY(30, 10);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 11);
+        printf("\xBA \xAF [1] Cash \t\t\t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 12);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 13);
+        printf("\xBA \xAF [2] Installment \t\t\t\t\t\t\t\t\t\t\t   \xBA");
+        SetCursorCoord_XY(30, 14);
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+        SetCursorCoord_XY(30, 15);
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+        SetCursorCoord_XY(30, 17);
+        printf("\xC8\xAF \xDD INFO \xDD Press a key that corresponds your decision \xAF ");
+        switch (Selection = getche())
+        {
+        case '1':
+            strcpy(OnProcess_StudentData.PaymentMethod, "Cash");
+            SetCursorCoord_XY(30, 19);
+            printf("\xAF \xDD SUCCESS \xAF Selected %s as a Mode of Payment. Proceeding to Final Overview...", OnProcess_StudentData.PaymentMethod);
+            Sleep(1750);
+            Func_PrintDocument_FinalTranscript();
+        case '2':
+            strcpy(OnProcess_StudentData.PaymentMethod, "Installment, Please talk to any representatives for schedule of payment.");
+            SetCursorCoord_XY(30, 19);
+            printf("\xAF \xDD SUCCESS \xAF Selected %s as a Mode of Payment. Proceeding to Final Overview...", OnProcess_StudentData.PaymentMethod);
+            Sleep(1750);
+            Func_PrintDocument_FinalTranscript();
+        default:
+            SetCursorCoord_XY(30, 19);
+            printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
+            Sleep(1750);
+            continue;
+        }
+    }
 }
-void PrintDocument_FinalTranscript()
+void Func_PrintDocument_FinalTranscript()
 {
-}
+    //Create an Student ID for New People
+    long long int stdnt_NumGenerated;
+    int SetCoordinates_Dependent = 20, SubjectCount = 0, SubjectNumber = 1, TotalCreditUnits = 0;
+    float TuitionFee, LaboratoryFee = 7225.85, AthleticsFee = 761.20,
+                      AudioVisualFee = 133.60, ClassroomEnergyFee = 1100, ComputerFee = 2650.75,
+                      CulturalnActivityFee = 48.30, DevFee = 830.45, EnergExtFee = 890.63,
+                      GuidancenCounselFee = 520.17, HandbookFee = 153.35, IDFee = 487.10,
+                      InsuranceFee = 12.00, InternetFee = 105.30, LibraryFee = 1520.35,
+                      MedicalFee = 510.20, RedCrossFee = 1, StudentConcilFee = 60,
+                      TestPaperFee = 266, ScholarshipDiscount = 0, TotalFee = 0;
+    FILE *FileCreation_StudentCopy;
+    char *FileNameGenerated;
+    //FileNameGenerated = GenerateFileName();
+    GenerateUserandPass();
+    //FileCreation_StudentCopy = fopen(FileNameGenerated[MAX_PATH], "wb+");
+    if (OldDataProcess_StudentData.stdnt_StudentID == 0)
+    {
+        //Create Algorithm here
+        stdnt_NumGenerated = 2018000;
+    }
+    else
+    {
+        stdnt_NumGenerated = OldDataProcess_StudentData.stdnt_StudentID;
+    }
+    system("CLS");
+    SetCursorCoord_XY(20, 3);
+    printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(20, 4);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+    SetCursorCoord_XY(20, 5);
+    printf("\xBA [1st \xAF 2nd \xAF 3rd \xAF 3rd \xAF 4th \xAF 5th \xAF \xDD\xAF [Confirm - Overall Overview] \xAF End]\t\t\t\t\t\t       \xBA");
+    SetCursorCoord_XY(20, 6);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+    SetCursorCoord_XY(20, 7);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+    SetCursorCoord_XY(20, 9);
+    printf("\xFE\xCD\xCD \xDD STUDENTS REGISTRATION FORM - STUDENTS COPY \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(20, 11);
+    printf(" \xDD %-18s \xAF %-50ld \xDD %-18s \xAF %-10s", "Student Number", stdnt_NumGenerated, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
+    SetCursorCoord_XY(20, 12);
+    printf(" \xDD %-18s \xAF %-s, %s %-50s \xDD%-10s \xAF %-20s ", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName, "Year Level", OnProcess_StudentData.Course_YearChoice);
+    SetCursorCoord_XY(20, 13);
+    printf(" \xDD %-18s \xAF %-50s", "Permanent Address", OnProcess_StudentData.stdnt_Address);
+    SetCursorCoord_XY(20, 14);
+    printf(" \xDD %-18s \xAF %-50s", "Student Type", OnProcess_StudentData.stdnt_StudentType);
+    SetCursorCoord_XY(20, 16);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(20, 18);
+    printf("\xFE\xCD\xCD \xDD SUBJECT INFORMATION \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SubjectCount = 0;
+    SubjectNumber = 1;
+    while (SubjectCount < ERLM_DataReceiver.Subject_Candidates)
+    {
+        if ((ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount] == NULL) || (ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount] == NULL) || (ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount] == NULL))
+        {
+            SubjectCount++;
+            continue;
+        }
+        else
+        {
 
-void Func_ERLM_Recheck()
+            SetCursorCoord_XY(20, SetCoordinates_Dependent);
+            if (SubjectNumber >= 10)
+            {
+                printf("      [ %d ]  \xDD    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i", SubjectNumber, ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_ScheduleDay_Receiver[SubjectCount], ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount], ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount]);
+                TotalCreditUnits += ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount];
+                SetCoordinates_Dependent++;
+                SubjectCount++;
+                SubjectNumber++;
+            }
+            else
+            {
+                printf("      [ %d ]   \xDD    %-10s -  %-46s \xDD  %-8s\xDD  %-19s\xDD%5i", SubjectNumber, ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_ScheduleDay_Receiver[SubjectCount], ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount], ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount]);
+                TotalCreditUnits += ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount];
+                SetCoordinates_Dependent++;
+                SubjectCount++;
+                SubjectNumber++;
+            }
+        }
+    }
+
+    TuitionFee = SubjectCount * 200 + 21500;
+    if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "50%% Discount") == 0)
+    {
+        ScholarshipDiscount = TuitionFee * 0.5;
+    }
+    else if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "75%% Discount") == 0)
+    {
+        ScholarshipDiscount = TuitionFee * 0.75;
+    }
+    else if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "100%% Discount") == 0)
+    {
+        TuitionFee = 0;
+        ScholarshipDiscount = TuitionFee * 0.100;
+    }
+    else if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "100%% + MISC.") == 0)
+    {
+        TuitionFee = 0;
+        ScholarshipDiscount = 0;
+        LaboratoryFee = 0;
+        AthleticsFee = 0;
+        AudioVisualFee = 0;
+        ClassroomEnergyFee = 0;
+        ComputerFee = 0;
+        CulturalnActivityFee = 0;
+        DevFee = 0;
+        EnergExtFee = 0;
+        GuidancenCounselFee = 0;
+        HandbookFee = 0;
+        IDFee = 0;
+        InsuranceFee = 0;
+        InternetFee = 0;
+        LibraryFee = 0;
+        MedicalFee = 0;
+        RedCrossFee = 0;
+        StudentConcilFee = 0;
+        TestPaperFee = 0;
+    }
+    else
+    {
+        ScholarshipDiscount = 0;
+    }
+    TotalFee = (TuitionFee + LaboratoryFee + AthleticsFee +
+                AudioVisualFee + ClassroomEnergyFee + ComputerFee +
+                CulturalnActivityFee + DevFee + EnergExtFee +
+                GuidancenCounselFee + HandbookFee + IDFee +
+                InsuranceFee + InternetFee + LibraryFee +
+                MedicalFee + RedCrossFee + StudentConcilFee +
+                TestPaperFee) -
+               ScholarshipDiscount;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("      Total Subjects To Take \xAF %d / %- 20d\xAF Total Credit Units To Take \xAF %d", ERLM_DataReceiver.Subjects_Selected, ERLM_DataReceiver.Subject_Candidates, TotalCreditUnits);
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD \xDD FEES AND IT'S AMOUNTS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "TUITION FEE", TuitionFee, "Laboratory Fee", LaboratoryFee, "Athletics Fee", AthleticsFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Audio Visual Fee", AudioVisualFee, "Classroom Energy Fee", ClassroomEnergyFee, "Computer Fee", ComputerFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Cultural & Act. Fee", CulturalnActivityFee, "Development Fee", DevFee, "Energy Fee", EnergExtFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-14.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Guidance & Counselling Fee", GuidancenCounselFee, "Handbook Fee", HandbookFee, "ID Fee", IDFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Insurance Fee", InsuranceFee, "Internet Fee", InternetFee, "Library Fee", LibraryFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Medical Fee", MedicalFee, "Red Cross Fee", RedCrossFee, "Student Concil Fee", StudentConcilFee);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("  %-20s \xAF %-20.2f \xDD %-19s \xAF -%-19.2f\xDD %-20s \xAF %-20.2f", "Test Paper Fee", TestPaperFee, "Scholarship Reduction", ScholarshipDiscount, "TOTAL FEE", TotalFee);
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD \xDD SCHOLARSHIP, SCHEDULE OF PAYMENT AND STUDENT PORTAL INFO \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD Scholarship Taken \xAF %s", OnProcess_StudentData.Granted_ScholarshipDetails);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD Payment Selected \xAF %s", OnProcess_StudentData.PaymentMethod);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD Student Portal Account \xDD");
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD User ID \xAF %s", OnProcess_StudentData.Generated_stdnt_NewUser);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD Temporary Password \xAF %s", OnProcess_StudentData.Generated_stdnt_NewPass);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xDD You can access it after this enrollment!");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCoordinates_Dependent++;
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xAF \xDD INFO \xDD Here are the full student copy OF your registration form containing everything you need to enroll...");
+    Sleep(5000);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xAF \xDD INFO \xDD A file name called %s will be saved, please call assistance for printing. Thank you.", FileNameGenerated);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xAF \xDD CONFIMRATION \xDD If you are done viewing this, press any key to continue...");
+    getch();
+    Func_EndofProcess();
+}
+void Func_EndofProcess() {
+
+}
+void Func_ERLM_Check()
 {
 }
 
 // Uncategoterized Function
-void gotoxy(int x, int y)
+void SetCursorCoord_XY(int x, int y)
 {
     COORD ConsoleXY = {x, y};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), ConsoleXY);
 }
+
+void GenerateUserandPass()
+{
+    char *BaseBranch = "qc-";
+    char Container[20], FirstNameLetter[30], LastName[20];
+
+    strncpy(FirstNameLetter, OnProcess_StudentData.stdnt_FName, 1);
+    strcpy(LastName, OnProcess_StudentData.stdnt_LName);
+
+    strcat(Container, BaseBranch);
+    strcat(Container, FirstNameLetter);
+    strcat(Container, LastName);
+    strncpy(OnProcess_StudentData.Generated_stdnt_NewUser, Container, sizeof(Container));
+}
+/*char GenerateFileName()
+{
+}*/

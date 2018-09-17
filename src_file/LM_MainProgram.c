@@ -2,7 +2,8 @@
 Group LM - Enrollment System in C for Preliminary Project in Programming
 Enrollment System, Version 2355-08182018 BETA
 ==============================================================================
-Project Leader / FrontEnd Design / Backend Programmer - Janrey Licas, Project Manager / Backend Programmer - Charles Ian Mascarenas
+Project Leader / FrontEnd Design / Backend Programmer - Janrey Licas, Project
+Manager / Backend Programmer - Charles Ian Mascarenas
 Code Tester / ???? - Sim Harvey Agustin Marquez, Julie Ann Luzano, Matt Matamis
 ==============================================================================*/
 #include <stdio.h>   // Just Basic Input Output Header File
@@ -12,7 +13,8 @@ Code Tester / ???? - Sim Harvey Agustin Marquez, Julie Ann Luzano, Matt Matamis
 #include <time.h>    // For Time Display and Such
 #include <string.h>  // String Handling for Usage of Structure and Database
 #define VERSION_NUMBER "2259-08102018-BETA"
-#define PRODUCT_NAME "Group LM | C CLI Enrollment System for TiP Engineering and Architecture"
+#define PRODUCT_NAME \
+    "Group LM | C CLI Enrollment System for TiP Engineering and Architecture"
 #define FUNCTION_UNFINISHED 1362565
 #define DATABASE_NOT_FOUND 40
 
@@ -23,16 +25,9 @@ struct Old_StudentRecords
 };
 struct New_StudentRecords
 {
-    char stdnt_FName[30],
-        stdnt_MName[30],
-        stdnt_LName[30],
-        stdnt_Gender[6],
-        stdnt_Birthday[30],
-        stdnt_Nationality[30],
-        stdnt_SpecialBehavioral[50],
-        stdnt_Address[MAX_PATH],
-        stdnt_Email[40],
-        stdnt_POC_Emergency[30];
+    char stdnt_FName[30], stdnt_MName[30], stdnt_LName[30], stdnt_Gender[6],
+        stdnt_Birthday[30], stdnt_Nationality[30], stdnt_SpecialBehavioral[50],
+        stdnt_Address[MAX_PATH], stdnt_Email[40], stdnt_POC_Emergency[30];
     int stdnt_PhoneNum, stdnt_MobileNum, stdnt_EmerNum;
 };
 
@@ -40,28 +35,33 @@ struct New_StudentRecords
 int Function_Management_ERLM();
 void gotoxy(int x, int y);
 
-//POST and Critical Component Function Prototypes
-char Function_CriticalComp_CheckCreate(); // Checks and Sets Components Before Initializing
-char Argument_Initialization(argc, argv); // PASS ARGC AND ARGV To Another Function
+// POST and Critical Component Function Prototypes
+char Function_CriticalComp_CheckCreate(); // Checks and Sets Components Before
+                                          // Initializing
+char Argument_Initialization(argc,
+                             argv); // PASS ARGC AND ARGV To Another Function
 
 void Main_Menu();
 int stdnt_DataCheck(struct New_StudentRecords NewData_Receiver);
 void Func_NewStdnt_ERLM();
 int Func_NewStdnt_ERLM_Step2();
-int Func_NewStdnt_Eng_YearSelect(struct New_StudentRecords NewData_Receiver, char *MainCourse_CodeName_Passer, char *MainCourse_FullName_Passer);
-int Func_NewStdnt_Arch_YearSelect(struct New_StudentRecords NewData, char *MainCourse_CodeName_Passer);
+int Func_NewStdnt_Eng_YearSelect(struct New_StudentRecords NewData_Receiver,
+                                 char *MainCourse_CodeName_Passer,
+                                 char *MainCourse_FullName_Passer);
+int Func_NewStdnt_Arch_YearSelect(struct New_StudentRecords NewData,
+                                  char *MainCourse_CodeName_Passer);
 
 int Func_NewStdnt_Eng_Subject_Select();
 
 int Func_NewStdnt_Arch_Subject_Select();
 
-//int Func_Stdnt_ScholarshipCheck();
+// int Func_Stdnt_ScholarshipCheck();
 int stdnt_Scholarship_Check();
 
 int Func_AlgoStdnt_NumberCreate(); // Function that creates a number
 void PrintDocument_FinalTranscript();
 
-//Architecture Selection Functions for Enrollment
+// Architecture Selection Functions for Enrollment
 int Stdnt_1stYear_Arch_FirstSem();
 int Stdnt_1stYear_Arch_SecondSem();
 int Stdnt_2ndYear_Arch_FirstSem();
@@ -140,14 +140,17 @@ int main(int argc, char *argv[])
 {
     HWND consoleWindow = GetConsoleWindow();
     int Argument_Checker = 0;
-    printf("  @ Function \t|\t INITIALIZING \t|\t  int main() => Argument_Initialization\n");
+    printf("  @ Function \t|\t INITIALIZING \t|\t  int main() => "
+           "Argument_Initialization\n");
     if (argc > 1)
     {
         while (Argument_Checker != argc)
         {
             if (strcmp(argv[Argument_Checker], "/rstrict_wnd") == 0)
             {
-                SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
+                SetWindowLong(consoleWindow, GWL_STYLE,
+                              GetWindowLong(consoleWindow, GWL_STYLE) &
+                                  ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
             }
             if (strcmp(argv[Argument_Checker], "/mgr_md") == 0)
             {
@@ -181,71 +184,88 @@ char Function_CriticalComp_CheckCreate()
     char *WARN_1 = "ERROR.UnableToConnect";
     SYSTEMTIME GetDate_Local;
     SetConsoleTitle("Intializing Critical Components | LM Enrollment System\n");
-    printf("Initializing and Checking Critical Components Before Actual Program Initialization\n");
-    puts("---------------------------------------------------------------------------------------------------");
+    printf("Initializing and Checking Critical Components Before Actual Program "
+           "Initialization\n");
+    puts("-----------------------------------------------------------------------"
+         "----------------------------");
     printf("COMPONENT MATERIAL\t|\t STATUS\t\t| DESCRIPTION\t\n");
-    puts("---------------------------------------------------------------------------------------------------");
-    printf("Init.Component # 1 \t|\t COMPLETE \t| Set Command Line to Full Screen\n");
+    puts("-----------------------------------------------------------------------"
+         "----------------------------");
+    printf("Init.Component # 1 \t|\t COMPLETE \t| Set Command Line to Full "
+           "Screen\n");
     ShowWindow(hwnd, SW_MAXIMIZE);
     printf("Init.Component # 2 \t|\t COMPLETE \t| Disable Close Button\n");
     EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
-    printf("Init.Component # 3.1 \t|\t CHECKING \t| Checking Local Database on Local Storage (Using .Dat File)\n");
-    for (Counter_DataPoint_Check = 1; Counter_DataPoint_Check <= 3; Counter_DataPoint_Check++)
+    printf("Init.Component # 3.1 \t|\t CHECKING \t| Checking Local Database on "
+           "Local Storage (Using .Dat File)\n");
+    for (Counter_DataPoint_Check = 1; Counter_DataPoint_Check <= 3;
+         Counter_DataPoint_Check++)
     {
         if (Counter_DataPoint_Check == 1)
         {
             FileDatabase_ERLM = fopen(datapoint_ERLM, "r");
             if (FileDatabase_ERLM == NULL)
             {
-                printf("Init.Component # 3.1 \t|\t ERROR \t\t| Database for Enrollment was not found! Creating Database Point...\n");
-                //fwrite(datapoint_ERLM, 1, sizeof(datapoint_ERLM), FileDatabase_ERLM);
+                printf("Init.Component # 3.1 \t|\t ERROR \t\t| Database for Enrollment "
+                       "was not found! Creating Database Point...\n");
+                // fwrite(datapoint_ERLM, 1, sizeof(datapoint_ERLM), FileDatabase_ERLM);
                 FileDatabase_ERLM = fopen(datapoint_ERLM, "w+");
                 fclose(FileDatabase_ERLM);
             }
             else
             {
-                printf("Init.Component # 3.1 \t|\t VERIFIED \t| Local Database Found for Enrollment!\n");
+                printf("Init.Component # 3.1 \t|\t VERIFIED \t| Local Database Found "
+                       "for Enrollment!\n");
                 fclose(FileDatabase_ERLM);
             }
         }
         else if (Counter_DataPoint_Check == 2)
         {
-            printf("Init.Component # 3.2 \t|\t CHECKING \t| Checking for DataPoint User Data...\n");
+            printf("Init.Component # 3.2 \t|\t CHECKING \t| Checking for DataPoint "
+                   "User Data...\n");
             FileDatabase_User = fopen(datapoint_User, "r");
             if (FileDatabase_User == NULL)
             {
-                printf("Init.Component # 3.2 \t|\t ERROR \t\t| Database for User was not found! Creating Database Point...\n");
-                //fwrite(datapoint_ERLM, 1, sizeof(datapoint_ERLM), FileDatabase_ERLM);
+                printf("Init.Component # 3.2 \t|\t ERROR \t\t| Database for User was "
+                       "not found! Creating Database Point...\n");
+                // fwrite(datapoint_ERLM, 1, sizeof(datapoint_ERLM), FileDatabase_ERLM);
                 FileDatabase_User = fopen(datapoint_User, "w+");
                 fclose(FileDatabase_User);
             }
             else
             {
-                printf("Init.Component # 3.2 \t|\t VERIFIED \t| Local Database Found for Student User!\n");
+                printf("Init.Component # 3.2 \t|\t VERIFIED \t| Local Database Found "
+                       "for Student User!\n");
                 fclose(FileDatabase_User);
             }
         }
         else if (Counter_DataPoint_Check == 3)
         {
-            printf("Init.Component # 3.3 \t|\t CHECKING \t| Checking for DataPoint Admin Data...\n");
+            printf("Init.Component # 3.3 \t|\t CHECKING \t| Checking for DataPoint "
+                   "Admin Data...\n");
             FileDatabase_Admin = fopen(datapoint_Admin, "r");
             if (FileDatabase_Admin == NULL)
             {
-                printf("Init.Component # 3.3 \t|\t ERROR \t\t| Database for Admin was not found! Creating Database Point...\n");
-                //fwrite(datapoint_Admin, 1, sizeof(datapoint_Admin), FileDatabase_Admin);
+                printf("Init.Component # 3.3 \t|\t ERROR \t\t| Database for Admin was "
+                       "not found! Creating Database Point...\n");
+                // fwrite(datapoint_Admin, 1, sizeof(datapoint_Admin),
+                // FileDatabase_Admin);
                 FileDatabase_Admin = fopen(datapoint_Admin, "w+");
                 fclose(FileDatabase_Admin);
             }
             else
             {
-                printf("Init.Component # 3.3 \t|\t VERIFIED \t| Local Database Found for Admin!\n");
+                printf("Init.Component # 3.3 \t|\t VERIFIED \t| Local Database Found "
+                       "for Admin!\n");
                 fclose(FileDatabase_Admin);
             }
         }
     }
     GetLocalTime(&GetDate_Local);
-    puts("---------------------------------------------------------------------------------------------------");
-    printf("\nDatabase Created as of %02d:%02d\n", GetDate_Local.wHour, GetDate_Local.wMinute);
+    puts("-----------------------------------------------------------------------"
+         "----------------------------");
+    printf("\nDatabase Created as of %02d:%02d\n", GetDate_Local.wHour,
+           GetDate_Local.wMinute);
     Sleep(3000);
     puts(ACMPLT);
     printf("Press any key to continue...");
@@ -312,11 +332,13 @@ void Func_OldStd_Logon()
         scanf("%d", &OldStudent.user_StudentIdentity);
         // if (insert database here) = TRUE then
     }
-    //printf("Hello %s | %d!\n", OldStudent.user_Username, OldStudent.user_StudentIdentity);
-    //printf("Also your password is %s\n", OldStudent.user_Password);
+    // printf("Hello %s | %d!\n", OldStudent.user_Username,
+    // OldStudent.user_StudentIdentity);
+    // printf("Also your password is %s\n", OldStudent.user_Password);
     Func_OldStd_Enrollment_Menu(OldStudent);
 }
-void Func_OldStd_Enrollment_Menu(struct StudentRecords OldStudent_Continuation)
+void Func_OldStd_Enrollment_Menu(
+    struct StudentRecords OldStudent_Continuation)
 {
     FILE *FileDatabase_ERLM;
     char datapoint_ERLM[] = "data/2018_LM_Database_Enrollment.dat";
@@ -331,17 +353,22 @@ void Func_OldStd_Enrollment_Menu(struct StudentRecords OldStudent_Continuation)
     else
     {
         SetConsoleTitle("LM Enrollment System | Old Student Login");
-        char *ENRL_Selection_Eng[4] = {"1st Year College", "2nd Year College", "3rd Year College", "4th Year College"};
+        char *ENRL_Selection_Eng[4] = {"1st Year College", "2nd Year College",
+                                       "3rd Year College", "4th Year College"};
         char ENRL_Stats_CurrentLevel, ENRL_Stats_Eligible;
         int Counter_For_Selection = 0;
         printf("-----------------------------");
-        printf("Hello and Welcome %c", OldStudent_Continuation.user_StudentIdentity);
+        printf("Hello and Welcome %c",
+               OldStudent_Continuation.user_StudentIdentity);
         printf("-----------------------------");
         Sleep(2000);
-        printf("Name %s | Student Number: %i", OldStudent_Continuation.user_UserPersonalName, OldStudent_Continuation.user_StudentIdentity);
+        printf("Name %s | Student Number: %i",
+               OldStudent_Continuation.user_UserPersonalName,
+               OldStudent_Continuation.user_StudentIdentity);
         printf("Your Current Level is %c", ENRL_Stats_CurrentLevel);
         printf("Enrollment Eligibility %c", ENRL_Stats_Eligible);
-        for (Counter_For_Selection; Counter_For_Selection < 5; Counter_For_Selection++)
+        for (Counter_For_Selection; Counter_For_Selection < 5;
+             Counter_For_Selection++)
         {
             printf(ENRL_Selection_Eng[Counter_For_Selection]);
         }
@@ -352,7 +379,7 @@ void Func_OldStd_Enrollment_Menu(struct StudentRecords OldStudent_Continuation)
     }
 }
 
-//Create Selectables Here for Array
+// Create Selectables Here for Array
 // ALGORITHMS
 int Func_AlgoStdnt_NumberCreate()
 {
@@ -361,7 +388,10 @@ int Func_AlgoStdnt_NumberCreate()
     char Created_Student_NumData;
     GetLocalTime(&Btch_Year); // Win32 Module Function
     // Get Current Batch and Student Number
-    printf("Created Student Number Data(Untouched) %d | ", Btch_Year.wYear); // Another Two Predicted Values are Btch_Num,Btch_StudentNum.
+    printf(
+        "Created Student Number Data(Untouched) %d | ",
+        Btch_Year
+            .wYear); // Another Two Predicted Values are Btch_Num,Btch_StudentNum.
     return Created_Student_NumData;
 }
 void Func_NewStdnt_ERLM()
@@ -377,11 +407,16 @@ void Func_NewStdnt_ERLM()
 
     system("CLS");
     SetConsoleTitle("New Student: Filling up Information | LM Enrollment System");
-    puts("---------------------------------------------------------------------------------------------------");
-    printf("--! 1st Step - Input your Personal Information | 2nd | 3rd | 4th | Confirm | End\n");
-    printf("++ Information: Please provide your information to let us identify you as a future student!\n\n");
+    puts("-----------------------------------------------------------------------"
+         "----------------------------");
+    printf("--! 1st Step - Input your Personal Information | 2nd | 3rd | 4th | "
+           "Confirm | End\n");
+    printf("++ Information: Please provide your information to let us identify "
+           "you as a future student!\n\n");
     printf("NOTE: Please input your information accurately!\n\n");
-    puts("--- IDENTITY INFORMATION --------------------------------------------------------------------------");
+    puts("--- IDENTITY INFORMATION "
+         "-----------------------------------------------------------------------"
+         "---");
     printf("\n [1] First Name |> ");
     fgets(NewData.stdnt_FName, sizeof(NewData.stdnt_FName), stdin);
     printf("\n [2] Middle Name |> ");
@@ -389,34 +424,44 @@ void Func_NewStdnt_ERLM()
     printf("\n [3] Last Name |> ");
     fgets(NewData.stdnt_LName, sizeof(NewData.stdnt_LName), stdin);
     printf("\n");
-    puts("--- GENERAL INFORMATION ---------------------------------------------------------------------------");
+    puts("--- GENERAL INFORMATION "
+         "-----------------------------------------------------------------------"
+         "----");
     printf("\n [4] Gender |> ");
     fgets(NewData.stdnt_Gender, sizeof(NewData.stdnt_Gender), stdin);
     printf("\n [5] Birthday |> ");
     fgets(NewData.stdnt_Birthday, sizeof(NewData.stdnt_Birthday), stdin);
-    printf("\n [6] Home (Main) Address |> "); //Include City and Village, ZIP CODE
+    printf("\n [6] Home (Main) Address |> "); // Include City and Village, ZIP
+                                              // CODE
     fgets(NewData.stdnt_Address, sizeof(NewData.stdnt_Address), stdin);
     printf("\n [7] Nationality |> ");
     fgets(NewData.stdnt_Nationality, sizeof(NewData.stdnt_Nationality), stdin);
 
     printf("\n");
-    puts("--- TECHNICAL INFORMATION -------------------------------------------------------------------------");
+    puts("--- TECHNICAL INFORMATION "
+         "-----------------------------------------------------------------------"
+         "--");
     printf("\n [8] Mobile Number |> ");
     scanf("%11ld", &NewData.stdnt_MobileNum);
     printf("\n [9] Phone Number |> ");
     scanf("%11ld", &NewData.stdnt_PhoneNum);
-    printf("\n [10] Emergency Number and Emergency Point of Contact (Seperated)\n");
+    printf(
+        "\n [10] Emergency Number and Emergency Point of Contact (Seperated)\n");
     printf("\n [10.1] Input Emergency Number |> ");
     scanf("%11ld", &NewData.stdnt_EmerNum);
     fflush(stdin);
     printf("\n [10.2] Input Name Emergency Point of Contact |> ");
-    fgets(NewData.stdnt_POC_Emergency, sizeof(NewData.stdnt_POC_Emergency), stdin);
+    fgets(NewData.stdnt_POC_Emergency, sizeof(NewData.stdnt_POC_Emergency),
+          stdin);
     printf("\n [11] Personal Email |> ");
     fgets(NewData.stdnt_Email, sizeof(NewData.stdnt_Email), stdin);
     printf("\n [12] Behavioral Issues |> ");
-    fgets(NewData.stdnt_SpecialBehavioral, sizeof(NewData.stdnt_SpecialBehavioral), stdin);
+    fgets(NewData.stdnt_SpecialBehavioral,
+          sizeof(NewData.stdnt_SpecialBehavioral), stdin);
     printf("\n");
-    puts("--- USER INPUT DONE ------------------------------------------------------------------------------------");
+    puts("--- USER INPUT DONE "
+         "-----------------------------------------------------------------------"
+         "-------------");
     Sleep(2000);
     DataReceiver(NewData);
 }
@@ -425,28 +470,40 @@ int DataReceiver(struct New_StudentRecords NewData_Receiver)
 {
     char Data_Confirmation;
     system("CLS");
-    puts("--- USER INPUT CHECKPOINT ------------------------------------------------------------------------------------");
+    puts("--- USER INPUT CHECKPOINT "
+         "-----------------------------------------------------------------------"
+         "-------------");
     printf("\n");
     printf("Is the following data inputted is correct?\n");
     printf("\n [1] First Name: %s", NewData_Receiver.stdnt_FName);
     printf(" [2] Middle Name: %s", NewData_Receiver.stdnt_MName);
     printf(" [3] Last Name: %s", NewData_Receiver.stdnt_LName);
     printf("\n");
-    puts("--- GENERAL INFORMATION ---------------------------------------------------------------------------");
+    puts("--- GENERAL INFORMATION "
+         "-----------------------------------------------------------------------"
+         "----");
     printf("\n");
     printf(" [4] Gender: %s", NewData_Receiver.stdnt_Gender);
     printf(" [5] Birthday: %s", NewData_Receiver.stdnt_Birthday);
-    printf(" [6] Home (Main) Address: %s", NewData_Receiver.stdnt_Address); //Include City and Village, ZIP CODE
+    printf(" [6] Home (Main) Address: %s",
+           NewData_Receiver.stdnt_Address); // Include City and Village, ZIP CODE
     printf(" [7] Nationality: %s", NewData_Receiver.stdnt_Nationality);
     printf("\n");
-    puts("--- TECHNICAL INFORMATION -------------------------------------------------------------------------");
+    puts("--- TECHNICAL INFORMATION "
+         "-----------------------------------------------------------------------"
+         "--");
     printf("\n");
     printf(" [8] Mobile Number: %ld", NewData_Receiver.stdnt_MobileNum);
     printf(" [9] Phone Number: %ld\n", NewData_Receiver.stdnt_PhoneNum);
-    printf(" [10] Emergency Number and Emergency Point of Contact (Seperated)): %ld | %s", NewData_Receiver.stdnt_EmerNum, NewData_Receiver.stdnt_POC_Emergency);
+    printf(" [10] Emergency Number and Emergency Point of Contact (Seperated)): "
+           "%ld | %s",
+           NewData_Receiver.stdnt_EmerNum, NewData_Receiver.stdnt_POC_Emergency);
     printf(" [11] Personal Email: %s", NewData_Receiver.stdnt_Email);
-    printf(" [12] Behavioral Issues: %s\n\n", NewData_Receiver.stdnt_SpecialBehavioral);
-    puts("--- USER INPUT CHECKPOINT ------------------------------------------------------------------------------------");
+    printf(" [12] Behavioral Issues: %s\n\n",
+           NewData_Receiver.stdnt_SpecialBehavioral);
+    puts("--- USER INPUT CHECKPOINT "
+         "-----------------------------------------------------------------------"
+         "-------------");
     Data_Confirmation = getchar();
     if (Data_Confirmation == 'Y' || Data_Confirmation == 'y')
     {
