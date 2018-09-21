@@ -36,7 +36,7 @@ struct OnHold_DataRecords
         stdnt_FathersName[30],
         stdnt_FathersInfoJob[30],
         stdnt_FathersInfoContact[30],
-        stdnt_SourceInterest[30],
+        stdnt_SourceInterest[MAX_PATH],
         stdnt_LastSchoolYear[30],
         stdnt_LastSchoolStrand[30],
         stdnt_Gender[6],
@@ -51,11 +51,12 @@ struct OnHold_DataRecords
         MainCourse_FullName_Passer[40],
         Course_YearChoice[20],
         Course_SemSelection[20],
-        Generated_stdnt_NewPass[10],
-        Generated_stdnt_NewUser[20],
+        Generated_stdnt_NewPass[100],
+        Generated_stdnt_NewUser[100],
         Granted_ScholarshipStats[16],
         Granted_ScholarshipDetails[65],
-        PaymentMethod[12];
+        PaymentMethod[12],
+        FileName_Coordinate[MAX_PATH];
     int GradeLowest,
         GradeHighest,
         GradeGeneralAverage_LastSem,
@@ -96,14 +97,14 @@ int Func_NewStdnt_YearSemSelect();
 int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12]);
 int Func_Stdnt_ScholarshipCheck();
 void Func_Mode_Of_Payment();
-void Func_PrintDocument_FinalTranscript();
+void GetDataEnrolleeInformation();
 void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates);
+void Func_PrintDocument_FinalTranscript();
 
 void Func_ERLM_Check();
 
-void GenerateUserandPass();
+void GenerateUserPass_withGenerateFileName();
 char GenerateFileName();
-void Func_EndofProcess();
 //int ReceiveData();
 
 int main()
@@ -202,9 +203,10 @@ int Main_Menu()
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
             SetCursorCoord_XY(30, 30);
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-            Sleep(2500);
+            //Sleep(2500);
             return EXIT_SUCCESS;
         case '6':
+            //Func_PrintDocument_FinalTranscript();
             Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
         default:
             SetCursorCoord_XY(30, 26);
@@ -217,7 +219,7 @@ int Main_Menu()
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
             SetCursorCoord_XY(30, 30);
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-            Sleep(1500);
+            //Sleep(1500);
             continue;
         }
     }
@@ -270,7 +272,7 @@ int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
         printf("-----------------------------");
         printf("Hello and Welcome %c", OldStudent_Continuation.stdnt_old_StudentIdentity);
         printf("-----------------------------");
-        Sleep(1750);
+        //Sleep(1750);
         printf("Name %s | Student Number: %i", OldStudent_Continuation.stdnt_old_UserPersonalName, OldStudent_Continuation.stdnt_old_StudentIdentity);
         printf("Your Current Level is %c", ENRL_Stats_CurrentLevel);
         printf("Enrollment Eligibility %c", ENRL_Stats_Eligible);
@@ -278,7 +280,7 @@ int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
         {
             printf(ENRL_Selection_Eng[Counter_For_Selection]);
         }
-        Sleep(999);
+        //Sleep(999);
         printf("Function Undefined... Press any key to continue...");
         getch();
         return FUNCTION_UNFINISHED;
@@ -339,6 +341,8 @@ void Func_NewStdnt_FillUp()
             printf("\xC8\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_LName, sizeof(OnProcess_StudentData.stdnt_LName), stdin);
             strtok(OnProcess_StudentData.stdnt_LName, "\n");
+            //Func_PrintDocument_FinalTranscript();
+            //Func_EndofProcess();
             SetCursorCoord_XY(30, 30);
             printf("\xAF [4] Father's Name \xDD [Surname, First Name]");
             SetCursorCoord_XY(30, 32);
@@ -377,7 +381,7 @@ void Func_NewStdnt_FillUp()
             strtok(OnProcess_StudentData.stdnt_MothersInfoContact, "\n");
             SetCursorCoord_XY(30, 54);
             printf("\xFE\xCD\xCD USER INPUT DONE FOR IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-            Sleep(3000);
+            //Sleep(3000);
             FillUp_Stage++;
             continue;
         }
@@ -442,7 +446,7 @@ void Func_NewStdnt_FillUp()
             strtok(OnProcess_StudentData.stdnt_POC_Emergency, "\n");
             SetCursorCoord_XY(30, 53);
             printf("\xFE\xCD\xCD USER INPUT DONE FOR GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-            Sleep(3000);
+            //Sleep(3000);
             FillUp_Stage++;
             continue;
         }
@@ -490,7 +494,7 @@ void Func_NewStdnt_FillUp()
     }
     SetCursorCoord_XY(30, 38);
     printf("\xFE\xCD\xCD USER INPUT DONE \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    Sleep(1750);
+    //Sleep(1750);
     Func_NewStdnt_InfoCheck();
 }
 
@@ -513,9 +517,9 @@ int Func_NewStdnt_InfoCheck()
     SetCursorCoord_XY(30, 11);
     printf("\xAF [1] Enrollee's Name \xDD\xAF %s, %s %s", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName);
     SetCursorCoord_XY(30, 13);
-    printf("\xAF [2] [ Parent ] Mother's Information \xAF %s %s %s", OnProcess_StudentData.stdnt_MothersName, OnProcess_StudentData.stdnt_MothersInfoJob, OnProcess_StudentData.stdnt_MothersInfoContact);
+    printf("\xAF [2] [ Parent ] Mother's Information \xAF %s \xDD %s \xDD %s", OnProcess_StudentData.stdnt_MothersName, OnProcess_StudentData.stdnt_MothersInfoJob, OnProcess_StudentData.stdnt_MothersInfoContact);
     SetCursorCoord_XY(30, 15);
-    printf("\xAF [3] [ Parent ] Father's Information \xAF %s %s %s", OnProcess_StudentData.stdnt_FathersName, OnProcess_StudentData.stdnt_FathersInfoJob, OnProcess_StudentData.stdnt_FathersInfoContact);
+    printf("\xAF [3] [ Parent ] Father's Information \xAF %s \xDD %s \xDD %s", OnProcess_StudentData.stdnt_FathersName, OnProcess_StudentData.stdnt_FathersInfoJob, OnProcess_StudentData.stdnt_FathersInfoContact);
     SetCursorCoord_XY(30, 17);
     printf("\xFE\xCD\xCD GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCursorCoord_XY(30, 19);
@@ -563,21 +567,21 @@ int Func_NewStdnt_InfoCheck()
     {
         SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD INFO \xDD Data Received, Proceeding to Step 2 \xDD Course Registration...");
-        Sleep(1750);
+        //Sleep(1750);
         Func_NewStdnt_CourseReg();
     }
     else if (Data_Confirmation == 'N' || Data_Confirmation == 'n')
     {
         SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD INFO \xDD Returning To Step 1 \xDD Filling up Personal Information...");
-        Sleep(3000);
+        //Sleep(3000);
         Func_NewStdnt_FillUp();
     }
     else
     {
         SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-        Sleep(1750);
+        //Sleep(1750);
         Func_NewStdnt_InfoCheck();
     }
 }
@@ -628,7 +632,7 @@ int Func_NewStdnt_CourseReg()
     case '1':
         SetCursorCoord_XY(30, 24);
         printf("\xAF \xDD INFO \xDD You have chosen 'College of Engineering' as a branch base course...");
-        Sleep(1750);
+        //Sleep(1750);
         while (1)
         {
             system("CLS");
@@ -683,7 +687,7 @@ int Func_NewStdnt_CourseReg()
             case '1':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[0]);
-                Sleep(1750);
+                //Sleep(1750);
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[0]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[0]);
                 Func_NewStdnt_YearSemSelect();
@@ -691,7 +695,7 @@ int Func_NewStdnt_CourseReg()
             case '2':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[1]);
-                Sleep(1750);
+                //Sleep(1750);
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[1]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[1]);
                 Func_NewStdnt_YearSemSelect();
@@ -699,7 +703,7 @@ int Func_NewStdnt_CourseReg()
             case '3':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[2]);
-                Sleep(1750);
+                //Sleep(1750);
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[2]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[2]);
                 Func_NewStdnt_YearSemSelect();
@@ -707,7 +711,7 @@ int Func_NewStdnt_CourseReg()
             case '4':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[3]);
-                Sleep(1750);
+                //Sleep(1750);
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[3]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[3]);
                 Func_NewStdnt_YearSemSelect();
@@ -715,7 +719,7 @@ int Func_NewStdnt_CourseReg()
             case '5':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[4]);
-                Sleep(1750);
+                //Sleep(1750);
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[4]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[4]);
                 Func_NewStdnt_YearSemSelect();
@@ -723,7 +727,7 @@ int Func_NewStdnt_CourseReg()
             case '6':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[5]);
-                Sleep(1750);
+                //Sleep(1750);
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[5]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[5]);
                 Func_NewStdnt_YearSemSelect();
@@ -731,7 +735,7 @@ int Func_NewStdnt_CourseReg()
             case '7':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[6]);
-                Sleep(1750);
+                //Sleep(1750);
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[6]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[6]);
                 Func_NewStdnt_YearSemSelect();
@@ -739,21 +743,21 @@ int Func_NewStdnt_CourseReg()
             default:
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-                Sleep(1750);
+                //Sleep(1750);
                 continue;
             }
         }
     case '2':
         SetCursorCoord_XY(30, 24);
         printf("\xAF \xDD INFO \xDD Architecture is basically indentified as a main course. Proceeding To Part 3 of Step 2...");
-        Sleep(1750);
+        //Sleep(1750);
         strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[7]);
         strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[7]);
         Func_NewStdnt_YearSemSelect();
     default:
         SetCursorCoord_XY(30, 24);
         printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-        Sleep(1750);
+        //Sleep(1750);
         Func_NewStdnt_CourseReg();
     }
 }
@@ -838,36 +842,36 @@ int Func_NewStdnt_YearSemSelect()
             YearSelection_Accepter = 0;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            Sleep(1750);
+            //Sleep(1750);
             break;
         case '2':
             YearSelection_Accepter = 1;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            Sleep(1750);
+            //Sleep(1750);
             break;
         case '3':
             YearSelection_Accepter = 2;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            Sleep(1750);
+            //Sleep(1750);
             break;
         case '4':
             YearSelection_Accepter = 3;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            Sleep(1750);
+            //Sleep(1750);
             break;
         case '5':
             YearSelection_Accepter = 4;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            Sleep(1750);
+            //Sleep(1750);
             break;
         default:
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
-            Sleep(1750);
+            //Sleep(1750);
             break;
         }
         if (YearSelection_Accepter >= 0 && YearSelection_Accepter <= 5)
@@ -929,18 +933,18 @@ int Func_NewStdnt_YearSemSelect()
             YearSelection_Accepter_Sem = 0;
             SetCursorCoord_XY(30, 29);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 5...", ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
-            Sleep(1750);
+            //Sleep(1750);
             break;
         case '2':
             SetCursorCoord_XY(30, 30);
             YearSelection_Accepter_Sem = 1;
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 5...", ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
-            Sleep(1750);
+            //Sleep(1750);
             break;
         default:
             SetCursorCoord_XY(30, 30);
             printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
-            Sleep(1750);
+            //Sleep(1750);
             break;
         }
         if (YearSelection_Accepter_Sem == 0 || YearSelection_Accepter_Sem == 1)
@@ -1008,7 +1012,7 @@ int Func_NewStdnt_YearSemSelect()
             printf("\xDD SUCCESS \xDD Data Processed. Proceeding to Step 3 \xAF Subject Enrollment Selection");
             strcpy(OnProcess_StudentData.Course_YearChoice, ERLM_Selection[YearSelection_Accepter]);
             strcpy(OnProcess_StudentData.Course_SemSelection, ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
-            Sleep(1800);
+            //Sleep(1800);
             if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSCE") == 0)
             {
                 if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
@@ -1789,7 +1793,6 @@ int Func_NewStdnt_YearSemSelect()
                         char *Subject_FullName[12] = {"LIFE AND WORKS OF RIZAL", "TAXATION AND AGRARIAN REFORM", "POLITICS AND GOVERNANCE W/ NEW CONSTITUTION", "ARCHITECTURAL DESIGN 10", "SPECIALIZATION 3"};
                         char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
                         int Subject_Units[12] = {3, 3, 3, 5, 3};
-                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
@@ -1804,13 +1807,13 @@ int Func_NewStdnt_YearSemSelect()
         case 'n':
             SetCursorCoord_XY(30, 29);
             printf("\xAF \xDD INFO \xDD Reinitializing function to go back...");
-            Sleep(1750);
+            //Sleep(1750);
             Func_NewStdnt_YearSemSelect();
             break;
         default:
             SetCursorCoord_XY(30, 29);
             printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
-            Sleep(1750);
+            //Sleep(1750);
             continue;
         }
         break;
@@ -1960,7 +1963,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -1974,14 +1977,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -1992,7 +1995,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2006,14 +2009,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2024,7 +2027,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2038,14 +2041,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2056,7 +2059,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2070,14 +2073,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2088,7 +2091,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2102,14 +2105,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2120,7 +2123,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2134,14 +2137,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2152,7 +2155,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2166,14 +2169,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2184,7 +2187,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2198,14 +2201,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2216,7 +2219,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2230,14 +2233,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2248,7 +2251,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2262,14 +2265,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2280,7 +2283,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2294,14 +2297,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2312,7 +2315,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2326,14 +2329,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2342,7 +2345,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
             {
                 SetCursorCoord_XY(20, 48);
                 printf("\xDD WARNING \xAF You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Function...");
-                Sleep(1750);
+                //Sleep(1750);
                 continue;
             }
         }
@@ -2357,7 +2360,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2385,14 +2388,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2403,7 +2406,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2431,14 +2434,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2449,7 +2452,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2477,14 +2480,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2495,7 +2498,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2523,14 +2526,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2541,7 +2544,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2569,14 +2572,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2587,7 +2590,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2615,14 +2618,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2633,7 +2636,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2661,14 +2664,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2679,7 +2682,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2707,14 +2710,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2725,7 +2728,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2753,14 +2756,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2771,7 +2774,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2799,14 +2802,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2817,7 +2820,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2845,14 +2848,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2863,7 +2866,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    Sleep(1000);
+                    //Sleep(1000);
                     continue;
                 }
                 else
@@ -2891,14 +2894,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        Sleep(500);
+                        //Sleep(500);
                         continue;
                     }
                 }
@@ -2931,7 +2934,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xDD ERROR \xAF You cannot set all subject/s to be 'Exclude'. Are you trying to enroll without subjects!?");
-                        Sleep(5000);
+                        //Sleep(5000);
                         break;
                     }
                     else if (Subject_Receive_Exclude_Count < Subject_Receive_Unknown_Count)
@@ -2939,7 +2942,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
 
                         SetCursorCoord_XY(20, 48);
                         printf("\xDD ERROR \xAF You cannot leave subject/s to be 'Unknown'. Set them to exclude if you don't want to include it.");
-                        Sleep(3000);
+                        //Sleep(3000);
                         break;
                     }
                     else if ((Subject_Receive_Exclude_Count || Subject_Receive_Unknown_Count != Subject_ExpectedCandidates) || (Subject_Receive_Exclude_Count || Subject_Receive_Unknown_Count == 0))
@@ -2963,7 +2966,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                         }
                         SetCursorCoord_XY(20, 51);
                         printf("\xDD PROCESS \xAF Moving Foward in the Next Step...");
-                        Sleep(3000);
+                        //Sleep(3000);
                         Func_Final_Overview(Final_Comp_SelectedSubjects, Subject_ExpectedCandidates);
                         break;
                     }
@@ -2972,14 +2975,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xDD PROCESS \xAF Going back to Subject Selection...");
-                    Sleep(1500);
+                    //Sleep(1500);
                     break;
                 }
                 else
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xDD ERROR \xAF Sorry, I don't understand that...");
-                    Sleep(1500);
+                    //Sleep(1500);
                     break;
                 }
             }
@@ -3004,7 +3007,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Increment] = 0;
                 Sbj_Stats_Increment++;
             }
-            Sleep(1500);
+            //Sleep(1500);
             continue;
         }
         else if (Option_Selector == 5)
@@ -3020,7 +3023,7 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement] = 0;
                 Sbj_Stats_Decrement++;
             }
-            Sleep(1500);
+            //Sleep(1500);
             continue;
         }
         else if (Option_Selector == 6)
@@ -3036,14 +3039,14 @@ int Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName,
                 Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement] = 0;
                 Sbj_Stats_Decrement++;
             }
-            Sleep(1500);
+            //Sleep(1500);
             continue;
         }
         else
         {
             SetCursorCoord_XY(20, 47);
             printf("\xDD WARNING \xAF The button you pressed might be wrong. We can't go non-linear!");
-            Sleep(1750);
+            //Sleep(1750);
             continue;
         }
     }
@@ -3140,7 +3143,7 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
     printf("\xAF \xDD PROCESS \xDD Proceeding to Scholarship Prompt and Mode of Payment...");
-    Sleep(1750);
+    //Sleep(1750);
     Func_Stdnt_ScholarshipCheck();
 }
 int Func_Stdnt_ScholarshipCheck()
@@ -3203,7 +3206,7 @@ int Func_Stdnt_ScholarshipCheck()
     {
         SetCursorCoord_XY(30, 31);
         printf("\xAF \xDD INFO \xDD Congratulations! You are eligible for scholarship!");
-        Sleep(1500);
+        //Sleep(1500);
         if ((OnProcess_StudentData.GradeLowest >= 82) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 86))
         {
             strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "50%% Discount");
@@ -3239,10 +3242,10 @@ int Func_Stdnt_ScholarshipCheck()
         printf("\xDD INFO \xAF Sorry, you are not allowed to take scholarship... But your encoded grade is still recorded...");
         SetCursorCoord_XY(30, 34);
         printf("\xDD INFO \xAF Proceeding to Mode of Payment...");
-        Sleep(1750);
+        //Sleep(1750);
         Func_Mode_Of_Payment();
     }
-    Sleep(1000);
+    //Sleep(1000);
     while (1)
     {
         SetCursorCoord_XY(30, 34);
@@ -3253,7 +3256,7 @@ int Func_Stdnt_ScholarshipCheck()
         case 'y': //Falls Through
             SetCursorCoord_XY(30, 35);
             printf("\xDD INFO \xAF Data Acquired. Good to know :). Proceeding to Mode of Payment...");
-            Sleep(1500);
+            //Sleep(1500);
             //Func_Stdnt_ScholarshipCheck();
             Func_Mode_Of_Payment();
         case 'N':
@@ -3261,13 +3264,13 @@ int Func_Stdnt_ScholarshipCheck()
             SetCursorCoord_XY(30, 35);
             printf("\xDD INFO \xAF Scholarship Grant Aborted :(. Proceeding to Mode of Payment...");
             strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "NULL");
-            Sleep(1500);
+            //Sleep(1500);
             Func_Mode_Of_Payment();
             break;
         default:
             SetCursorCoord_XY(30, 35);
             printf("\xDD ERROR \xAF Sorry, I don't understand that...");
-            Sleep(1500);
+            //Sleep(1500);
             continue;
         }
     }
@@ -3311,18 +3314,18 @@ void Func_Mode_Of_Payment()
             strcpy(OnProcess_StudentData.PaymentMethod, "Cash");
             SetCursorCoord_XY(30, 19);
             printf("\xAF \xDD SUCCESS \xAF Selected %s as a Mode of Payment. Proceeding to Final Overview...", OnProcess_StudentData.PaymentMethod);
-            Sleep(1750);
+            //Sleep(1750);
             Func_PrintDocument_FinalTranscript();
         case '2':
-            strcpy(OnProcess_StudentData.PaymentMethod, "Installment, Please talk to any representatives for schedule of payment.");
+            strcpy(OnProcess_StudentData.PaymentMethod, "Installment");
             SetCursorCoord_XY(30, 19);
             printf("\xAF \xDD SUCCESS \xAF Selected %s as a Mode of Payment. Proceeding to Final Overview...", OnProcess_StudentData.PaymentMethod);
-            Sleep(1750);
+            //Sleep(1750);
             Func_PrintDocument_FinalTranscript();
         default:
             SetCursorCoord_XY(30, 19);
             printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-            Sleep(1750);
+            //Sleep(1750);
             continue;
         }
     }
@@ -3331,19 +3334,20 @@ void Func_PrintDocument_FinalTranscript()
 {
     //Create an Student ID for New People
     long long int stdnt_NumGenerated;
-    int SetCoordinates_Dependent = 20, SubjectCount = 0, SubjectNumber = 1, TotalCreditUnits = 0;
+    int SetCoordinates_Dependent = 20, SubjectCount = 0, SubjectNumber = 1, TotalCreditUnits = 0, Reprint_SubjectCount = 0, Reprint_SubjectNumber = 1;
     float TuitionFee, LaboratoryFee = 7225.85, AthleticsFee = 761.20,
                       AudioVisualFee = 133.60, ClassroomEnergyFee = 1100, ComputerFee = 2650.75,
                       CulturalnActivityFee = 48.30, DevFee = 830.45, EnergExtFee = 890.63,
                       GuidancenCounselFee = 520.17, HandbookFee = 153.35, IDFee = 487.10,
                       InsuranceFee = 12.00, InternetFee = 105.30, LibraryFee = 1520.35,
-                      MedicalFee = 510.20, RedCrossFee = 1, StudentConcilFee = 60,
+                      MedicalFee = 510.20, RedCrossFee = 1, StudentCouncilFee = 60,
                       TestPaperFee = 266, ScholarshipDiscount = 0, TotalFee = 0;
+    SYSTEMTIME GetTimePrinted;
+    GetLocalTime(&GetTimePrinted);
     FILE *FileCreation_StudentCopy;
-    char *FileNameGenerated;
-    //FileNameGenerated = GenerateFileName();
-    GenerateUserandPass();
-    //FileCreation_StudentCopy = fopen(FileNameGenerated[MAX_PATH], "wb+");
+    GenerateUserPass_withGenerateFileName();
+    FileCreation_StudentCopy = fopen(OnProcess_StudentData.FileName_Coordinate, "w+");
+
     if (OldDataProcess_StudentData.stdnt_StudentID == 0)
     {
         //Create Algorithm here
@@ -3367,9 +3371,9 @@ void Func_PrintDocument_FinalTranscript()
     SetCursorCoord_XY(20, 9);
     printf("\xFE\xCD\xCD \xDD STUDENTS REGISTRATION FORM - STUDENTS COPY \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCursorCoord_XY(20, 11);
-    printf(" \xDD %-18s \xAF %-50ld \xDD %-18s \xAF %-10s", "Student Number", stdnt_NumGenerated, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
+    printf(" \xDD %-18s \xAF %-50ld \xDD %-10s \xAF %-10s", "Student Number", stdnt_NumGenerated, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
     SetCursorCoord_XY(20, 12);
-    printf(" \xDD %-18s \xAF %-s, %s %-50s \xDD%-10s \xAF %-20s ", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName, "Year Level", OnProcess_StudentData.Course_YearChoice);
+    printf(" \xDD %-18s \xAF %-s, %s %-30s \xDD%-10s \xAF %-20s ", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName, "Year Level", OnProcess_StudentData.Course_YearChoice);
     SetCursorCoord_XY(20, 13);
     printf(" \xDD %-18s \xAF %-50s", "Permanent Address", OnProcess_StudentData.stdnt_Address);
     SetCursorCoord_XY(20, 14);
@@ -3444,7 +3448,7 @@ void Func_PrintDocument_FinalTranscript()
         LibraryFee = 0;
         MedicalFee = 0;
         RedCrossFee = 0;
-        StudentConcilFee = 0;
+        StudentCouncilFee = 0;
         TestPaperFee = 0;
     }
     else
@@ -3456,7 +3460,7 @@ void Func_PrintDocument_FinalTranscript()
                 CulturalnActivityFee + DevFee + EnergExtFee +
                 GuidancenCounselFee + HandbookFee + IDFee +
                 InsuranceFee + InternetFee + LibraryFee +
-                MedicalFee + RedCrossFee + StudentConcilFee +
+                MedicalFee + RedCrossFee + StudentCouncilFee +
                 TestPaperFee) -
                ScholarshipDiscount;
     SetCoordinates_Dependent++;
@@ -3488,7 +3492,7 @@ void Func_PrintDocument_FinalTranscript()
     printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Insurance Fee", InsuranceFee, "Internet Fee", InternetFee, "Library Fee", LibraryFee);
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
-    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Medical Fee", MedicalFee, "Red Cross Fee", RedCrossFee, "Student Concil Fee", StudentConcilFee);
+    printf("  %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f \xDD %-20s \xAF %-20.2f", "Medical Fee", MedicalFee, "Red Cross Fee", RedCrossFee, "Student Council Fee", StudentCouncilFee);
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
     printf("  %-20s \xAF %-20.2f \xDD %-19s \xAF -%-19.2f\xDD %-20s \xAF %-20.2f", "Test Paper Fee", TestPaperFee, "Scholarship Reduction", ScholarshipDiscount, "TOTAL FEE", TotalFee);
@@ -3509,13 +3513,13 @@ void Func_PrintDocument_FinalTranscript()
     printf("\xDD Payment Selected \xAF %s", OnProcess_StudentData.PaymentMethod);
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
-    printf("\xDD Student Portal Account \xDD");
+    printf("\xDD Student Portal Account");
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
-    printf("\xDD User ID \xAF %s", OnProcess_StudentData.Generated_stdnt_NewUser);
+    printf("\xDD \xAF User ID \xAF %s", OnProcess_StudentData.Generated_stdnt_NewUser);
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
-    printf("\xDD Temporary Password \xAF %s", OnProcess_StudentData.Generated_stdnt_NewPass);
+    printf("\xDD \xAF Temporary Password \xAF %s", OnProcess_StudentData.Generated_stdnt_NewPass);
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
     printf("\xDD You can access it after this enrollment!");
@@ -3526,19 +3530,131 @@ void Func_PrintDocument_FinalTranscript()
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
-    printf("\xAF \xDD INFO \xDD Here are the full student copy OF your registration form containing everything you need to enroll...");
-    Sleep(5000);
+    printf("\xAF \xDD INFO \xDD Here's the full overview of your registration form containing everything you need to enroll...");
+    //Sleep(5000);
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
-    printf("\xAF \xDD INFO \xDD A file name called %s will be saved, please call assistance for printing. Thank you.", FileNameGenerated);
+    SetCoordinates_Dependent++;
+    SetCursorCoord_XY(20, SetCoordinates_Dependent);
+    printf("\xAF \xDD WARNING \xDD THIS IS NOT the design for the final printed registration form...");
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
     printf("\xAF \xDD CONFIMRATION \xDD If you are done viewing this, press any key to continue...");
     getch();
-    Func_EndofProcess();
-}
-void Func_EndofProcess() {
 
+    system("CLS");
+    SetCursorCoord_XY(30, 3);
+    printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
+    SetCursorCoord_XY(30, 4);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 5);
+    printf("\xBA [1st \xAF 2nd \xAF 3rd \xAF 4th \xAF 5th \xAF Confirm \xAF \xDD\xAF [End \xAF Processing of Files]\t\t\t\t\t   \xBA");
+    SetCursorCoord_XY(30, 6);
+    printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    SetCursorCoord_XY(30, 7);
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
+
+    SetCursorCoord_XY(30, 9);
+    printf("\xFE\xCD\xCD \xDD PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(30, 11);
+    printf("\xAF \xDD PROCESS FILE #1 \xDD Saving Data for Enrollee's Completed Registration Form...");
+    //Progress File to Enrollee Registration Form
+    setbuf(FileCreation_StudentCopy, NULL);
+    fprintf(FileCreation_StudentCopy, "■══  STUDENTS REGISTRATION FORM - STUDENTS COPY ▌ ══════════════════════■\n\n");
+    fprintf(FileCreation_StudentCopy, "▌ %-10s » %-10ld ▌ %-10s » %-5s\n", "Student Number", stdnt_NumGenerated, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
+    fprintf(FileCreation_StudentCopy, "▌ %-10s » %-s, %s %-50s ▌ %-10s » %-5s \n", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_FName, OnProcess_StudentData.stdnt_MName, "Year Level", OnProcess_StudentData.Course_YearChoice);
+    fprintf(FileCreation_StudentCopy, "▌ %-10s » %-15s\n", "Permanent Address", OnProcess_StudentData.stdnt_Address);
+    fprintf(FileCreation_StudentCopy, "▌ %-10s » %-15s\n\n", "Student Type", OnProcess_StudentData.stdnt_StudentType);
+    fprintf(FileCreation_StudentCopy, "■══ ▌ SUBJECT INFORMATION ▌ ════════════════════════════════════════════■\n\n");
+    SubjectCount = 0;
+    SubjectNumber = 1;
+    while (SubjectCount < ERLM_DataReceiver.Subject_Candidates)
+    {
+        if ((ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount] == NULL) || (ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount] == NULL) || (ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount] == NULL))
+        {
+            SubjectCount++;
+            continue;
+        }
+        else
+        {
+            if (SubjectNumber >= 10)
+            {
+                fprintf(FileCreation_StudentCopy, "%d ▌ %s - %s ▌ %s ▌ %s ▌ %i\n", SubjectNumber, ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_ScheduleDay_Receiver[SubjectCount], ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount], ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount]);
+                SetCoordinates_Dependent++;
+                SubjectCount++;
+                SubjectNumber++;
+            }
+            else
+            {
+                fprintf(FileCreation_StudentCopy, "%d ▌ %s - %s ▌ %s ▌ %s ▌ %i\n", SubjectNumber, ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount], ERLM_DataReceiver.Subject_ScheduleDay_Receiver[SubjectCount], ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount], ERLM_DataReceiver.Subject_Units_Receiver[SubjectCount]);
+                SetCoordinates_Dependent++;
+                SubjectCount++;
+                SubjectNumber++;
+            }
+        }
+    }
+    fprintf(FileCreation_StudentCopy, "\nTotal Subjects To Take » %d / %d, Total Credit Units To Take » %d\n\n", ERLM_DataReceiver.Subjects_Selected, ERLM_DataReceiver.Subject_Candidates, TotalCreditUnits);
+    fprintf(FileCreation_StudentCopy, "■══ ▌ FEES AND IT'S AMOUNTS ▌ ══════════════════════════════════════════■\n\n");
+    fprintf(FileCreation_StudentCopy, " %s » %.2f | %s » %.2f \n %s » %.2f ", "TUITION FEE", TuitionFee, "Laboratory Fee", LaboratoryFee, "Athletics Fee", AthleticsFee);
+    fprintf(FileCreation_StudentCopy, " | %s » %.2f\n %s » %.2f | %s » %.2f \n", "Audio Visual Fee", AudioVisualFee, "Classroom Energy Fee", ClassroomEnergyFee, "Computer Fee", ComputerFee);
+    fprintf(FileCreation_StudentCopy, " %s » %.2f | %s » %.2f \n %s » %.2f ", "Cultural & Act. Fee", CulturalnActivityFee, "Development Fee", DevFee, "Energy Fee", EnergExtFee);
+    fprintf(FileCreation_StudentCopy, " | %s » %.2f\n %s » %.2f | %s » %.2f \n", "Guidance & Counselling Fee", GuidancenCounselFee, "Handbook Fee", HandbookFee, "ID Fee", IDFee);
+    fprintf(FileCreation_StudentCopy, " %s » %.2f | %s » %.2f \n %s » %.2f ", "Insurance Fee", InsuranceFee, "Internet Fee", InternetFee, "Library Fee", LibraryFee);
+    fprintf(FileCreation_StudentCopy, " | %s » %.2f\n %s » %.2f | %s » %.2f \n", "Medical Fee", MedicalFee, "Red Cross Fee", RedCrossFee, "Student Council Fee", StudentCouncilFee);
+    fprintf(FileCreation_StudentCopy, " %s » %.2f | %s » -%.2f \n%s » %.2f \n\n", "Test Paper Fee", TestPaperFee, "Scholarship Reduction", ScholarshipDiscount, "TOTAL FEE", TotalFee);
+    fprintf(FileCreation_StudentCopy, "■══ ▌ SCHOLARSHIP, SCHEDULE OF PAYMENT AND STUDENT PORTAL INFO ▌ ═══════■\n\n");
+    fprintf(FileCreation_StudentCopy, "▌ Scholarship Taken » %s\n\n", OnProcess_StudentData.Granted_ScholarshipDetails);
+    fprintf(FileCreation_StudentCopy, "▌ Payment Selected » %s\n\n", OnProcess_StudentData.PaymentMethod);
+    fprintf(FileCreation_StudentCopy, "▌ Student Portal Account\n");
+    fprintf(FileCreation_StudentCopy, "▌ » User ID » %s\n", OnProcess_StudentData.Generated_stdnt_NewUser);
+    fprintf(FileCreation_StudentCopy, "▌ » Temporary Password » %s\n", OnProcess_StudentData.Generated_stdnt_NewPass);
+    fprintf(FileCreation_StudentCopy, "▌ » Printed on %02d/%02d/%d\n\n", GetTimePrinted.wMonth, GetTimePrinted.wDay, GetTimePrinted.wYear);
+    fprintf(FileCreation_StudentCopy, "■═══════════════════════════════════════════════════════════════════════■");
+    fclose(FileCreation_StudentCopy);
+    GetDataEnrolleeInformation();
+    SetCursorCoord_XY(30, 12);
+    printf("\xAF \xDD SAVED \xAF FILENAME %s\n", OnProcess_StudentData.FileName_Coordinate);
+    SetCursorCoord_XY(30, 14);
+    printf("\xAF \xDD PROCESS FILE #2 \xDD Saving Data for Enrollee's Information...");
+    SetCursorCoord_XY(30, 16);
+    printf("\xAF \xDD SAVED \xAF FILENAME %s\n", OnProcess_StudentData.FileName_Coordinate);
+    SetCursorCoord_XY(30, 18);
+    printf("\xAF \xDD ENROLLMENT SUCCESS \xAF You are all set! Please get assistance for printing of your registration form!");
+    SetCursorCoord_XY(30, 20);
+    printf("Thank you for enrolling!");
+    SetCursorCoord_XY(30, 22);
+    printf("Returning to Main Menu in 10 Seconds...");
+    Sleep(10000);
+    Main_Menu();
+}
+
+void GetDataEnrolleeInformation()
+{
+    FILE *FileCreation_StudentInformation;
+    FileCreation_StudentInformation = fopen("test.rtf", "w+");
+    fprintf(FileCreation_StudentInformation, "Student Information of %s, %s %s\n", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_MName, OnProcess_StudentData.stdnt_FName);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Name » %s, %s %s\n", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_MName, OnProcess_StudentData.stdnt_FName);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Name of Father » %s\n", OnProcess_StudentData.stdnt_FathersName);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Current Occupation of Father » %s\n", OnProcess_StudentData.stdnt_FathersInfoJob);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Contact Number of Father » %s", OnProcess_StudentData.stdnt_FathersInfoContact);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Name of Mother » %s", OnProcess_StudentData.stdnt_MothersName);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Current Occupation of Mother » %s\n", OnProcess_StudentData.stdnt_MothersInfoJob);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Contact Number of Mother » %s\n", OnProcess_StudentData.stdnt_MothersInfoContact);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Gender » %s\n", OnProcess_StudentData.stdnt_Gender);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Birthday » %s\n", OnProcess_StudentData.stdnt_Birthday);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Address » %s\n", OnProcess_StudentData.stdnt_Address);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Nationality » %s\n", OnProcess_StudentData.stdnt_Nationality);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Mobile Number » %s\n", OnProcess_StudentData.stdnt_MobileNum);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Telephone Number » %s\n", OnProcess_StudentData.stdnt_PhoneNum);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Emergency Number » %s\n", OnProcess_StudentData.stdnt_EmerNum);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Emergency Point of Contact » %s\n", OnProcess_StudentData.stdnt_POC_Emergency);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Source of Interest » %s\n", OnProcess_StudentData.stdnt_SourceInterest);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Last School Year Attended » %s\n", OnProcess_StudentData.stdnt_LastSchoolYear);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Senior High, Strand Taken » %s\n", OnProcess_StudentData.stdnt_LastSchoolStrand);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Personal Email » %s\n", OnProcess_StudentData.stdnt_Email);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Behavioral Issue » %s\n", OnProcess_StudentData.stdnt_SpecialBehavioral);
+    fprintf(FileCreation_StudentInformation, "...End of Line...");
+    fclose(FileCreation_StudentInformation);
 }
 void Func_ERLM_Check()
 {
@@ -3551,18 +3667,57 @@ void SetCursorCoord_XY(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), ConsoleXY);
 }
 
-void GenerateUserandPass()
+void GenerateUserPass_withGenerateFileName()
 {
-    char *BaseBranch = "qc-";
-    char Container[20], FirstNameLetter[30], LastName[20];
+    SYSTEMTIME PasswordBaseDate;
+    char *BaseBranch = "qc_";
+    char *PasswordSeperate = "_";
+    char *FileNameSeperate = "-";
+    // Code for Generating UserName
+    char UserGenerate_Container[50],
+        PasswordGenerate_Container[100],
+        FileName_Container[MAX_PATH],
+        PasswordGenerate_Year[10],
+        PasswordGenerate_Hour[10],
+        PasswordGenerate_Second[10];
 
-    strncpy(FirstNameLetter, OnProcess_StudentData.stdnt_FName, 1);
-    strcpy(LastName, OnProcess_StudentData.stdnt_LName);
+    strncat(UserGenerate_Container, BaseBranch, sizeof(BaseBranch));
+    strncat(UserGenerate_Container, OnProcess_StudentData.stdnt_FName, 1);
+    strncat(UserGenerate_Container, OnProcess_StudentData.stdnt_LName, sizeof(OnProcess_StudentData.stdnt_LName));
 
-    strcat(Container, BaseBranch);
-    strcat(Container, FirstNameLetter);
-    strcat(Container, LastName);
-    strncpy(OnProcess_StudentData.Generated_stdnt_NewUser, Container, sizeof(Container));
+    strncpy(OnProcess_StudentData.Generated_stdnt_NewUser, UserGenerate_Container, sizeof(OnProcess_StudentData.Generated_stdnt_NewUser));
+
+    GetLocalTime(&PasswordBaseDate);
+
+    sprintf(PasswordGenerate_Year, "%d", PasswordBaseDate.wYear);
+    sprintf(PasswordGenerate_Hour, "%02d", PasswordBaseDate.wHour);
+    sprintf(PasswordGenerate_Second, "%02d", PasswordBaseDate.wSecond);
+
+    strncat(PasswordGenerate_Container, PasswordGenerate_Year, sizeof(PasswordGenerate_Year));
+    strncat(PasswordGenerate_Container, PasswordGenerate_Hour, sizeof(PasswordGenerate_Hour));
+    strncat(PasswordGenerate_Container, PasswordGenerate_Second, sizeof(PasswordGenerate_Second));
+    strncat(PasswordGenerate_Container, PasswordSeperate, 1);
+    strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_MName, sizeof(OnProcess_StudentData.stdnt_MName));
+    strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_FName, 1);
+    strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_LName, 1);
+
+    strncpy(OnProcess_StudentData.Generated_stdnt_NewPass, PasswordGenerate_Container, sizeof(OnProcess_StudentData.Generated_stdnt_NewPass));
+
+    strncat(FileName_Container, PasswordGenerate_Year, sizeof(PasswordGenerate_Year));
+    strncat(FileName_Container, PasswordGenerate_Hour, sizeof(PasswordGenerate_Hour));
+    strncat(FileName_Container, PasswordGenerate_Second, sizeof(PasswordGenerate_Second));
+    strncat(FileName_Container, FileNameSeperate, sizeof(FileNameSeperate));
+    strncat(FileName_Container, OnProcess_StudentData.stdnt_FName, sizeof(OnProcess_StudentData.stdnt_FName));
+    strncat(FileName_Container, OnProcess_StudentData.stdnt_LName, sizeof(OnProcess_StudentData.stdnt_LName));
+    strncat(FileName_Container, "RegistrationForm.rtf", sizeof("RegistrationForm.rtf"));
+
+    strncpy(OnProcess_StudentData.FileName_Coordinate, FileName_Container, sizeof(OnProcess_StudentData.FileName_Coordinate));
+
+    //printf("%d | %d | %d \n", PasswordBaseDate.wYear, PasswordBaseDate.wHour, PasswordBaseDate.wSecond);
+    //strncat(PasswordGenerate_Container, PasswordBaseDate.wYear, sizeof(PasswordBaseDate.wYear));
+    //strncat(PasswordGenerate_Container, PasswordBaseDate.wHour, sizeof(PasswordBaseDate.wHour));
+    //printf(" Password is %s", PasswordGenerate_Container);
+    //getch();
 }
 /*char GenerateFileName()
 {
