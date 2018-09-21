@@ -17,7 +17,7 @@ void search_name();
 void search_prog();
 void search_id();
 void del_entry();
-int main() {
+int main() { 
   while (1) {
     short unsigned int sel;
     char sel1[10];
