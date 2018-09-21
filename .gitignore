@@ -70,10 +70,11 @@ Experimental/.vs/Experimental_Argc_Argv_Extended/v15/.suo
 *.exe
 *.dat
 *.log
+*.rtf
+*.txt
+*.lmdat
 Experimental/Win32Example_SetConsole.c
 Experimental/Example.c
 Debug/
 x64/
 flowchart/
-IDAlgorithm_CheckFile.lmdat
-Experimental/IDAlgorithm_CheckFile.lmdat
