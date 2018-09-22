@@ -1,21 +1,39 @@
-# Team LM - Enrollment System for C CLI
-A First Year College 1st Semester Programming Project.
+# Team LM - Enrollment System for C CLI (ERLM_C-CLI)
+A First Year College 1st Semester Programming Project in CPE 007 - Programming Logic and Design.
 An Enrollment Project that runs in CLI with C Language.
 
 ## Introduction / Information
-This project was one of our first project in programming that only circulates in C Language. Our goal is to make a responsive application that technically able to replicate a Web application / system called "Aris". Aris is one of the school web system that currently operates. With that, alternative can be done just in case.
+Enrollment System for C CLI (No Brand) was one of our first project in programming that only circulates in C Language. Our goal is to make a responsive application that technically able to replicate a Web application / system called "ARIS". ARIS is one our school web system that currently operates within the school. With that, alternatives can be done just in case, and so this application was born.
 
 ## Getting Started
 
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Here are the things that you need to install the software. Each software has labelled it's difficulty on how to use it.
 
 ```
-Give examples
+PROGRAM NAME - COMMENTS - SET UP DIFFICULTY
+
+IDE (Dependent and Independent)
+
+Visual Studio Code (Dependent IDE) - For Coding w/o Compiling - Easy, w/ Compiling + Dependencies - Hard
+Dev-C++ - Obsolete Alternative IDE for Compiling - Easy
+Visualt Studio (Community Edition) - Accurate Checks with Quality, Large Size IDE - (For Setting up Options) - Intermediate
+
+TOOLS & Visual Studio Code Dependencies
+
+Cppcheck - Checker for C and C++ Code - Easy
+C / C++ Components
+Beautify
+Terminal
+Code Runner - Alternative Compiler - (First Time Setup) - Between Medium and Hard
+
+Collaboration
+VS Live Share - You need aspiring or willing groupmates to use this one.
+Github Desktop, Git GUI and Git Bash - Alternative Collaboration Than Usual File Passing - Intermediate
+
 ```
 
 ### Installing
@@ -71,7 +89,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Contributing
 
-There is no contribution outside for a moment. I'm planning to work and plan about this part.
+There is no contribution outside for a moment. I'm planning to work on this part.
 
 ## Versioning
 
@@ -85,13 +103,13 @@ We are planning to automatically do basic versioning with C Language soon. Not s
 
 ## Authors
 
-Here are the list of authors who is part of the project.
+Here are the list of authors who is taking part of the project.
 
 * **Janrey Tuazon Licas** - *Initial Work / Project Lead / FrontEnd Design and Backend Programming* - [CodexLink](https://github.com/CodexLink)
-* **Charles Ian Mascarenas** - *Network SSH Implementation and Backend Programming* - [ci-mascarenas](https://github.com/ci-mascarenas)
+* **Charles Ian Mascarenas** - *Junior Database Programming* - [ci-mascarenas](https://github.com/ci-mascarenas)
 * **Sim Harvey Agustin Marquez** - *Data Gatherer, Code Analysis and Flow Creator*
 * **Julie Ann Luzano** - *Data Gatherer and Flow Creator*
-* **Matt Matamis** - *Data Gatherer and Flow Creator*
+* **Matt Matamis** - *Data Gatherer, Potentially VOID due to Cheating within Required Conditions*
 
 ## License
 
@@ -104,11 +122,11 @@ This project is licensed under the GNU v3 License - see the [LICENSE.md](https:/
 * Someone who doesn't love us but we do love them...
 
 ## Links used to gain knowledge for creating this project
-
+Please refer to this for the list of stackoverflow links that we have checked out.
 # Unconventional FAQ
 
 ## Why would you like to distribute this?
-I want to distribute this in a way of helping people with a twist. Also this wasn't really meant to be shared in public. It was used to collaborate with people. Other than that, this repository will be hardened at some point.
+I want to distribute this in a way of helping people with a twist. Also this wasn't really meant to be shared in public. It was used to collaborate with people. Other than that, this repository will be private for some time.
 
 ## Disclaimer
 We want to be good as possible, but as far as we know, this project will likely to be shared by everyone else without any credit. With that, soon enough we will try to hard coded this.
