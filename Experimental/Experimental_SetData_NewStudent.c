@@ -105,7 +105,6 @@ void Func_ERLM_Check();
 
 void GenerateUserPass_withGenerateFileName();
 char GenerateFileName();
-//int ReceiveData();
 
 int main()
 {
@@ -168,7 +167,7 @@ int Main_Menu()
         switch (Selection_1 = getche())
         {
         case '1':
-            //Func_OldStdnt_ERLM();
+            Func_OldStdnt_ERLM();
             break;
         case '2':
             Func_NewStdnt_FillUp();
@@ -224,7 +223,7 @@ int Main_Menu()
         }
     }
 }
-/*void Func_OldStdnt_ERLM()
+void Func_OldStdnt_ERLM()
 {
     struct Old_StudentRecords OldData;
     FILE *FileDatabase_ERLM;
@@ -286,7 +285,7 @@ int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
         return FUNCTION_UNFINISHED;
     }
 }
-*/
+
 /////////////////////////////////////////////////////////////////////////////////////
 void Func_NewStdnt_FillUp()
 {
