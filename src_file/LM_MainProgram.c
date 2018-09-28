@@ -214,6 +214,9 @@ void Function_CriticalComp_CheckCreate()
         FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "r");
         if (FileDatabase_Check == NULL)
         {
+            mkdir("LM KeyDatabase");
+            mkdir("Student_RegForm");
+            mkdir("DataInformation_Student");
             SetCursorCoord_XY(30, SetCursorCounter);
             SetCursorCounter++;
             printf("\xDD\xAF Init.Component # 3.%i \t\xDD\t ERROR \t\t\xDD #%i File Database not found! Creating File...\n", Counter_DataPoint_Check + 1, Counter_DataPoint_Check + 1);
@@ -365,12 +368,6 @@ void Func_OldStdnt_ERLM()
         while (1)
         {
             fread(&DataChange, sizeof(DataChange), 1, FileDatabase_Enrollment);
-
-            printf("%ld | %lld\n", stdnt_GeneratedID_Placeholder, stdnt_GeneratedID_Placeholder);
-            printf("%ld | %lld\n", DataChange.Generated_StudentID, DataChange.Generated_StudentID);
-            printf("%s | %s\n", stdnt_Username_Placeholder, DataChange.stdnt_Username);
-            printf("%s | %s\n", stdnt_Password_Placeholder, DataChange.stdnt_Password);
-            getch();
             if (feof(FileDatabase_Enrollment))
             {
                 if ((strcmp(stdnt_Username_Placeholder, DataChange.stdnt_Username) != 0) || (strcmp(stdnt_Password_Placeholder, DataChange.stdnt_Password) != 0) || (stdnt_GeneratedID_Placeholder == DataChange.Generated_StudentID) != 0)
@@ -427,15 +424,39 @@ void Func_OldStdnt_ERLM()
                         }
                         else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSME") == 0)
                         {
-                            strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, "CMechanical Engineering");
+                            strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, "Mechanical Engineering");
                         }
                         else if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "Arch") == 0)
                         {
                             strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, "Architecture");
                         }
-                        else
+                        if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st") == 0)
                         {
-                            strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, "<Unknown FullName Course>");
+                            strcpy(OnProcess_StudentData.Course_YearChoice, "First Year College");
+                        }
+                        else if (strcmp(OnProcess_StudentData.Course_YearChoice, "2nd") == 0)
+                        {
+                            strcpy(OnProcess_StudentData.Course_YearChoice, "Second Year College");
+                        }
+                        else if (strcmp(OnProcess_StudentData.Course_YearChoice, "3rd") == 0)
+                        {
+                            strcpy(OnProcess_StudentData.Course_YearChoice, "Third Year College");
+                        }
+                        else if (strcmp(OnProcess_StudentData.Course_YearChoice, "4th") == 0)
+                        {
+                            strcpy(OnProcess_StudentData.Course_YearChoice, "Four Year College");
+                        }
+                        else if (strcmp(OnProcess_StudentData.Course_YearChoice, "5th") == 0)
+                        {
+                            strcpy(OnProcess_StudentData.Course_YearChoice, "Fifth Year College");
+                        }
+                        if (strcmp(OnProcess_StudentData.Course_SemSelection, "First") == 0)
+                        {
+                            strcpy(OnProcess_StudentData.Course_SemSelection, "First Semester");
+                        }
+                        else if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second") == 0)
+                        {
+                            strcpy(OnProcess_StudentData.Course_SemSelection, "Second Semester");
                         }
                     }
                 }
@@ -458,7 +479,7 @@ void Func_OldStdnt_ERLM()
 void Func_OldStd_ERLM_Menu()
 {
     SetConsoleTitle("LM Enrollment System | Current Student Login");
-    char  Prompt;
+    char Prompt;
     int Counter_For_Selection = 0;
     while (1)
     {
@@ -3299,7 +3320,7 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     SetConsoleTitle(FUNCTION_STEP4);
     char *StudentType;
     char *StatusTake;
-    int Subject_Pass_Reader = 0, Subject_Pass_Reader_Counter = 1, SetCoordinates_Dependent = 13;
+    int Subject_Pass_Reader = 0, Subject_Pass_Reader_Counter = 0, SetCoordinates_Dependent = 13;
     if (Final_Comp_SelectedSubjects < Subject_ExpectedCandidates)
     {
         StudentType = "Irregular Student";
@@ -3370,7 +3391,7 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
-    printf("\xDD Student Type \xAF %s\t\xDD\t Subjects Enrolled \xAF %d / %d => %-28s", StudentType, Subject_Pass_Reader_Counter, Subject_ExpectedCandidates + 1, StatusTake);
+    printf("\xDD Student Type \xAF %s\t\xDD\t Subjects Enrolled \xAF %d / %d => %-28s", StudentType, Subject_Pass_Reader_Counter, Subject_ExpectedCandidates, StatusTake);
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
@@ -3575,6 +3596,7 @@ void Func_PrintDocument_FinalTranscript()
 {
     //Create an Student ID for New People
     int SetCoordinates_Dependent = 20, SubjectCount = 0, SubjectNumber = 1, TotalCreditUnits = 0, Reprint_SubjectCount = 0, Reprint_SubjectNumber = 1;
+    short unsigned int exist = 0;
     float TuitionFee, LaboratoryFee = 7225.85, AthleticsFee = 761.20,
                       AudioVisualFee = 133.60, ClassroomEnergyFee = 1100, ComputerFee = 2650.75,
                       CulturalnActivityFee = 48.30, DevFee = 830.45, EnergExtFee = 890.63,
@@ -3585,7 +3607,51 @@ void Func_PrintDocument_FinalTranscript()
     SYSTEMTIME GetTimePrinted;
     GetLocalTime(&GetTimePrinted);
     FILE *FileCreation_StudentCopy;
-    Increment_StudentID();
+    if (OnProcess_StudentData.stdnt_StudentID == 0)
+    {
+        Increment_StudentID();
+    }
+    else
+    {
+        FILE *Database_Enrollment, *Database_Enrollment_Temporary;
+        Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb+");
+        Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "wb+");
+        //Get Data Now
+        while (1)
+        {
+            fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+            if (feof(Database_Enrollment))
+            {
+                break;
+            }
+            if (OnProcess_StudentData.stdnt_StudentID == DataChange.Generated_StudentID)
+            {
+                exist++;
+            }
+            else
+            {
+                fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
+            }
+        }
+        fclose(Database_Enrollment_Temporary);
+        fclose(Database_Enrollment);
+        if (exist >= 1)
+        {
+            Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "wb+");
+            Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "rb+");
+            while (1)
+            {
+                fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment_Temporary);
+                if (feof(Database_Enrollment_Temporary))
+                {
+                    break;
+                }
+                fwrite(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+            }
+            fclose(Database_Enrollment);
+            fclose(Database_Enrollment_Temporary);
+        }
+    }
     GenerateUserPass_withGenerateFileName();
     FileCreation_StudentCopy = fopen(OnProcess_StudentData.FileName_Coordinate, "w+");
     system("CLS");
@@ -3602,9 +3668,9 @@ void Func_PrintDocument_FinalTranscript()
     SetCursorCoord_XY(20, 9);
     printf("\xFE\xCD\xCD \xDD STUDENTS REGISTRATION FORM - STUDENTS COPY \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCursorCoord_XY(20, 11);
-    printf(" \xDD %-18s \xAF %-50ld \xDD %-10s \xAF %-10s", "Student Number", OnProcess_StudentData.stdnt_StudentID, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
+    printf(" \xDD %-18s \xAF %-50ld \xDD %-6s \xAF %-10s", "Student Number", OnProcess_StudentData.stdnt_StudentID, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
     SetCursorCoord_XY(20, 12);
-    printf(" \xDD %-18s \xAF %-s, %s %-30s \xDD%-10s \xAF %-20s ", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_GName, OnProcess_StudentData.stdnt_MName, "Year Level", OnProcess_StudentData.Course_YearChoice);
+    printf(" \xDD %-18s \xAF %-s, %s %-30s \xDD%-10s \xAF %-15s \xAF %-10s", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_GName, OnProcess_StudentData.stdnt_MName, "Year Level and Semester", OnProcess_StudentData.Course_YearChoice, OnProcess_StudentData.Course_SemSelection);
     SetCursorCoord_XY(20, 13);
     printf(" \xDD %-18s \xAF %-50s", "Permanent Address", OnProcess_StudentData.stdnt_Address);
     SetCursorCoord_XY(20, 14);
@@ -3792,8 +3858,8 @@ void Func_PrintDocument_FinalTranscript()
     //Progress File to Enrollee Registration Form
     setbuf(FileCreation_StudentCopy, NULL);
     fprintf(FileCreation_StudentCopy, "■══  STUDENTS REGISTRATION FORM - STUDENTS COPY ▌ ══════════════════════■\n\n");
-    fprintf(FileCreation_StudentCopy, "▌ %-10s » %-10ld ▌ %-10s » %-5s\n", "Student Number", OnProcess_StudentData.stdnt_StudentID, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
-    fprintf(FileCreation_StudentCopy, "▌ %-10s » %-s, %s %-50s ▌ %-10s » %-5s \n", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_GName, OnProcess_StudentData.stdnt_MName, "Year Level", OnProcess_StudentData.Course_YearChoice);
+    fprintf(FileCreation_StudentCopy, "▌ %-10s » %-10ld ▌ %-7s » %-5s\n", "Student Number", OnProcess_StudentData.stdnt_StudentID, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
+    fprintf(FileCreation_StudentCopy, "▌ %-10s » %-s, %s %-50s ▌ %-10s » %-5s, %-5s\n", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_GName, OnProcess_StudentData.stdnt_MName, "Year Level and Semester", OnProcess_StudentData.Course_YearChoice, OnProcess_StudentData.Course_SemSelection);
     fprintf(FileCreation_StudentCopy, "▌ %-10s » %-15s\n", "Permanent Address", OnProcess_StudentData.stdnt_Address);
     fprintf(FileCreation_StudentCopy, "▌ %-10s » %-15s\n\n", "Student Type", OnProcess_StudentData.stdnt_StudentType);
     fprintf(FileCreation_StudentCopy, "■══ ▌ SUBJECT INFORMATION ▌ ════════════════════════════════════════════■\n\n");
@@ -3914,17 +3980,13 @@ void GenerateUserPass_withGenerateFileName()
     char *BaseBranch = "qc_";
     char *PasswordSeperate = "_";
     char *FileNameSeperate = "-";
-    char *FileDirectory = "Student_RegForm//";
     // Code for Generating UserName
     char UserGenerate_Container[MAX_PATH] = {0},
-        PasswordGenerate_Container[MAX_PATH] = {0},
-        FileName_Container[MAX_PATH] = {0},
-        Acquired_String_StudentID[MAX_PATH] = {0},
-        DataInfo_Container[MAX_PATH] = {0};
+         PasswordGenerate_Container[MAX_PATH] = {0},
+         FileName_Container[MAX_PATH] = {0},
+         Acquired_String_StudentID[MAX_PATH] = {0},
+         DataInfo_Container[MAX_PATH] = {0};
     //Increment_StudentID();
-    strcpy(OnProcess_StudentData.stdnt_GName, "Janrey");
-    strcpy(OnProcess_StudentData.stdnt_MName, "Tuazon");
-    strcpy(OnProcess_StudentData.stdnt_LName, "Licas");
     //Generate Username from BaseBranch + 2 Letters of GivenName + Surname
     // On This Function, Use STRNCAT To UserGenerate_Container for BaseBranch, means concatenate BaseBranch Value to UserGenerate_Container
     strncat(UserGenerate_Container, BaseBranch, sizeof(BaseBranch));
@@ -3935,14 +3997,14 @@ void GenerateUserPass_withGenerateFileName()
 
     GetLocalTime(&PasswordBaseDate);
 
-    itoa(OnProcess_StudentData.stdnt_StudentID, Acquired_String_StudentID,10);
+    itoa(OnProcess_StudentData.stdnt_StudentID, Acquired_String_StudentID, 10);
     strncat(PasswordGenerate_Container, Acquired_String_StudentID, sizeof(Acquired_String_StudentID));
     strncat(PasswordGenerate_Container, PasswordSeperate, 1);
     strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_MName, sizeof(OnProcess_StudentData.stdnt_MName));
     strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_GName, 3);
     strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_LName, 3);
     strncpy(OnProcess_StudentData.Generated_stdnt_NewPass, PasswordGenerate_Container, sizeof(OnProcess_StudentData.Generated_stdnt_NewPass));
-    
+
     //Create a File Name for Registration Form
     // We have to concatenate the directory first to seperate files of output
     strncat(FileName_Container, "Student_RegForm//", sizeof("Student_RegForm//"));
@@ -4268,65 +4330,74 @@ void FuncAdmin_Mgr_SearchID()
 }
 void FuncAdmin_Mgr_Delete_Entry()
 {
-    FILE *Database_Enrollment, *Database_Enrollment_Temporary;
-    Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "wb+");
-    Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "wb+");
-    long int DataEntryBase_ID = 0;
-    system("CLS");
-    printf("DELETE - ID\n\n");
-    printf("Enter ID \xAF ");
-    scanf("%ld", &DataEntryBase_ID);
-    system("CLS");
-    while (1)
+
     {
-        fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
-        if (feof(Database_Enrollment))
+        FILE *Database_Enrollment, *Database_Enrollment_Temporary;
+        Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb+");
+        Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "wb+");
+        long int DataEntryBase_ID = 0;
+        short unsigned int exist = 0;
+        system("CLS");
+        printf("DELETE - ID\n\n");
+        printf("Enter ID \xAF ");
+        scanf("%ld", &DataEntryBase_ID);
+        system("CLS");
+        while (1)
         {
-            if (DataEntryBase_ID != DataChange.Generated_StudentID)
+            fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+            if (feof(Database_Enrollment))
             {
-                printf("\xAF\xDD FAILED \xDD Data Inputted is incorrect!\n");
-                FuncAdmin_Mgr_Mode();
                 break;
+            }
+            if (DataEntryBase_ID == DataChange.Generated_StudentID)
+            {
+                exist++;
+                system("CLS");
+                printf("%-20s", "Student ID");
+                printf("%-20s", "First name");
+                printf("%-20s", "Middle name");
+                printf("%-20s", "Last Name");
+                printf("%-20s", "Program Name");
+                printf("%-20s", "Year Level");
+                printf("%-20s", "Semester");
+                printf("%-20s", "Stdnt UserName");
+                printf("%-20s\n", "Stdnt Password");
+                printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s --ENTRY DELETED--\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+                printf("This ENTRY Entry will be deleted... \nPress Any Key To Continue...");
+                getch();
             }
             else
             {
-                printf("Data Read Completed!\n");
-                while (1)
-                {
-                    fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment_Temporary);
-                    if (feof(Database_Enrollment_Temporary))
-                    {
-                        break;
-                    }
-                    fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment);
-                }
-                printf("Data Transfer Complete!\n");
-                fclose(Database_Enrollment);
-                fclose(Database_Enrollment_Temporary);
-                getch();
-                FuncAdmin_Mgr_Mode();
-                break;
+                fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
             }
         }
-        else if (DataEntryBase_ID == DataChange.Generated_StudentID)
+        fclose(Database_Enrollment_Temporary);
+        fclose(Database_Enrollment);
+        if (exist >= 1)
         {
-            system("CLS");
-            printf("%-20s", "Student ID");
-            printf("%-20s", "First name");
-            printf("%-20s", "Middle name");
-            printf("%-20s", "Last Name");
-            printf("%-20s", "Program Name");
-            printf("%-20s", "Year Level");
-            printf("%-20s", "Semester");
-            printf("%-20s", "Stdnt UserName");
-            printf("%-20s\n", "Stdnt Password");
-            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s --ENTRY DELETED--\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
-            printf("This ENTRY Entry will be deleted... \nPress Any Key To Continue...");
+            Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "wb+");
+            Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "rb+");
+            printf("\n\nData Read Completed!\n");
+            while (1)
+            {
+                fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment_Temporary);
+                if (feof(Database_Enrollment_Temporary))
+                {
+                    break;
+                }
+                fwrite(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+            }
+            printf("\nData Transfer Complete!\n");
+            fclose(Database_Enrollment);
+            fclose(Database_Enrollment_Temporary);
             getch();
+            FuncAdmin_Mgr_Mode();
         }
         else
         {
-            fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
+            printf("\xAF\xDD FAILED \xDD Data Inputted is incorrect!\n");
+            getch();
+            FuncAdmin_Mgr_Mode();
         }
     }
 }
