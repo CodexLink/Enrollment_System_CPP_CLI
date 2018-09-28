@@ -86,8 +86,8 @@ struct Enrollment_InformationReceiver ERLM_DataReceiver;
 struct Old_StudentRecords OldDataProcess_StudentData;
 void SetCursorCoord_XY(int x, int y); //Custom Function To Call SetCursorCoord_XY. @Conio.h cannot be used for Windows.
 int Main_Menu();                      // Call For Main Menu
-//void Func_OldStdnt_ERLM();            // Old Student Function Prototype
-//int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldData);
+void Func_OldStdnt_ERLM();            // Old Student Function Prototype
+int Func_OldStd_ERLM_Menu();
 
 //Function Prototype on Ascending Order
 void Func_NewStdnt_FillUp();
@@ -101,10 +101,8 @@ void GetDataEnrolleeInformation();
 void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates);
 void Func_PrintDocument_FinalTranscript();
 
-void Func_ERLM_Check();
-
 void GenerateUserPass_withGenerateFileName();
-char GenerateFileName();
+void Generate_StoreStudentInformation();
 
 int main()
 {
@@ -148,22 +146,15 @@ int Main_Menu()
         printf("\xBA [2] \xDD New Student\t\t\t\t\t\t\t\t\t\t       \xBA");
         SetCursorCoord_XY(30, 15);
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        printf("\xBA [3] \xDD Manage Enrollment\t\t\t\t\t\t\t\t\t\t       \xBA");
         SetCursorCoord_XY(30, 16);
-        printf("\xBA [3] \xDD Reprint Enrollment Student Form | Registration Form\t\t\t\t\t       \xBA");
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
         SetCursorCoord_XY(30, 17);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
+        printf("\xBA [4] \xDD Exit Application\t\t\t\t\t\t\t\t\t\t       \xBA");
         SetCursorCoord_XY(30, 18);
-        printf("\xBA [4] \xDD Manage Enrollment\t\t\t\t\t\t\t\t\t\t       \xBA");
+        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
         SetCursorCoord_XY(30, 19);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        SetCursorCoord_XY(30, 20);
-        printf("\xBA [5] \xDD Exit Application\t\t\t\t\t\t\t\t\t\t       \xBA");
-        SetCursorCoord_XY(30, 21);
-        printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        SetCursorCoord_XY(30, 22);
-        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-        SetCursorCoord_XY(30, 24);
-        printf("\xC8\xAF Press a key that corresponds your decision [1 - 5] \xDD\xAF ");
+        printf("\xC8\xAF Press a key that corresponds your decision [1 - 4] \xDD\xAF ");
         switch (Selection_1 = getche())
         {
         case '1':
@@ -223,35 +214,7 @@ int Main_Menu()
         }
     }
 }
-void Func_OldStdnt_ERLM()
-{
-    struct Old_StudentRecords OldData;
-    FILE *FileDatabase_ERLM;
-    char datapoint_ERLM[] = "data/2018_LM_Database_Enrollment.dat";
-    while (1)
-    {
-        system("CLS");
-        SetConsoleTitle("LM Enrollment System | Old Student Login");
-        printf("Please enter your Username: ");
-        scanf("%s", OldData.stdnt_old_Username);
-        printf("Please enter your Password: ");
-        scanf("%s", OldData.stdnt_old_Password);
-        printf("Please enter your Student Number: ");
-        scanf("%d", &OldData.stdnt_old_StudentIdentity);
-        //if (//strcmp() == 0)
-        //)
-        //{
-
-        //} else {
-        Func_OldStdnt_ERLM();
-        //}
-        //printf("Hello %s | %d!\n", OldStudent.user_Username, OldStudent.user_StudentIdentity);
-        //printf("Also your password is %s\n", OldStudent.user_Password);
-        Func_OldStd_ERLM_Menu(OldData);
-    }
-}
-
-int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
+int Func_OldStd_ERLM_Menu()
 {
     FILE *FileDatabase_ERLM;
     char datapoint_ERLM[] = "data/2018_LM_Database_Enrollment.dat";
@@ -268,21 +231,15 @@ int Func_OldStd_ERLM_Menu(struct Old_StudentRecords OldStudent_Continuation)
         char *ENRL_Selection_Eng[4] = {"1st Year College", "2nd Year College", "3rd Year College", "4th Year College"};
         char ENRL_Stats_CurrentLevel, ENRL_Stats_Eligible;
         int Counter_For_Selection = 0;
-        printf("-----------------------------");
-        printf("Hello and Welcome %c", OldStudent_Continuation.stdnt_old_StudentIdentity);
-        printf("-----------------------------");
-        //Sleep(1750);
-        printf("Name %s | Student Number: %i", OldStudent_Continuation.stdnt_old_UserPersonalName, OldStudent_Continuation.stdnt_old_StudentIdentity);
+        printf("Hello and Welcome %s, %s %s | %ld", );
+        printf("%s, %s %s | %ld", );
+        Sleep(1750);
         printf("Your Current Level is %c", ENRL_Stats_CurrentLevel);
         printf("Enrollment Eligibility %c", ENRL_Stats_Eligible);
         for (Counter_For_Selection; Counter_For_Selection < 5; Counter_For_Selection++)
         {
             printf(ENRL_Selection_Eng[Counter_For_Selection]);
         }
-        //Sleep(999);
-        printf("Function Undefined... Press any key to continue...");
-        getch();
-        return FUNCTION_UNFINISHED;
     }
 }
 
@@ -3630,6 +3587,7 @@ void Func_PrintDocument_FinalTranscript()
 void GetDataEnrolleeInformation()
 {
     FILE *FileCreation_StudentInformation;
+    Generate_StoreStudentInformation();
     FileCreation_StudentInformation = fopen("test.rtf", "w+");
     fprintf(FileCreation_StudentInformation, "Student Information of %s, %s %s\n", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_MName, OnProcess_StudentData.stdnt_FName);
     fprintf(FileCreation_StudentInformation, "Enrollee's Name » %s, %s %s\n", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_MName, OnProcess_StudentData.stdnt_FName);
@@ -3717,6 +3675,9 @@ void GenerateUserPass_withGenerateFileName()
     //strncat(PasswordGenerate_Container, PasswordBaseDate.wHour, sizeof(PasswordBaseDate.wHour));
     //printf(" Password is %s", PasswordGenerate_Container);
     //getch();
+}
+void Generate_StoreStudentInformation() {
+
 }
 /*char GenerateFileName()
 {

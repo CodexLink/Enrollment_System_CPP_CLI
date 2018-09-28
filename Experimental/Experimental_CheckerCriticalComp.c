@@ -15,24 +15,22 @@ char Argument_Initialization(int argc, char *argv[]);
 
 
 int main(int argc, char *argv[]) {
-    int Counter_Argument;
-    char ArgumentModeReturn;
+    // When Program detects that parameter count is one and obove, initialize this function for initiating the parameters passed.
     if (argc > 1) {
-        Argument_Initialization(argc, argv);
+        Argument_Initialization(argc, argv); // Pass ARGC and ARGV for Clean Execution.
     }
-    //Insert If and Else According to FlowChart
     Sleep(2000);
-    while(1) { // This will loop forever because wtf is 1?
+    while(1) { // While (AnyValue Especially One) will Loop Forever due to no datachecking, hence this will true to be looping until break; command has been called.
         int Selection_1 = 0;
         puts("-----------------------------");
         printf("Version " VERSION_NUMBER "\n");
         printf(PRODUCT_NAME "\n");
         puts("-----------------------------");
-        Function_CriticalComp_CheckCreate();   // Init Function to Check for Critical Components Before Proceeding
+        Function_CriticalComp_CheckCreate();   // Init Function to Check for Critical Components Before Proceeding The Actual Program...
         system("CLS");
         puts("-----------------------------");
-        printf("Version " VERSION_NUMBER "\n");
-        printf(PRODUCT_NAME "\n");
+        printf("Version " VERSION_NUMBER "\n"); // Call VERSION_NUMBER String and Display
+        printf(PRODUCT_NAME "\n"); // Call VERSION_NUMBER String and Display
         puts("-----------------------------");
         puts("Main Menu");
         printf("[1] | Old Student\n");
