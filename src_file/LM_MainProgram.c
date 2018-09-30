@@ -1,10 +1,12 @@
 /*==============================================================================
 Group LM - Enrollment System in C for Preliminary Project in Programming
-Enrollment System, Version 2355-08182018 BETA
+https://github.com/CodexLink/Project_5MES_C - Project Link managed by Janrey Licas
+LM Enrollment System, Version 1748-09302018-STABLE VERSION
 ==============================================================================
-Project Leader / FrontEnd Design / Backend Programmer - Janrey Licas, Project
-Manager / Backend Programmer - Charles Ian Mascarenas
-Code Tester / ???? - Sim Harvey Agustin Marquez, Julie Ann Luzano, Matt Matamis
+Janrey Tuazon Licas - Initial Work / Project Lead / FrontEnd Design and Backend Programming, Commenter - CodexLink
+Charles Ian Mascarenas - Junior Database Programming - ci-mascarenas
+Sim Harvey Agustin Marquez - Data Gatherer, Code Analysis and Flow Creator
+Julie Ann Luzano - Data Gatherer and Flow Creator
 ==============================================================================*/
 #include <stdio.h>   // Just Basic Input Output Header File
 #include <stdlib.h>  // For SYSTEM Command
@@ -31,6 +33,7 @@ Code Tester / ???? - Sim Harvey Agustin Marquez, Julie Ann Luzano, Matt Matamis
 // A Structure that Holds Data Records on the Process of Enrollment
 struct OnHold_DataRecords
 {
+    // MAX_PATH IS A MACRO FROM MINWIN HEADER FILE FROM WINDOWS WHICH IS A SIZE OF 260
     char stdnt_GName[30],
         stdnt_MName[30],
         stdnt_LName[30],
@@ -61,7 +64,7 @@ struct OnHold_DataRecords
         Generated_stdnt_NewPass[MAX_PATH],
         Generated_stdnt_NewUser[MAX_PATH],
         Granted_ScholarshipStats[16],
-        Granted_ScholarshipDetails[65],
+        Granted_ScholarshipDetails[MAX_PATH],
         PaymentMethod[12],
         FileName_Coordinate[MAX_PATH],
         FileName_DataInformation[MAX_PATH];
@@ -71,7 +74,8 @@ struct OnHold_DataRecords
     long int stdnt_StudentID;
 };
 
-// Struct That Holds ONHold_DataRecords Struct Members that is only true from the selected subjects.
+// Struct that receives values of OnHold_DataRecords Struct Members. Specific Parameters are Added to be only passed from this Struct Members.
+// TRUE ELements are being stored here...
 struct Enrollment_InformationReceiver
 {
     char *Subject_CodeName_Receiver[12];
@@ -83,7 +87,7 @@ struct Enrollment_InformationReceiver
     int Subjects_Selected;
 };
 
-// Database Struct Members that is going to be used for Rewritting, Reading, Passing Data from Program.
+// Database Struct Members that is going to be used for Rewritting, Reading, Receiving, Passing Data from Program to File.
 struct Management_Override
 {
     char stdnt_GName[30],
@@ -96,37 +100,61 @@ struct Management_Override
         stdnt_Password[100];
     long int Generated_StudentID;
 };
-// Database Struct that can be used for Managing Master Users
+// Database Struct that can be used for Managing Master Users espeically witrh File Specific Master Use Only...
 struct MasterKey
 {
     char Master_User[50],
         Master_Password[50];
 };
-// Define Following Structs to these another variables that holds the same copy of the following members.
 
+// Following Defined Structs to these another variables that holds the same copy of the following members.
 struct OnHold_DataRecords OnProcess_StudentData;
 struct Enrollment_InformationReceiver ERLM_DataReceiver;
 struct Management_Override DataChange;
 struct MasterKey MasterPoint;
 
-int FunctionCount = 0;
-int FillUp_Stage = 0;
+// Global variables to Use On Specific Functions...
+int FunctionCount = 0; // Used at
+int FillUp_Stage = 0;  // Used at Func_NewStdnt_Fillup() Funciont
 
 // Current Student Functions, Login Functions.
 void Func_OldStd_ERLM_Menu();
 void Func_OldStdnt_ERLM(); // Menu for Checking Data that is being parsed by the program, asking the user if the data checked reflect to his/her information
 
 // New Student Functions, Current Students will use most of these functions as well. There are at least 2-3 functions that are being skipped.
-void Func_NewStdnt_FillUp();
-void Func_NewStdnt_InfoCheck();
-void Func_NewStdnt_CourseReg();
-void Func_NewStdnt_YearSemSelect();
-void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12]); // Pass these subject information regarding their titles.
-void Func_Stdnt_ScholarshipCheck();
-void Func_Mode_Of_Payment();
+void Func_NewStdnt_FillUp();        // New Student -> Step One, Part One Function, Asked Information in Three Stages Categorized from Identity, General and Technical
+void Func_NewStdnt_InfoCheck();     // New Student ->  Step One, Part Two Function, Displays All Inputted Data and Asks User to if all data is correct from the passed values.
+void Func_NewStdnt_CourseReg();     // New Student -> Step Two of Part One and of Part Two Function, User asked to Select Branch Course and Specified Main Course
+void Func_NewStdnt_YearSemSelect(); // Student Function (Old and New) -> Step Two of Part Three / Four and Five Function, User Selects Year and Semester and also displays current information before proceeding.
+/*
+    SPECIAL NOTE: THIS FUNCTION ON TOP ALSO PARSES DATA TO KNOW WHAT TO PASS SUCH AS SUBJECTS, UNITS, TIME, AND DAY.
+    PLEASE REFER TO THE FUNCTION TO KNOW WHAT DATA TO PARSES AND DATA TO PASS
+*/
+void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12]); //  Step 3, Pass these subject information regarding their titles.
+/*
+    SPECIAL NOTE @ Func_SubjectUnit_Selection()
+    One of the most longest body of function in the Whole System.
+    Contains alot of Guard to Fix Entry Holes.
+    -----------
+    Double Pointer is pretty much unusual specially for people who is beginner. 
+    To preserve memory after going out to the function, we need to use double pointer.
+    To retain the memory even outside the function call. Please refer to this link for more information
+    https://stackoverflow.com/questions/5580761/why-use-double-pointer-or-why-use-pointers-to-pointers
+*/
+void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates); // Step 4 Function, Pass Data without Creating Struct Variables and Parses and shows the only available subjects that user taken.
+/*
+    Function above uses struct Enrollment_InformationReceiver ERLM_DataReceiver;
+*/
+void Func_Stdnt_ScholarshipCheck();        // Step 5, Function that almost replicates the standards of checking grade if entrance scholarship is admittable.
+void Func_Mode_Of_Payment();               // Step 6, Simple Function that asks for two modes of payment.
+void Func_PrintDocument_FinalTranscript(); //Shows Final output of the potential look of a registration form.
+/*
+The Func_PrintDocument_FinalTranscript is calls dynamic data creation function and those are:
 void GetDataEnrolleeInformation();
-void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates); // Pass those variables than creating another struct member that is going to be used twice or ones.
-void Func_PrintDocument_FinalTranscript();
+void Increment_StudentID();                   
+void GenerateUserPass_withGenerateFileName();
+Those are used for data-interaction.
+*/
 
 // POST and Critical Component Function Prototypes, used for Pre runnning the application
 void Function_CriticalComp_CheckCreate();             // Checks Components First Before Actual Initialization
@@ -141,16 +169,21 @@ void FuncAdmin_Mgr_AddEntry();           // Function for Manual Override / Addin
 void FuncAdmin_Mgr_ReadAllEntry();       // Shows Current Entries without any Sort
 void FuncAdmin_Mgr_SearchNameEntry();    // Function for Searching by Name of a Student
 void FuncAdmin_Mgr_SearchProgramEntry(); // Function for Searching by Program of a Student
-void FuncAdmin_Mgr_SearchID();           // Functioon for Searching by ID of a Student
+void FuncAdmin_Mgr_SearchID();           // Function for Searching by ID of a Student
 void FuncAdmin_Mgr_Delete_Entry();       // Function for Deleting Entries for Mistakes and Potential Data Corruption
 void FuncAdmin_Mgr_AddMaster();          // Function for Creating a Master Credential
-void FuncAdmin_Mgr_ReadMaster();         // Function for CHecking Master Credentials
+void FuncAdmin_Mgr_ReadMaster();         // Function for Checking Master Credentials
 void FuncAdmin_Mgr_DeleteMaster();       // Function for Deleting Master Credentials
-// Functions for Dynamic Data Creation
-void Increment_StudentID();                   // Accesses Files that contains number that is non binary and return incremented value of the received value.
-void GenerateUserPass_withGenerateFileName(); // Generate Username, Password for Student Based on their Name and Student Number.
-void SetCursorCoord_XY(int x, int y);         // gotoxy's linux port by Windows API Function. Renamed to SetCursorCoord for clarification.
 
+// Functions for Dynamic Data Creation
+void GetDataEnrolleeInformation();            // Contains Data Printing to File Stream and Contains Database Changing Functions
+void Increment_StudentID();                   // Accesses A File that contains number that is non binary and return incremented value of the received value.
+void GenerateUserPass_withGenerateFileName(); // Generate Username, Password for Student Based on their Name and Student Number.
+void SetCursorCoord_XY(int x, int y);         // gotoxy's linux port to Windows API Function. Renamed to SetCursorCoord for clarification instead of gotoxy.
+
+// End of Dataprototype of Starting Headpoints
+
+// int Main -> Argument Checker
 int main(int argc, char *argv[])
 {
     HWND consoleWindow = GetConsoleWindow();
@@ -162,12 +195,13 @@ int main(int argc, char *argv[])
         {
             if (strcmp(argv[Argument_Checker], "/rstrict_wnd") == 0) // Restrict Window Parameter Check
             {
-                // SetWindowLong consists of the following contents: (consoleWindow is )
+                // SetWindowLong sets a 32-bit value constituting the information about a window. consists of the following contents: (consoleWindow is a Handle that gets GetConsoleWindowInfo, GWL_STYLE - Retrieve the window styles of the window.)
+                // GetWindowLong retrives information of the window.
                 SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
             }
             if (strcmp(argv[Argument_Checker], "/mgr_md") == 0) // Management Mode Parameter Check
             {
-                FunctionCount = 1; // Technically Sends Function Count Value to 1 and which runs functions to ManagerMode.
+                FunctionCount = 1; // Technically Sends Function Count Value to 1 which runs functions to ManagerMode.
             }
             Argument_Checker++; // Increments When First Check is done, and so on...
         }
@@ -175,24 +209,25 @@ int main(int argc, char *argv[])
     system("CLS");                       // Clears Screen to show that functions runs succesfully.
     Function_CriticalComp_CheckCreate(); // If the parameters are being called or not, program will run POST / Critical Components Checker to sure program runs successfully.
 }
-
+// Function_CriticalComp_CheckCreate -> Function that is replicates POST Screens. Initiates before actual initialization of main program.
 void Function_CriticalComp_CheckCreate()
 {
-    HWND hwnd = GetConsoleWindow();
-    HMENU hmenu = GetSystemMenu(hwnd, FALSE);
-    FILE *FileDatabase_Check;
-    SYSTEMTIME GetDate_Local;
+    HWND hwnd = GetConsoleWindow();           // Get Console Window Properties
+    HMENU hmenu = GetSystemMenu(hwnd, FALSE); // Gets Exact copy of System Menu for Modification...
+    FILE *FileDatabase_Check;                 // Pointer for FileDataBase
+    SYSTEMTIME GetDate_Local;                 // WINDOWS.H Specific Header for Time Check. This removes time.h
     // Set Char Pointer of Strings with Directories to Execute and Check
     char *datapoint_filelist[3] = {"LM KeyDatabase//LM_CEA_Enrollment.lmdat", "LM KeyDatabase//LM_CEA_MasterKey.lmdat", "LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat"};
+    // char pointer of array is a set of setences per block array.
     int Counter_DataPoint_Check;
-    int SetCursorCounter = 5, SizeCheck = 0, SizeCheck_1 = 0;
-    SetConsoleTitle("Intializing Critical Components | LM Enrollment System\n");
+    int SetCursorCounter = 3, SizeCheck = 0, SizeCheck_1 = 0; // Inits SetCursorCounter for Dynamic Change
+    SetConsoleTitle("Intializing Critical Components | LM Enrollment System");
     SetCursorCoord_XY(30, SetCursorCounter); // SetCursorConuner Value is 3
     SetCursorCounter++;                      // SetCursorConuner Value is now 4. This Will repeat depends on the current code structure given.
-    printf(VERSION_NUMBER "\n");
+    printf(VERSION_NUMBER "\n");             // Calls DEFINE Macros
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
-    printf(PRODUCT_NAME "\n");
+    printf(PRODUCT_NAME "\n"); // Calls DEFINE Macros
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
     Sleep(2500);
@@ -224,46 +259,46 @@ void Function_CriticalComp_CheckCreate()
         FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "r");
         if (FileDatabase_Check == NULL)
         {
-            mkdir("LM KeyDatabase");
-            mkdir("Student_RegForm");
-            mkdir("DataInformation_Student");
+            mkdir("LM KeyDatabase");          // Calls to create a folder dynamically. Never checks errors because we never need it.
+            mkdir("Student_RegForm");         // Calls to create a folder dynamically. Never checks errors because we never need it.
+            mkdir("DataInformation_Student"); // Calls to create a folder dynamically. Never checks errors because we never need it.
             SetCursorCounter++;
             SetCursorCoord_XY(30, SetCursorCounter);
             printf("\xDD\xAF Init.Components \t\xDD\t ERROR \t\t\xDD File Database not found! Creating File...");
-            FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "w");
+            FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "w"); // Set Mode to Written After FileDatabase_Check is NULL
 
             if (strcmp(datapoint_filelist[Counter_DataPoint_Check], "LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat") == 0)
-            {
+            {                                           // At some cases, specific files needs to write specific data hence, have to create an if and else structure.
                 fprintf(FileDatabase_Check, "1800000"); // Starting Point of Student Number, Changeable Default as File Holder for this Value has been deleted...
                 SetCursorCounter++;
                 SetCursorCoord_XY(30, SetCursorCounter);
-                printf("\xDD\xAF Init.Components \t\xDD\t COMPLETE \t\xDD Database Now Found!");
+                printf("\xDD\xAF Init.Components \t\xDD\t COMPLETE \t\xDD Database Now Found!"); // Prints that it was successfully written.
             }
             else if (strcmp(datapoint_filelist[Counter_DataPoint_Check], "LM KeyDatabase//LM_CEA_MasterKey.lmdat") == 0)
             {
-                FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "wb");
-                strcpy(MasterPoint.Master_User, "ADMIN");
-                strcpy(MasterPoint.Master_Password, "LM123");
-                fwrite(&MasterPoint, sizeof(MasterPoint), 1, FileDatabase_Check);
+                FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "wb"); // Writes in binary as per security
+                strcpy(MasterPoint.Master_User, "ADMIN");                                      // These sends data to be passed on File, no need to create local variable.
+                strcpy(MasterPoint.Master_Password, "LM123");                                  // These sends data to be passed on File, no need to create local variable.
+                fwrite(&MasterPoint, sizeof(MasterPoint), 1, FileDatabase_Check);              // This was used to use two strcpy from above to copy from file.
                 SetCursorCounter++;
                 SetCursorCoord_XY(30, SetCursorCounter);
                 printf("\xDD\xAF Init.Components \t\xDD\t COMPLETE \t\xDD Database Now Found!");
                 continue;
             }
-            else if (FileDatabase_Check == NULL)
+            else if (FileDatabase_Check == NULL) // Added for double check if file really creates...
             {
                 SetCursorCounter++;
                 SetCursorCoord_XY(30, SetCursorCounter);
                 printf("\xDD\xAF Init.Components \t\xDD\t ERROR \t\t\xDD I cannot create the file, give me a adminstrative priviledge or move me somewhere???");
                 fclose(FileDatabase_Check);
-                Sleep(3000);
-                exit(FUNCTION_LINEAR_DISCONTINUE);
+                Sleep(1500);
+                exit(FUNCTION_LINEAR_DISCONTINUE); // Exits and gives static random value to tell it looks like a segmentation fault but disk written fault.
             }
             else
             {
                 SetCursorCounter++;
                 SetCursorCoord_XY(30, SetCursorCounter);
-                printf("\xDD\xAF Init.Components \t\xDD\t COMPLETE \t\xDD Database Now Found!");
+                printf("\xDD\xAF Init.Components \t\xDD\t COMPLETE \t\xDD Database Now Found!"); // Runs on Specific File Check....
             }
         }
         else
@@ -279,15 +314,20 @@ void Function_CriticalComp_CheckCreate()
     SetCursorCounter++;
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
+    /*
+    INITIALIZATION #2 CHECKING CONTENTS BEFORE CONTINUING....
+    Two Files are being checked if the files have size or content. This is mandatory due to the fact it plays a major role and cannot run without
+    having blank content. The only cons here is that, it never checks if the file is valid, hence known one of our limitations to do so.
+    */
     printf("\xAF\xDD INITIALIZATION #2 \xDD\xAF Checking Two Special File Contents...");
     FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "r");
-    fseek(FileDatabase_Check, 0, SEEK_END);
-    SizeCheck = ftell(FileDatabase_Check);
+    fseek(FileDatabase_Check, 0, SEEK_END); // Make File Pointer at the last point
+    SizeCheck = ftell(FileDatabase_Check);  // Checks Current Position Pointer
     fclose(FileDatabase_Check);
-    if (SizeCheck == 0)
+    if (SizeCheck == 0) // if pointer is still at 0 this proves that the file has no size.
     {
-        fseek(FileDatabase_Check, 0, SEEK_SET);
-        FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "w");
+        fseek(FileDatabase_Check, 0, SEEK_SET);                                           // Resets back at the beginning to ensure file write.
+        FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "w"); // Change Mode
         SetCursorCounter++;
         SetCursorCoord_XY(30, SetCursorCounter);
         printf("\xDD\xAF Init.Components \t\xDD\t ERROR \t\t\xDD File Found, But File is blank...");
@@ -305,18 +345,18 @@ void Function_CriticalComp_CheckCreate()
         fclose(FileDatabase_Check);
     }
     FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "rb");
-    fseek(FileDatabase_Check, 0, SEEK_END);
+    fseek(FileDatabase_Check, 0, SEEK_END); // Resets back at the beginning to ensure file write.
     SizeCheck_1 = ftell(FileDatabase_Check);
     fclose(FileDatabase_Check);
-    if (SizeCheck_1 == 0)
+    if (SizeCheck_1 == 0) // if pointer is still at 0 this proves that the file has no size.
     {
         fseek(FileDatabase_Check, 0, SEEK_SET);
         SetCursorCounter++;
         SetCursorCoord_XY(30, SetCursorCounter);
         printf("\xDD\xAF Init.Components \t\xDD\t ERROR \t\t\xDD File Found, But File is blank. Data Added");
         FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "wb");
-        strcpy(MasterPoint.Master_User, "ADMIN");
-        strcpy(MasterPoint.Master_Password, "LM123");
+        strcpy(MasterPoint.Master_User, "ADMIN");     // Same Scenario in Initialization #1 where it has to be created...
+        strcpy(MasterPoint.Master_Password, "LM123"); // Same Scenario in Initialization #1 where it has to be created...
         fwrite(&MasterPoint, sizeof(MasterPoint), 1, FileDatabase_Check);
         SetCursorCounter++;
         SetCursorCoord_XY(30, SetCursorCounter);
@@ -330,6 +370,7 @@ void Function_CriticalComp_CheckCreate()
         printf("\xDD\xAF Init.Components \t\xDD\t VERIFIED \t\xDD File Has Size and Content");
         fclose(FileDatabase_Check);
     }
+    // This FunctionCount Variable is a Global Variable, this helps to differentiate what mode to launch.
     if (FunctionCount == 1)
     {
         SetCursorCounter++;
@@ -351,7 +392,7 @@ void Function_CriticalComp_CheckCreate()
 }
 void Main_Menu()
 {
-    SetConsoleTitle(PRODUCT_NAME);
+    SetConsoleTitle(PRODUCT_NAME); // Set Title with DEFINED Macro
     system("CLS");
     while (1)
     {                     // This will loop forever because wtf is 1?
@@ -360,12 +401,14 @@ void Main_Menu()
         SetCursorCoord_XY(30, 3);
         // \x is a Format Specifier for Hexadecimal, There are two characters to be inputed to complete an \x format specifier.
         // CD is one of the ASCII Characters that can be seen on the ASCII Table provided by Programmers of this Program.
-        // At some point, Direct Encoding ASCII Characters by Copy Paste or Sepcial Command can sometimes be confusing espeically when Editor has different Enconding Mode.
+        // At some point, Direct Encoding ASCII Characters by Copy Pasting or Special Command can sometimes be confusing especially when Editor has different Enconding Mode.
+        // Some editors need to encoding mode to UTF-8. When you set to different, there is a one function that is directly encoded to a symbol without adding this parameter.
+        // The function referenced is GetDataEnrolleeInformation();
         printf("\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
         SetCursorCoord_XY(30, 4);
         // Lucky Based Point For Manipulating Spaces with Tab Space with \t
         printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-        SetCursorCoord_XY(30, 5);
+        SetCursorCoord_XY(30, 5); //SetCursorCoord_XY is the same as gotoxy. 30 is X, and 5 is Y.
         printf("\xBA \xDD Version " VERSION_NUMBER "\t\t\t\t\t\t\t\t       \xBA");
         SetCursorCoord_XY(30, 6);
         printf("\xBA \xDD " PRODUCT_NAME "    \xBA");
@@ -385,9 +428,9 @@ void Main_Menu()
         printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
         SetCursorCoord_XY(30, 20);
         printf("\xC8\xAF Press a key that corresponds your decision [1 - 3] \xDD\xAF ");
-        switch (getche())
+        switch (getche()) // Used getche to receive single character.
         {
-        case '1':
+        case '1': // here getche outputs char instead of int. To receive literal one, it has to be single quoted as char
             Func_OldStdnt_ERLM();
             break;
         case '2':
@@ -400,30 +443,27 @@ void Main_Menu()
             SetCursorCoord_XY(30, 23);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
             SetCursorCoord_XY(30, 24);
-            printf("\xBA \xAF LM Enrollment System => Terminated... Have A Nice Day...\t\t\t\t\t\t\t\t       \xBA");
+            printf("\xBA \xAF LM Enrollment System => Terminated... Have A Nice Day...\t\t\t\t\t       \xBA");
             SetCursorCoord_XY(30, 25);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
             SetCursorCoord_XY(30, 26);
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-            //Sleep(2500);
-            exit(EXIT_SUCCESS);
-        case '6':
-            //Increment_StudentID();
-            //GenerateUserPass_withGenerateFileName();
-            FuncAdmin_Mgr_Mode();
-            //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
-        default:
-            SetCursorCoord_XY(30, 26);
+            Sleep(2500);
+            exit(EXIT_SUCCESS); // Return Exit Code to 0 has per macro defined as 0.
+            case '6':
+            Func_Stdnt_ScholarshipCheck();
+        default:                // If none of it is true to the above said case, hence it will go back to the menu once again.
+            SetCursorCoord_XY(30, 22);
             printf("\xC9\xCD\xCD \xDD Warning! \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-            SetCursorCoord_XY(30, 27);
+            SetCursorCoord_XY(30, 23);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            SetCursorCoord_XY(30, 28);
+            SetCursorCoord_XY(30, 24);
             puts("\xBA \xAF Unrecognized Input!\t\t\t\t\t\t\t\t\t\t       \xBA");
-            SetCursorCoord_XY(30, 29);
+            SetCursorCoord_XY(30, 25);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            SetCursorCoord_XY(30, 30);
+            SetCursorCoord_XY(30, 26);
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
-            //Sleep(1500);
+            Sleep(1500);
             continue;
         }
     }
@@ -456,7 +496,7 @@ void Func_OldStdnt_ERLM()
         SetCursorCoord_XY(30, 11);
         printf("Enter your Username \xAF [ \xDD NOTE \xAF If you want to go back to main menutype 'RBF-0'] \xAF ");
         scanf("%30s", &stdnt_Username_Placeholder);
-        if (strcmp(stdnt_Username_Placeholder, "RBF-0") == 0)
+        if (strcmp(stdnt_Username_Placeholder, "RBF-0") == 0) // Created STRCMP for Getting out of the Login Menu. There are no ways to insert it somewhere so to make it quick, we added it in front.
         {
             SetCursorCoord_XY(30, 13);
             printf("\xAF \xDD INFO \xDD \xAF Returning to Main Menu...");
@@ -467,17 +507,23 @@ void Func_OldStdnt_ERLM()
         printf("Enter your Password \xAF ");
         scanf("%30s", &stdnt_Password_Placeholder);
         fflush(stdin);
+        /*
+        This part has controversy where scanf has field limit where it only takes 30 characters. But this does not avoid
+        buffer overflow. So to fix it, we added fflush(stdin); To clear any unnecessary data.
+        We are aware that fflush has undefined behavior due to the fact that it was specially used for output streams. 
+        Refer to https://stackoverflow.com/questions/2979209/using-fflushstdin
+        */
         SetCursorCoord_XY(30, 15);
         printf("Enter Student ID \xAF ");
         scanf("%10lld", &stdnt_GeneratedID_Placeholder);
         fflush(stdin);
         while (1)
         {
-            fread(&DataChange, sizeof(DataChange), 1, FileDatabase_Enrollment);
-            if (feof(FileDatabase_Enrollment))
+            fread(&DataChange, sizeof(DataChange), 1, FileDatabase_Enrollment); // Reads One Line in the size of DataChange -> Bytes to the File
+            if (feof(FileDatabase_Enrollment))                                  // if end of the line then check if the following is still correct to display errors.
             {
                 if ((strcmp(stdnt_Username_Placeholder, DataChange.stdnt_Username) != 0) || (strcmp(stdnt_Password_Placeholder, DataChange.stdnt_Password) != 0) || (stdnt_GeneratedID_Placeholder == DataChange.Generated_StudentID) != 0)
-                {
+                { // Added if the read data still may validate at some point, hence not.
                     SetCursorCoord_XY(30, 17);
                     printf("\xAF\xDD FAILED \xDD Login Failed! One of the following inputs are incorrect!");
                     Sleep(2000);
@@ -486,10 +532,14 @@ void Func_OldStdnt_ERLM()
                 }
             }
             else if ((strcmp(stdnt_Username_Placeholder, DataChange.stdnt_Username) == 0) && (strcmp(stdnt_Password_Placeholder, DataChange.stdnt_Password) == 0) && (stdnt_GeneratedID_Placeholder == DataChange.Generated_StudentID) == 1)
-            {
-                rewind(FileDatabase_Enrollment);
+            {                                    // At this point, the data is valid. There will be a loop that might parse the data into the program.
+                rewind(FileDatabase_Enrollment); // Rewind to reset to beginning because the credentials doesnt match to the input given.
                 while (1)
                 {
+                    /*
+                    This was intended because the file has to loop to find the exact data and get it
+                    // If we don't have loop, assume that there are two identical datas. The first will be used if the second one has been used.
+                    */
                     fread(&DataChange, sizeof(DataChange), 1, FileDatabase_Enrollment);
                     if (feof(FileDatabase_Enrollment))
                     {
@@ -497,6 +547,7 @@ void Func_OldStdnt_ERLM()
                     }
                     else if ((strcmp(stdnt_Username_Placeholder, DataChange.stdnt_Username) == 0) && (strcmp(stdnt_Password_Placeholder, DataChange.stdnt_Password) == 0) && (stdnt_GeneratedID_Placeholder == DataChange.Generated_StudentID) == 1)
                     {
+                        // Get the data onboard to the program to use for enrollment.
                         strcpy(OnProcess_StudentData.stdnt_GName, DataChange.stdnt_GName);
                         strcpy(OnProcess_StudentData.stdnt_MName, DataChange.stdnt_MName);
                         strcpy(OnProcess_StudentData.stdnt_LName, DataChange.stdnt_LName);
@@ -504,6 +555,9 @@ void Func_OldStdnt_ERLM()
                         OnProcess_StudentData.stdnt_StudentID = DataChange.Generated_StudentID;
                         strcpy(OnProcess_StudentData.Course_YearChoice, DataChange.stdnt_Year_Choice);
                         strcpy(OnProcess_StudentData.Course_SemSelection, DataChange.stdnt_Course_Semester);
+                        // Parse the data for data that has been manually encoded.
+                        // If any by chance it hasn't been parsed, the program won't handle hit due to the fact that
+                        // It is already unknown even when converted to Unknown Type...
                         if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSCE") == 0)
                         {
                             strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, "Civil Engineering");
@@ -570,26 +624,29 @@ void Func_OldStdnt_ERLM()
                 SetCursorCoord_XY(30, 17);
                 printf("\xC8\xDD INFO \xDD Login Success!");
                 Sleep(2000);
-                Func_OldStd_ERLM_Menu();
+                Func_OldStd_ERLM_Menu(); // Caliing this function will skip two function because those are already defined.
                 break;
                 // Get Information of Student
             }
             else
             {
+                // Continue Through until data valid.
                 continue;
             }
         }
     }
 }
-
+// Func_OldStd_ERLM_Menu -> Function of Data Validity of Existing Student Account
+/*
+NOTE: We cannot create a menu here, it only signifies data check if the given data is correct.
+*/
 void Func_OldStd_ERLM_Menu()
 {
     SetConsoleTitle("LM Enrollment System | Current Student Login");
-    char Prompt;
     int Counter_For_Selection = 0;
     while (1)
     {
-        int SetCursorCounter = 3;
+        int SetCursorCounter = 3; // Set Starting Point
         system("CLS");
         SetCursorCoord_XY(30, SetCursorCounter);
         SetCursorCounter++;
@@ -636,32 +693,38 @@ void Func_OldStd_ERLM_Menu()
         SetCursorCounter++;
         SetCursorCounter++;
         printf("Are the following details reflects on you? [Y/N]\xAF ");
-        switch (Prompt = getche())
+        switch (getche())
         {
         case 'Y':
         case 'y':
             SetCursorCoord_XY(30, SetCursorCounter);
             SetCursorCounter++;
             printf("\xAF \xDD INFO \xDD Proceeding To Second Step of Part 3...");
-            Sleep(1750);
+            Sleep(1500);
             Func_NewStdnt_YearSemSelect();
         case 'N':
         case 'n':
             SetCursorCoord_XY(30, SetCursorCounter);
             SetCursorCounter++;
             printf("\xAF \xDD INFO \xDD Returning To Main Menu...");
-            Sleep(1750);
+            Sleep(1500);
             Main_Menu();
         default:
             SetCursorCoord_XY(30, SetCursorCounter);
             SetCursorCounter++;
             printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-            Sleep(1750);
+            Sleep(1500);
             continue;
         }
     }
 }
-/////////////////////////////////////////////////////////////////////////////////////
+//Func_NewStdnt_FillUp -> Data Filling Student Information
+/*
+NOTE: Contains FGETS and STRTOK to handle strings properly.
+Without strtok, the strings will technically broke the interface because \n was there.
+fgets, sizeof(MaxCount) is a size or number characters to be passed to the struct variables.
+There are three stages, those are identity, general and technical. Each stages is managed at FillUp_Stage Variable set within values to proceed.
+*/
 void Func_NewStdnt_FillUp()
 {
     system("CLS");
@@ -699,7 +762,9 @@ void Func_NewStdnt_FillUp()
             printf("\xAF [1] Enrollee's First Name [If Secondary Given Name Exist, Concatenate with '-', Ex: Lily-Ann]");
             SetCursorCoord_XY(30, 20);
             printf("\xC8\xAF INPUT \xDD\xAF ");
+            //fgets instead of scanf to reduced the difficulty of dealing with whitespaces
             fgets(OnProcess_StudentData.stdnt_GName, sizeof(OnProcess_StudentData.stdnt_GName), stdin);
+            //strtok trims new line on the data
             strtok(OnProcess_StudentData.stdnt_GName, "\n");
             SetCursorCoord_XY(30, 22);
             printf("\xAF [2] Enrollee's Middle Name");
@@ -750,8 +815,9 @@ void Func_NewStdnt_FillUp()
             printf("\xC8\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_MothersInfoContact, sizeof(OnProcess_StudentData.stdnt_MothersInfoContact), stdin);
             strtok(OnProcess_StudentData.stdnt_MothersInfoContact, "\n");
-            //Sleep(3000);
+            //This printf data checker, checks string lengths if characters are below 2 or above 2.
             //printf(" %d | %d | %d | %d | %d | %d | %d | %d | %d", Test_2, Test_3, Test_4, Test_5, Test_6, Test_7, Test_9, Test_10, Test_11);
+            // To avoid getting manipulated by \n only and to above interface break. We have to set up and restrict characters to be 2 and above to proceed on the next stage.
             if ((strlen(OnProcess_StudentData.stdnt_GName) <= 2) || (strlen(OnProcess_StudentData.stdnt_MName) <= 2) || (strlen(OnProcess_StudentData.stdnt_LName) <= 2) || (strlen(OnProcess_StudentData.stdnt_FathersName) <= 2) || (strlen(OnProcess_StudentData.stdnt_FathersInfoJob) <= 2) || (strlen(OnProcess_StudentData.stdnt_FathersInfoContact) <= 2) || (strlen(OnProcess_StudentData.stdnt_MothersName) <= 2) || (strlen(OnProcess_StudentData.stdnt_MothersInfoJob) <= 2) || (strlen(OnProcess_StudentData.stdnt_MothersInfoContact) <= 2))
             {
                 SetCursorCoord_XY(30, 54);
@@ -763,12 +829,15 @@ void Func_NewStdnt_FillUp()
             {
                 SetCursorCoord_XY(30, 54);
                 printf("\xFE\xCD\xCD USER INPUT DONE FOR IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-                FillUp_Stage++;
-                Sleep(1750);
-                Func_NewStdnt_FillUp();
+                FillUp_Stage++; // Increments Varaible
+                Sleep(1500);
+                Func_NewStdnt_FillUp(); // When called, it will proceed to the next stage.
             }
         }
-        else if (FillUp_Stage == 1)
+        else if (FillUp_Stage == 1) // Next Stage
+        /*
+        Comments from the above is the same from these stages. Refer to FillUp_Stage == 0 Contents
+        */
         {
             SetCursorCoord_XY(30, 16);
             printf("\xFE\xCD\xCD GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
@@ -790,6 +859,7 @@ void Func_NewStdnt_FillUp()
             printf("Syntax \xDD\xAF [House #, Residential Name, Strt #, Brgy Name, City, ZIP Code, Metro Manila or Any Province Name]"); //Include City and Village, ZIP CODE
             SetCursorCoord_XY(30, 29);
             printf("\xC8\xAF INPUT \xDD\xAF ");
+            // ADDRESS IS MAX PATH SIZE DUE TO LONG STRING NEEDED
             fgets(OnProcess_StudentData.stdnt_Address, sizeof(OnProcess_StudentData.stdnt_Address), stdin);
             strtok(OnProcess_StudentData.stdnt_Address, "\n");
             SetCursorCoord_XY(30, 31);
@@ -804,14 +874,16 @@ void Func_NewStdnt_FillUp()
             printf("\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_MobileNum, sizeof(OnProcess_StudentData.stdnt_MobileNum), stdin);
             strtok(OnProcess_StudentData.stdnt_MobileNum, "\n");
-            fflush(stdin); // Flushes \n on ScanF to prevent fgets to be skipped
+            fflush(stdin); // Flushes \n on ScanF to prevent fgets to be skipped, on new versions, it is now handled as string
+            // Due to limitations... As per now it is still needed because it is limited to 11 characters only. Going beyond causes overflow.
             SetCursorCoord_XY(30, 39);
             printf("\xAF [6] House Telephone Number");
             SetCursorCoord_XY(30, 41);
             printf("\xC8\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_PhoneNum, sizeof(OnProcess_StudentData.stdnt_PhoneNum), stdin);
             strtok(OnProcess_StudentData.stdnt_PhoneNum, "\n");
-            fflush(stdin); // Flushes \n on ScanF to prevent fgets to be skipped
+            fflush(stdin); // Flushes \n on ScanF to prevent fgets to be skipped, on new versions, it is now handled as string
+            // Due to limitations... As per now it is still needed because it is limited to 11 characters only. Going beyond causes overflow.
             SetCursorCoord_XY(30, 43);
             printf("\xAF [7] Emergency Number and Emergency Point of Contact (Seperated)");
             SetCursorCoord_XY(30, 45);
@@ -839,11 +911,14 @@ void Func_NewStdnt_FillUp()
                 SetCursorCoord_XY(30, 53);
                 printf("\xFE\xCD\xCD USER INPUT DONE FOR GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
                 FillUp_Stage++;
-                Sleep(1750);
+                Sleep(1500);
                 Func_NewStdnt_FillUp();
             }
         }
         else if (FillUp_Stage == 2)
+        /*
+        Comments from the above is the same from these stages. Refer to FillUp_Stage == 0 Contents
+        */
         {
             SetCursorCoord_XY(30, 16);
             printf("\xFE\xCD\xCD TECHNICAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
@@ -889,17 +964,25 @@ void Func_NewStdnt_FillUp()
                 SetCursorCoord_XY(30, 38);
                 printf("\xFE\xCD\xCD USER INPUT DONE \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
                 FillUp_Stage = 0;
-                Sleep(1750);
+                Sleep(1500);
                 Func_NewStdnt_InfoCheck();
             }
         }
         else
         {
+            // These was intentional incase if the program is bugged at some point and the variable gets incremented than expected
+            // it will still fall  to Func_NewStdnt_InfoCheck Function.
             Func_NewStdnt_InfoCheck();
         }
     }
 }
-
+// Func_NewStdnt_InfoCheck -> Data Validity
+/*
+NOTE: This was needed to make sure that future student knows what data to input.
+CONS: Goes back to beginning of stages when one mistake found.
+The flow of this kind of design can be changed, but as per time goes by. The developers intended to make it like this
+due to the heavy workflow. Flow can be revisable which results to long code.
+*/
 void Func_NewStdnt_InfoCheck()
 {
     char Data_Confirmation;
@@ -915,7 +998,7 @@ void Func_NewStdnt_InfoCheck()
     SetCursorCoord_XY(30, 7);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
     SetCursorCoord_XY(30, 9);
-    printf("\xFE\xCD\xCD IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    printf("\xFE\xCD\xCD IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCursorCoord_XY(30, 11);
     printf("\xAF [1] Enrollee's Name \xDD\xAF %s, %s %s", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_GName, OnProcess_StudentData.stdnt_MName);
     SetCursorCoord_XY(30, 13);
@@ -923,7 +1006,7 @@ void Func_NewStdnt_InfoCheck()
     SetCursorCoord_XY(30, 15);
     printf("\xAF [3] [ Parent ] Father's Information \xAF %s \xDD %s \xDD %s", OnProcess_StudentData.stdnt_FathersName, OnProcess_StudentData.stdnt_FathersInfoJob, OnProcess_StudentData.stdnt_FathersInfoContact);
     SetCursorCoord_XY(30, 17);
-    printf("\xFE\xCD\xCD GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    printf("\xFE\xCD\xCD GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCursorCoord_XY(30, 19);
     printf("\xAF [4] Gender \xDD\xAF %s", OnProcess_StudentData.stdnt_Gender);
     SetCursorCoord_XY(30, 21);
@@ -966,33 +1049,38 @@ void Func_NewStdnt_InfoCheck()
     printf("\xC8\xAF Press a key that corresponds to your decision [|Y|es or |N|o] \xDD\xAF ");
     switch (getche())
     {
-    case 'Y':
+    case 'Y': // case Y will fall to case 'y' this method is somewhat makes the flow cleaner to look at.
     case 'y':
         SetCursorCoord_XY(30, 54);
         // Set Student Id as 0 already to let developers know that it is definitely a new student..
         OnProcess_StudentData.stdnt_StudentID = 0;
         printf("\xAF \xDD INFO \xDD Data Received, Proceeding to Step 2 \xDD Course Registration...");
-        //Sleep(1750);
+        Sleep(1500);
         Func_NewStdnt_CourseReg();
     case 'N':
     case 'n':
         SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD INFO \xDD Returning To Step 1 \xDD Filling up Personal Information...");
-        //Sleep(3000);
+        Sleep(1500);
         Func_NewStdnt_FillUp();
     default:
         SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-        //Sleep(1750);
+        Sleep(1500);
         Func_NewStdnt_InfoCheck();
     }
 }
 
+//Func_NewStdnt_CourseReg - Branch Course Selectors and Main Course Selectors
+/*
+NOTE: Old Student Skips this function...
+On this function it introduces the char pointer of arrays which is a pointer of strings in defined size.
+*/
+
 void Func_NewStdnt_CourseReg()
 {
-    SetConsoleTitle(FUNCTION_STEP2);
     system("CLS");
-    int BranchBase_Accepter = 0, MainCourse_Accepter = 0;
+    SetConsoleTitle(FUNCTION_STEP2);
     char *MainCourse_CodeName[8] = {"BSCE", "BSCpE", "BSEE", "BSECE", "BSEnSE", "BSIE", "BSME", "Arch"};
     char *MainCourse_FullName[8] = {"Civil Engineering", "Computer Engineering", "Electrical Engineering", "Electronics Engineering", "Environmental and Sanitary Engineering", "Industrial Engineering", "Mechanical Engineering", "Architecture"};
     SetCursorCoord_XY(30, 3);
@@ -1029,14 +1117,15 @@ void Func_NewStdnt_CourseReg()
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
     SetCursorCoord_XY(30, 22);
     printf("\xC8\xAF Press a key that corresponds your decision [1 - 2] \xDD\xAF ");
-    switch (BranchBase_Accepter = getche())
+    switch (getche())
     {
     case '1':
         SetCursorCoord_XY(30, 24);
         printf("\xAF \xDD INFO \xDD You have chosen 'College of Engineering' as a branch base course...");
-        //Sleep(1750);
+        Sleep(1500);
         while (1)
         {
+            // Menu for College of Engineering
             system("CLS");
             SetCursorCoord_XY(30, 3);
             printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
@@ -1084,12 +1173,14 @@ void Func_NewStdnt_CourseReg()
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
             SetCursorCoord_XY(30, 27);
             printf("\xC8\xAF Press a key that corresponds your decision [1 - 7] \xDD\xAF "); // Fix this also
-            switch (MainCourse_Accepter = getche())
+            switch (getche())
             {
             case '1':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[0]);
-                //Sleep(1750);
+                Sleep(1500);
+                // This Data Transport is one of the potential use of struct members.
+                // Syntax: strcpy (Destination, Source) both char pointer
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[0]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[0]);
                 Func_NewStdnt_YearSemSelect();
@@ -1097,7 +1188,9 @@ void Func_NewStdnt_CourseReg()
             case '2':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[1]);
-                //Sleep(1750);
+                Sleep(1500);
+                // This Data Transport is one of the potential use of struct members.
+                // Syntax: strcpy (Destination, Source) both char pointer
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[1]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[1]);
                 Func_NewStdnt_YearSemSelect();
@@ -1105,7 +1198,9 @@ void Func_NewStdnt_CourseReg()
             case '3':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[2]);
-                //Sleep(1750);
+                Sleep(1500);
+                // This Data Transport is one of the potential use of struct members.
+                // Syntax: strcpy (Destination, Source) both char pointer
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[2]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[2]);
                 Func_NewStdnt_YearSemSelect();
@@ -1113,7 +1208,9 @@ void Func_NewStdnt_CourseReg()
             case '4':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[3]);
-                //Sleep(1750);
+                Sleep(1500);
+                // This Data Transport is one of the potential use of struct members.
+                // Syntax: strcpy (Destination, Source) both char pointer
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[3]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[3]);
                 Func_NewStdnt_YearSemSelect();
@@ -1121,7 +1218,9 @@ void Func_NewStdnt_CourseReg()
             case '5':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[4]);
-                //Sleep(1750);
+                Sleep(1500);
+                // This Data Transport is one of the potential use of struct members.
+                // Syntax: strcpy (Destination, Source) both char pointer
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[4]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[4]);
                 Func_NewStdnt_YearSemSelect();
@@ -1129,7 +1228,9 @@ void Func_NewStdnt_CourseReg()
             case '6':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[5]);
-                //Sleep(1750);
+                Sleep(1500);
+                // This Data Transport is one of the potential use of struct members.
+                // Syntax: strcpy (Destination, Source) both char pointer
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[5]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[5]);
                 Func_NewStdnt_YearSemSelect();
@@ -1137,7 +1238,9 @@ void Func_NewStdnt_CourseReg()
             case '7':
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding To Step 2 of Part 3...", MainCourse_FullName[6]);
-                //Sleep(1750);
+                Sleep(1500);
+                // This Data Transport is one of the potential use of struct members.
+                // Syntax: strcpy (Destination, Source) both char pointer
                 strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[6]);
                 strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[6]);
                 Func_NewStdnt_YearSemSelect();
@@ -1145,36 +1248,35 @@ void Func_NewStdnt_CourseReg()
             default:
                 SetCursorCoord_XY(30, 29);
                 printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-                //Sleep(1750);
+                Sleep(1500);
                 continue;
             }
         }
     case '2':
         SetCursorCoord_XY(30, 24);
         printf("\xAF \xDD INFO \xDD Architecture is basically indentified as a main course. Proceeding To Part 3 of Step 2...");
-        //Sleep(1750);
+        Sleep(1500);
+        // In Architecture, there are no main courses or sub. But the actual is the Architecture itself.
         strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, MainCourse_CodeName[7]);
         strcpy(OnProcess_StudentData.MainCourse_FullName_Passer, MainCourse_FullName[7]);
         Func_NewStdnt_YearSemSelect();
     default:
         SetCursorCoord_XY(30, 24);
         printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-        //Sleep(1750);
+        Sleep(1500);
         Func_NewStdnt_CourseReg();
     }
 }
+// Func_NewStdnt_YearSemSelect -> Same Scenario as Func_NewStdnt_CourseReg but Year Level and  Semester are being selected.
 void Func_NewStdnt_YearSemSelect()
 {
     system("CLS");
     SetConsoleTitle(FUNCTION_STEP2_1);
     int YearSelection_Accepter = 0,
-        YearSelection_Accepter_Sem = 0,
-        OldStudentParameter = 0;
-    char DataCheck;
+        YearSelection_Accepter_Sem = 0;
+    //Define Following to be dynamic data for transport.
     char *ERLM_Selection[5] = {"1st Year College", "2nd Year College", "3rd Year College", "4th Year College", "5th Year College"},
          *ERLM_Selection_Sem[2] = {"First Semester", "Second Semester"};
-
-    //Check At User.
     while (1)
     {
         system("CLS");
@@ -1226,52 +1328,45 @@ void Func_NewStdnt_YearSemSelect()
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
         SetCursorCoord_XY(30, 31);
         printf("\xC8\xAF Press a key that corresponds your Desired College Year Level [1 - 5] \xAF ");
-        switch (YearSelection_Accepter = getche())
+        switch (getche())
         {
         case '1':
             YearSelection_Accepter = 0;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            //Sleep(1750);
+            Sleep(1500);
             break;
         case '2':
             YearSelection_Accepter = 1;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            //Sleep(1750);
+            Sleep(1500);
             break;
         case '3':
             YearSelection_Accepter = 2;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            //Sleep(1750);
+            Sleep(1500);
             break;
         case '4':
             YearSelection_Accepter = 3;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            //Sleep(1750);
+            Sleep(1500);
             break;
         case '5':
             YearSelection_Accepter = 4;
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 4...", ERLM_Selection[YearSelection_Accepter]);
-            //Sleep(1750);
+            Sleep(1500);
             break;
         default:
             SetCursorCoord_XY(30, 33);
             printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
-            //Sleep(1750);
-            break;
-        }
-        if (YearSelection_Accepter >= 0 && YearSelection_Accepter <= 5)
-        {
-            break;
-        }
-        else
-        {
+            Sleep(1500);
             continue;
         }
+        break;
     }
     system("CLS");
     while (1)
@@ -1317,38 +1412,38 @@ void Func_NewStdnt_YearSemSelect()
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
         SetCursorCoord_XY(30, 27);
         printf(" \xAF Please choose your Desired Semester [1 - 2] \xAF ");
-        switch (YearSelection_Accepter_Sem = getche())
+        switch (getche())
         {
         case '1':
+            // At this point, Selections or Number that is being pressed should be taken. But since getche is string and developers
+            // Have never checked the function called atoi or itoa. It was keeped like this.
+            // It has been proposed before because array starts at 0 and so that is why when following numbers are pressed
+            //  It will be - 1 to a variable received.
             YearSelection_Accepter_Sem = 0;
             SetCursorCoord_XY(30, 29);
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 5...", ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
-            //Sleep(1750);
+            Sleep(1500);
             break;
         case '2':
             SetCursorCoord_XY(30, 30);
             YearSelection_Accepter_Sem = 1;
             printf("\xAF \xDD INFO \xDD You have selected %s. Proceeding to Step 2 of Part 5...", ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
-            //Sleep(1750);
+            Sleep(1500);
             break;
         default:
             SetCursorCoord_XY(30, 30);
             printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
-            //Sleep(1750);
-            break;
-        }
-        if (YearSelection_Accepter_Sem == 0 || YearSelection_Accepter_Sem == 1)
-        {
-            break;
-        }
-        else
-        {
+            Sleep(1500);
             continue;
         }
+        break;
     }
 
     system("CLS");
-
+    /*
+This while loop part, loops only within when user input is invalid to the question.
+It is another part of data check to avoid mistakes being corrected after enrollment process.
+*/
     while (1)
     {
         system("CLS");
@@ -1392,17 +1487,38 @@ void Func_NewStdnt_YearSemSelect()
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
         SetCursorCoord_XY(30, 27);
         printf("\xC8\xAF Press a key that corresponds your decision [|Y|es or |N|o] \xDD\xAF ");
-        switch (DataCheck = getche())
+        switch (getche())
         {
-        case 'Y':
+        case 'Y': // case 'Y' falls to case 'y'
         case 'y':
             SetCursorCoord_XY(30, 29);
             printf("\xDD INFO \xDD Data Temporarily Recorded \xAF Processing Data..."); // Pass This Already in Struct to lessen the difficutly to check what to pass when User Press 3 on Subject Unit Selection Function
             SetCursorCoord_XY(30, 30);
             printf("\xDD SUCCESS \xDD Data Processed. Proceeding to Step 3 \xAF Subject Enrollment Selection");
+            /*
+            This two is being transported too eraly than transporting at the final steps.
+            This was meant to avoid confusion if the data is being transported in a proper way.
+            */
             strcpy(OnProcess_StudentData.Course_YearChoice, ERLM_Selection[YearSelection_Accepter]);
             strcpy(OnProcess_StudentData.Course_SemSelection, ERLM_Selection_Sem[YearSelection_Accepter_Sem]);
-            //Sleep(1800);
+            Sleep(1800);
+
+            /*
+            THIS PART INCLUDES MORE THAN 64 COMPARISONS FOR WHICH TO KNOW WHAT DATA TO BE SENT
+            THIS PART WAS KNOWN TO BE EFFECTIVE THAN STATIC ONE AS IT DECREASE THE CODE TO 80%. IN THE TIME OF CREATION FOR EACH
+            THE TOTAL LINES WAS UP TO 6000+++ LINE OF CODE...
+            
+           For readibility, there are identions to which part of the code is intended to be part of.
+           First step, it checks the course codename passed
+                Second Step is the year college to be checked
+                    Third Part is Semester to be checked
+            
+            NOTE: THE FOLLOWING CHAR POINTTER ARRAY
+            -- AS OBSERVERS (YOU) NOTICED, WE ARE GIVING DATA THAT IS NOT EXACTLY AS IT MEANT TO BE
+            For Example: Give 8 datas while char is usually at 12 size
+            The remaining four is being treated as unknown to the next function. Refer to the next function for more information....
+
+           */
             if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSCE") == 0)
             {
                 if (strcmp(OnProcess_StudentData.Course_YearChoice, "1st Year College") == 0)
@@ -1414,6 +1530,7 @@ void Func_NewStdnt_YearSemSelect()
                         char *Subject_LinearTime[12] = {"8:00AM - 9:30AM", "9:30AM - 10:30AM", "10:30AM - 11:30AM", "11:30AM - 1:30PM", "1:30PM - 2:30PM", "2:30PM - 3:30PM", "1:30PM - 4:30PM", "7:30AM - 9:30AM", "9:30AM - 12:00PM"};
                         int Subject_Units[12] = {3, 3, 3, 3, 1, 3, 0, 2, 3};
                         Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
+                        // Function was called with parameters to be delivered, all is double pointer when passed and units are passes to 12 datas only...
                     }
                     if (strcmp(OnProcess_StudentData.Course_SemSelection, "Second Semester") == 0)
                     {
@@ -2183,68 +2300,79 @@ void Func_NewStdnt_YearSemSelect()
                         char *Subject_FullName[12] = {"LIFE AND WORKS OF RIZAL", "TAXATION AND AGRARIAN REFORM", "POLITICS AND GOVERNANCE W/ NEW CONSTITUTION", "ARCHITECTURAL DESIGN 10", "SPECIALIZATION 3"};
                         char *Subject_LinearTime[12] = {"8:00AM - 9:00AM", "9:00AM - 10:00AM", "10:00AM - 11:00AM", "11:00AM - 12:00PM", "12:00PM - 1:00PM", "2:00PM - 3:00PM"};
                         int Subject_Units[12] = {3, 3, 3, 5, 3};
+                        Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
                     }
                 }
             }
             else
             {
-                system("CLS");
-                printf("Houston! We have a problem!");
-                printf("There is no way that this system returns false for each comparision for more than 64+!\n This is a bug! Please report to the developer immediately!!!");
-                printf("For Manual Override of Data, Please Delete and Redo with Proper Naming of Course Code Again!!!");
-                exit(FUNCTION_LINEAR_DISCONTINUE); // Calls Exit Code When More than 64+ Comparison returns false.
                 /*
-                This would occur in the following:
+                LEAD DEVELOPER'S NOTE: THIS WAS MEANT TO BE JOKE OR SOMEWHAT Unexpectating Result.
+                The only cause of this one is from the Data that is added manually from the Management Mode...
+                If syntax wasnt followed, then there is a probably that it wasn't parsed to the list of if and else conditions.
+                Hence it will unknown for the program or doesnt understand what it was.
+                Displaying this will result into a problem and cause termination of a program.
+                It will never be going back to Main Menu just to make sure that managers of this program would resolve it.
+                This would be impossible to happen when New Student Process was being taken.
                 */
+                system("CLS");
+                printf("Houston! We have a problem!\n");
+                printf("There is no way that this system returns false for each comparision for more than 64+!\n This is a bug! Please report to the developer immediately!!!\n");
+                printf("For Manual Override of Data, Please Delete and Redo with Proper Naming of Course Code Again!!!\n");
+                exit(FUNCTION_LINEAR_DISCONTINUE); // Calls Exit Code When More than 64+ Comparison returns false.
             }
         case 'N':
         case 'n':
             SetCursorCoord_XY(30, 29);
             printf("\xAF \xDD INFO \xDD Reinitializing function to go back...");
-            //Sleep(1750);
+            Sleep(1500);
             Func_NewStdnt_YearSemSelect();
             break;
         default:
             SetCursorCoord_XY(30, 29);
             printf("\xAF \xDD ERROR \xDD Sorry, I don't understand that...");
-            //Sleep(1750);
+            Sleep(1500);
             continue;
         }
         break;
     }
 }
-
+/*
+WARNING: CONTAINS ALOT OF FUNCTIONS WITH MINIMAL COMMENT TO AVOID OVERFLOW
+THIS WAS THE PURE AND ALMOST SECURED FUNCTION WHEN IN THE PROCESS OF DEVELOPING THE SYSTEM.
+CERTAIN INFORMATION ARE COMMENTED FOR REASONS, PLEASE REFER TO THOSE BELOW.
+*/
 void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName, char **Subject_LinearTime, int Subject_Units[12])
 {
     system("CLS");
     SetConsoleTitle(FUNCTION_STEP3);
-    int Subject_Selector = 0,
-        Option_Selector = 0,
-        Final_Comp_SelectedSubjects = 0,
-        Final_Comp_SemUnits = 0,
-        Subject_Counter = 0,
-        Subject_Selection_Checker,
-        Transport_Element = 0,
-        Transport_PassElementTrue = 0,
-        Subject_UnitsGuard_AntiDuplicate_Include[12] = {0},
-        Subject_UnitsGuard_AntiDuplicate_Exclude[12] = {0},
-        Nullifier_Parameter[12] = {0},
-        Counter = 0,
-        Setup_Counter = 0,
-        Subject_ExpectedCandidates = 0,
-        Subject_ExpectedSemUnits = 0,
-        Sizeof_SemSelection = strlen(OnProcess_StudentData.Course_SemSelection),
-        Sizeof_YearChoice = strlen(OnProcess_StudentData.Course_YearChoice),
-        Sizeof_FullNamePasser = strlen(OnProcess_StudentData.MainCourse_FullName_Passer);
-    char Final_Decision_Selector;
-    // Default Placeholder for Selection
+    int Subject_Selector = 0,                               // Used for choosing subjects
+        Option_Selector = 0,                                // Used for selecting options indicated from 1 to 6
+        Final_Comp_SelectedSubjects = 0,                    // Shows Current Selected Subject
+        Final_Comp_SemUnits = 0,                            // Shows All Units Computed
+        Subject_Selection_Checker,                          // Used as a Value of Array to Process Subjects that are Included, Excluded and Unknown
+        Transport_Element = 0,                              // A Variable that is used to as a array element for passing data to struct containing 12 elements for each
+        Subject_UnitsGuard_AntiDuplicate_Include[12] = {0}, // Initialized for Assurance of Not Getting Corrupted... Used for Anti Selecting when it was already selected
+        Subject_UnitsGuard_AntiDuplicate_Exclude[12] = {0}, // Initialized for Assurance of Not Getting Corrupted... Used for Anti Selecting when it was already selected
+        Nullifier_Parameter[12] = {0},                      // It is a set that contains only value of 0 or 1, it is a blocker used for selecting NULL contents which is not really recommended to select into.
+        Setup_Counter = 0,                                  // Used as an Array Element to Setup Elements that are NULL.
+        Subject_ExpectedCandidates = 0,                     // Used as a counter for counting subjects passed by the previous function.
+        Subject_ExpectedSemUnits = 0,// Used as a counter for counting semester passed by the previous function.
+        Sizeof_SemSelection = strlen(OnProcess_StudentData.Course_SemSelection),// These checks character count and it was being pass to the pointer of printf width limiter.
+        Sizeof_YearChoice = strlen(OnProcess_StudentData.Course_YearChoice),// These checks character count and it was being pass to the pointer of printf width limiter.
+        Sizeof_FullNamePasser = strlen(OnProcess_StudentData.MainCourse_FullName_Passer); // These checks character count and it was being pass to the pointer of printf width limiter.
+    char Final_Decision_Selector;                                                         // Variable that is responsible for confirmation for leaving the function. Used traditional conditional than case scenario.
+    /*
+    The Four Char Pointer Array is a set of placeholders that are not being passed by the previous function. Hence those are static and does not change the value no matter what selections are passed.
+    */
     char *Subject_Parameters[2] = {"Include", "Exclude"};
     char *Subject_Status[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
     char *Subject_Include[12] = {"Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"};
+    // Subject_ScheduleDay is based on Project Leader's Schedule
     char *Subject_ScheduleDay[12] = {"MoWeFr", "Tu", "MoSat", "MoWeFr", "We", "Th", "MoweFr", "TuTh", "TuTh", "FrSat", "We", "Sat"};
-    // Assign Null Pointer Elements to the following strings.
+    // For command that assigns NULL Pointer Elements to the following strings.
     for (Setup_Counter = 0; Setup_Counter <= 11; Setup_Counter++)
-    {
+    { // Setup_Counter cannot be at 12 because it is already set for null terminating character hence data starts at 0 and ends at 11
         if ((Subject_CodeName[Setup_Counter] == NULL) || (Subject_FullName[Setup_Counter] == NULL))
         {
             Subject_CodeName[Setup_Counter] = "NONE";
@@ -2252,21 +2380,29 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
             Subject_LinearTime[Setup_Counter] = "N/A - N/A";
             Subject_ScheduleDay[Setup_Counter] = "N/A";
             Subject_Units[Setup_Counter] = 0;
-            Nullifier_Parameter[Setup_Counter] = 1;
+            Nullifier_Parameter[Setup_Counter] = 1; // Nulifier sets 1 as true to be not allowed to use
         }
+        // Let program calculate non-null element arrays to count for subject_whole size.
         else if ((Subject_CodeName[Setup_Counter] != NULL) || (Subject_FullName[Setup_Counter] != NULL))
         {
-            Nullifier_Parameter[Setup_Counter] = 0;
+            Nullifier_Parameter[Setup_Counter] = 0; // Selectable as it was false.
             Subject_ExpectedCandidates += 1;
-            Subject_ExpectedSemUnits += Subject_Units[Setup_Counter];
+            Subject_ExpectedSemUnits += Subject_Units[Setup_Counter]; // Calculate Semester Units
         }
     }
-    // Let program calculate non-null element arrays to count for subject_whole size.
 
+    /*
+Show Interface
+%-[Value][Format] - Left to Right Alignment - ALlocates expected space by the value
+%[Value][Format] - Right to Left Alignment - ALlocates expected space by the value
+*/
     while (1)
     {
         //Looping Variables Will Be Reinitialized Here
-        int Sbj_Stats_Increment = 0, Sbj_Stats_Decrement = 0, Subject_Receive_Exclude_Count = 0, Subject_Receive_Unknown_Count = 0;
+        int Sbj_Stats_Increment = 0,           // Used To Increment Variables When Selecting "Include All Subjects", Goes back to zero for reusing the function as it also binds as an array element.
+            Sbj_Stats_Decrement = 0,           // Used To Decrement Variables When Selecting "Exclude All Subjects", Goes back to zero for reusing the function as it also binds as an array element.
+            Subject_Receive_Exclude_Count = 0, // Used to Count Exclude and Unknown Selections, there are limitations passed when all is indicated as excluded or unknonwn, it prohibits the user.
+            Subject_Receive_Unknown_Count = 0; // Used to Count Exclude and Unknown Selections, there are limitations passed when all is indicated as excluded or unknonwn, it prohibits the user.
         system("CLS");
         SetCursorCoord_XY(20, 3);
         printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
@@ -2353,384 +2489,408 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
             scanf("%d", &Subject_Selector);
             if (Subject_Selector == 1)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 2)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 3)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 4)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 5)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 6)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 7)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 8)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 9)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 10)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 11)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 12)
             {
+                // Checks if Nulifier_Parameter is set to 1. If it was set, it was not available. Nullifier_Parameter is already set at Setup Part. So it cannot be changed when output shows up.
+                //NOTE: Array -1 because Subject_Selector is part of the choice as it being taken as well. Ex. If pressed 1, the result would be 0 which takes 0th element of the array.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks Anti Duplicated Guard, it's purpose was to block if it was already included, it will be available if excluded or unknown.
                     if (Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1;
-                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];
-                        Final_Comp_SelectedSubjects += 1;
-                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 0; // Set Exclude To Be Available To Use from this element.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 1; // Set Include To Be Disabled after it allows, one time.
+                        Subject_Status[Subject_Selector - 1] = Subject_Parameters[0];       // Set Status of the Element In Line to Include.
+                        Final_Comp_SelectedSubjects += 1;                                   // Increment as Included by Adding One to Selected Subjects.
+                        Final_Comp_SemUnits += Subject_Units[Subject_Selector - 1];         // Add Value Corresponding to Array in this variable.
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i | '%s' is now included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i | '%s' is already included!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
@@ -2739,563 +2899,624 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
             {
                 SetCursorCoord_XY(20, 48);
                 printf("\xDD WARNING \xAF You have inputted a wrong number! Out of Choice.Bonds! Reinitialing Function...");
-                //Sleep(1750);
+                Sleep(1500);
                 continue;
             }
         }
         else if (Option_Selector == 2)
         {
+            //Part of Opposite of Included. Excluded Functions
             SetCursorCoord_XY(20, 47);
             printf("\xC8\xAF \xDD QUESTION \xDDPlease select the subject number to be excluded \xAF ");
             scanf("%d", &Subject_Selector);
             if (Subject_Selector == 1)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 2)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 3)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 4)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 5)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 6)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 7)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 8)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 9)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 10)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 11)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
             }
             else if (Subject_Selector == 12)
-            {
+            { // Same Scenario, Check if Nulifier, Nulifies this option, if it is we are unable to select this one.
                 if (Nullifier_Parameter[Subject_Selector - 1] == 1)
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xC8\xAF \xDD QUESTION \xDD You cannot select this option!");
-                    //Sleep(1000);
+                    Sleep(1000);
                     continue;
                 }
                 else
-                {
+                { // Checks if AntiDuplicate_Exclude has been set to 0, if it is we are allowed to exclude, else not.
                     if (Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] == 0)
                     {
-                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1;
-                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0;
+                        Subject_UnitsGuard_AntiDuplicate_Exclude[Subject_Selector - 1] = 1; // Set Exclude to be Disabled to use.
+                        Subject_UnitsGuard_AntiDuplicate_Include[Subject_Selector - 1] = 0; // Set Include to be Used again.
                         if (Final_Comp_SelectedSubjects == 0)
                         {
+                            //Conditional Note: This Variable Below is not unsigned, in any case, it will probably go to -1. to fix this, we added if it was already zero then make it really zero without decrementing but declare it as zero.
                             Final_Comp_SelectedSubjects = 0;
                         }
                         else
                         {
+                            // If it wasn't zero then we are allowed to Decrement it by 1.
                             Final_Comp_SelectedSubjects -= 1;
                         }
                         if (Final_Comp_SemUnits == 0)
                         {
+                            //Same Conditionals Note as Selected Subjects
                             Final_Comp_SemUnits = 0;
                         }
                         else
                         {
                             Final_Comp_SemUnits -= Subject_Units[Subject_Selector - 1];
                         }
+                        //Set Status to Excluded as it was excluded
                         Subject_Status[Subject_Selector - 1] = Subject_Parameters[1];
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD SUCCESS \xDD Subject #%i \xDD '%s' is now excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                     else
                     {
+                        // Effected when AntiGuard_Exclude was set to 1
                         SetCursorCoord_XY(20, 48);
                         printf("\xC8\xAF \xDD ERROR \xDD Subject #%i \xDD '%s' is already excluded!", Subject_Selector, Subject_CodeName[Subject_Selector - 1]);
-                        //Sleep(500);
+                        Sleep(500);
                         continue;
                     }
                 }
@@ -3304,15 +3525,19 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
         else if (Option_Selector == 3)
         {
             fflush(stdin);
+            // Final Stage Part...
             while (1)
             {
                 SetCursorCoord_XY(20, 47);
                 printf("\xDD QUESTION \xAF Are you sure that you picked the subjects that you wanted to take???");
                 SetCursorCoord_XY(20, 48);
                 printf("\xDD Pick your choice \xAF [Y]es or [N]o \xAF ");
+                // We never used switch case here, there are lots of conditional to be checkd as it was not meant for checking if value is 'y' or not.
                 Final_Decision_Selector = getche();
                 if ((Final_Decision_Selector == 'Y') || (Final_Decision_Selector == 'y'))
                 {
+                    // If user wants to process the data then check for Subject_Status by incrementing elements if some parts are valid to Exclude and Unknown
+                    // They are going to be used for comparison if those meet the requirements.
                     for (Subject_Selection_Checker = 0; Subject_Selection_Checker < Subject_ExpectedCandidates; Subject_Selection_Checker++)
                     {
                         if (Subject_Status[Subject_Selection_Checker] == "Unknown")
@@ -3324,26 +3549,30 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
                             Subject_Receive_Exclude_Count += 1;
                         }
                     }
+                    // If Subjects are all excluded and equal to ExpectedCandidates, show an error.
                     if (Subject_Receive_Exclude_Count == Subject_ExpectedCandidates)
                     {
                         SetCursorCoord_XY(20, 48);
+                        // Definitely not allowed, as you are not trying to enroll at this point...
                         printf("\xDD ERROR \xAF You cannot set all subject/s to be 'Exclude'. Are you trying to enroll without subjects!?");
-                        //Sleep(5000);
+                        Sleep(5000);
                         break;
                     }
+                    // This concludes that Unknown Count was higher and as per said, They are not allowed to enroll with Unknown Status, except for Nulified Status.
                     else if (Subject_Receive_Exclude_Count < Subject_Receive_Unknown_Count)
                     {
 
                         SetCursorCoord_XY(20, 48);
                         printf("\xDD ERROR \xAF You cannot leave subject/s to be 'Unknown'. Set them to exclude if you don't want to include it.");
-                        //Sleep(3000);
+                        Sleep(1500);
                         break;
                     }
+                    // Multiple Checks, If Exclude or Unknown is not equal to Expected Candidates, it is then valid pr Exc;ude and Unknown is Zero
                     else if ((Subject_Receive_Exclude_Count || Subject_Receive_Unknown_Count != Subject_ExpectedCandidates) || (Subject_Receive_Exclude_Count || Subject_Receive_Unknown_Count == 0))
                     {
                         SetCursorCoord_XY(20, 50);
                         printf("\xDD INFO \xAF Processing Data...");
-                        //Transport_PassElementTrue = 0;
+                        // Transport Data by Using another Array Element Size Place holder...
                         for (Transport_Element = 0; Transport_Element <= Subject_ExpectedCandidates; Transport_Element++)
                         {
                             if (strcmp(Subject_Status[Transport_Element], Subject_Parameters[0]) == 0)
@@ -3355,36 +3584,32 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
                                 ERLM_DataReceiver.Subject_Units_Receiver[Transport_Element] = Subject_Units[Transport_Element];
                                 ERLM_DataReceiver.Subject_Candidates = Subject_ExpectedCandidates;
                                 ERLM_DataReceiver.Subjects_Selected = Final_Comp_SelectedSubjects;
-                                //Transport_PassElementTrue++;
                             }
                         }
                         SetCursorCoord_XY(20, 51);
                         printf("\xDD PROCESS \xAF Moving Foward in the Next Step...");
-                        //Sleep(3000);
+                        Sleep(1500);
                         Func_Final_Overview(Final_Comp_SelectedSubjects, Subject_ExpectedCandidates);
                         break;
                     }
                 }
+                // When going back, data is still binded...
                 else if ((Final_Decision_Selector == 'N') || (Final_Decision_Selector == 'n'))
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xDD PROCESS \xAF Going back to Subject Selection...");
-                    //Sleep(1500);
+                    Sleep(1500);
                     break;
                 }
                 else
                 {
                     SetCursorCoord_XY(20, 48);
                     printf("\xDD ERROR \xAF Sorry, I don't understand that...");
-                    //Sleep(1500);
+                    Sleep(1500);
                     break;
                 }
             }
             continue;
-        }
-        else if (Option_Selector == 7)
-        {
-            Func_NewStdnt_CourseReg();
         }
         else if (Option_Selector == 4)
         {
@@ -3392,16 +3617,17 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
             printf("\xDD PROCESS \xAF Including All Available Subjects...");
             Final_Comp_SelectedSubjects = 0;
             Final_Comp_SemUnits = 0;
+            // Use Another Array Element Holder and Read and Write from 0 to 11th Element
             while (Sbj_Stats_Increment < Subject_ExpectedCandidates)
             {
-                Subject_Status[Sbj_Stats_Increment] = Subject_Parameters[0];
-                Final_Comp_SelectedSubjects += 1;
-                Final_Comp_SemUnits += Subject_Units[Sbj_Stats_Increment];
-                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Increment] = 1;
-                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Increment] = 0;
-                Sbj_Stats_Increment++;
+                Subject_Status[Sbj_Stats_Increment] = Subject_Parameters[0];       // Set All to Include
+                Final_Comp_SelectedSubjects += 1;                                  // Set All as Included, excluding nulified
+                Final_Comp_SemUnits += Subject_Units[Sbj_Stats_Increment];         // Calculate all units
+                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Increment] = 1; // Set Include Disabled to NonNulfied Elements
+                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Increment] = 0; // Set Excluded Enabled to All
+                Sbj_Stats_Increment++;                                             // Increase Per Loop
             }
-            //Sleep(1500);
+            Sleep(1500);
             continue;
         }
         else if (Option_Selector == 5)
@@ -3412,12 +3638,12 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
             Final_Comp_SemUnits = 0;
             while (Sbj_Stats_Decrement < Subject_ExpectedCandidates)
             {
-                Subject_Status[Sbj_Stats_Decrement] = Subject_Parameters[1];
-                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Decrement] = 0;
-                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement] = 0;
-                Sbj_Stats_Decrement++;
+                Subject_Status[Sbj_Stats_Decrement] = Subject_Parameters[1];       // Set All to Exclude
+                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Decrement] = 0; // Set Include Disabled to NonNulfied Elements
+                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement] = 0; // Set Excluded Enabled to All
+                Sbj_Stats_Decrement++;                                             // Increase Per Loop
             }
-            //Sleep(1500);
+            Sleep(1500);
             continue;
         }
         else if (Option_Selector == 6)
@@ -3428,32 +3654,35 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
             Final_Comp_SemUnits = 0;
             while (Sbj_Stats_Decrement < Subject_ExpectedCandidates)
             {
-                Subject_Status[Sbj_Stats_Decrement] = "Unknown";
-                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Decrement] = 0;
-                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement] = 0;
+                Subject_Status[Sbj_Stats_Decrement] = "Unknown";                   // Restore the following values by Iteration
+                Subject_UnitsGuard_AntiDuplicate_Include[Sbj_Stats_Decrement] = 0; // Restore the following values by Iteration
+                Subject_UnitsGuard_AntiDuplicate_Exclude[Sbj_Stats_Decrement] = 0; // Restore the following values by Iteration
                 Sbj_Stats_Decrement++;
             }
-            //Sleep(1500);
+            Sleep(1500);
             continue;
         }
         else
         {
             SetCursorCoord_XY(20, 47);
             printf("\xDD WARNING \xAF The button you pressed might be wrong. We can't go non-linear!");
-            Sleep(1750);
+            Sleep(1500);
             fflush(stdin);
             continue;
         }
     }
 }
-//Continue Function...
 
+/*
+Func_Final_Overview, Passed with Two Variables Containing Total of Subjects Passed with INCLUDE Status
+*/
 void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates)
 {
     SetConsoleTitle(FUNCTION_STEP4);
     char *StudentType;
     char *StatusTake;
     int Subject_Pass_Reader = 0, Subject_Pass_Reader_Counter = 1, SetCoordinates_Dependent = 13;
+    // Set Status of a Student and Take Type by Calculating Passed Array Values.
     if (Final_Comp_SelectedSubjects < Subject_ExpectedCandidates)
     {
         StudentType = "Irregular Student";
@@ -3485,18 +3714,20 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     printf("\xBA \xAF Here are the list of your subjects that you will be taking with.\t\t\t\t           \xBA");
     SetCursorCoord_XY(30, 12);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
+    // Using <= Would result to checking 11 or more or max array size which results to Segmentation Fault
     while (Subject_Pass_Reader < Subject_ExpectedCandidates)
     {
+        // Subject Contains at Max 12, there are parts that are null midway of 0-11 element, it was being skipped when values are NULL.
         if ((ERLM_DataReceiver.Subject_CodeName_Receiver[Subject_Pass_Reader] == NULL) || (ERLM_DataReceiver.Subject_FullName_Receiver[Subject_Pass_Reader] == NULL) || (ERLM_DataReceiver.Subject_LinearTime_Receiver[Subject_Pass_Reader] == NULL))
         {
-            Subject_Pass_Reader++;
+            Subject_Pass_Reader++; // Increments To Increase the Array Element Size
             continue;
         }
         else
         {
-            SetCursorCoord_XY(30, SetCoordinates_Dependent);
+            SetCursorCoord_XY(30, SetCoordinates_Dependent); // SetCoordinates_Dependent contains Y Values, it was intended to be like this for dynamic graphics incrementation.
             if (Subject_Pass_Reader_Counter >= 10)
-            {
+            { // There are nothing special in this case, except for formatting, it breaks design with space.
                 printf("\xBA  [ %d ]   %-10s -  %-51s \xDD %-18s\xDD     %-5i\xBA", Subject_Pass_Reader_Counter, ERLM_DataReceiver.Subject_CodeName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_FullName_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_LinearTime_Receiver[Subject_Pass_Reader], ERLM_DataReceiver.Subject_Units_Receiver[Subject_Pass_Reader]);
                 Subject_Pass_Reader++;
                 Subject_Pass_Reader_Counter++;
@@ -3524,6 +3755,7 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
+    //Shows Status
     printf("\xDD Student Type \xAF %s\t\xDD\t Subjects Enrolled \xAF %d / %d => %-28s", StudentType, Subject_Pass_Reader, Subject_ExpectedCandidates, StatusTake);
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
@@ -3533,17 +3765,20 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
     printf("\xAF \xDD TAKE NOTE \xDD Here are the last information to be reviewed, press any key to continue.");
-    getch();
+    getch(); // No actions needed except press any key, it was just an overview...
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
     printf("\xAF \xDD PROCESS \xDD Proceeding to Scholarship Prompt and Mode of Payment...");
-    //Sleep(1750);
+    Sleep(1500);
     Func_Stdnt_ScholarshipCheck();
 }
+/*
+Func_Stdnt_ScholarshipCheck -> Checks Grades for posibility of admitting in a scholarship
+*/
 void Func_Stdnt_ScholarshipCheck()
 {
-    char Confirmation;
+    // Initialize Struct Members that is Integer to avoid Garble Data to Be Added On Potential User Value to be Input.
     OnProcess_StudentData.GradeLowest = 0, OnProcess_StudentData.GradeHighest = 0, OnProcess_StudentData.GradeGeneralAverage_LastSem = 0;
     //char *OnProcess_StudentData.Granted_ScholarshipStats[0], *Granted_ScholarshipStats;
     system("CLS");
@@ -3562,17 +3797,17 @@ void Func_Stdnt_ScholarshipCheck()
     SetCursorCoord_XY(30, 10);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
     SetCursorCoord_XY(30, 11);
-    printf("\xBA To get a scholarship discount, your grades must met the following\t\t\t\t\t   \xBA");
+    printf("\xBA To get a scholarship discount, your grades must meet the following\t\t\t\t\t   \xBA");
     SetCursorCoord_XY(30, 12);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
     SetCursorCoord_XY(30, 13);
-    printf("\xBA \xAF 84.00%% - 85.99%% General Avg with Subject Minimum Grade of 82%% \t\t\t\t\t   \xBA");
+    printf("\xBA \xAF 84.00%% - 85.00%% General Avg with Subject Minimum Grade of 83%% \t\t\t\t\t   \xBA");
     SetCursorCoord_XY(30, 14);
-    printf("\xBA \xAF 86.00%% - 87.99%% General Avg with Subject Minimum Grade of 84%% \t\t\t\t\t   \xBA");
+    printf("\xBA \xAF 85.00%% - 86.00%% General Avg with Subject Minimum Grade of 85%% \t\t\t\t\t   \xBA");
     SetCursorCoord_XY(30, 15);
-    printf("\xBA \xAF 88.00%% - 88.99%% General Avg with Subject Minimum Grade of 86%% \t\t\t\t\t   \xBA");
+    printf("\xBA \xAF 86.00%% - 87.00%% General Avg with Subject Minimum Grade of 87%% \t\t\t\t\t   \xBA");
     SetCursorCoord_XY(30, 16);
-    printf("\xBA \xAF 89.00%% - 89.99%% General Avg with Subject Minimum Grade of 88%% \t\t\t\t\t   \xBA");
+    printf("\xBA \xAF 87.00%% - 99.00%% General Avg with Subject Minimum Grade of 88%% \t\t\t\t\t   \xBA");
     SetCursorCoord_XY(30, 17);
     printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t           \xBA");
     SetCursorCoord_XY(30, 18);
@@ -3583,12 +3818,13 @@ void Func_Stdnt_ScholarshipCheck()
     printf("\xAF \xDD QUESTION #1 \xDD What is your general average grade from your last semester?");
     SetCursorCoord_XY(30, 23);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-
-    if (scanf("%2d", &OnProcess_StudentData.GradeGeneralAverage_LastSem) != 1)
+    // here, checks scanf if data given is valid from the format specifier except with limiter.
+    // This is a work around when user attempts to add a letter.
+    if (scanf("%3d", &OnProcess_StudentData.GradeGeneralAverage_LastSem) != 1)
     {
         SetCursorCoord_XY(30, 25);
         printf("\xAF \xDD ERROR \xDD You attempted to add letter! Reinitializing...");
-        Sleep(1750);
+        Sleep(1500);
         fflush(stdin); // Added Stream Input Flush to Avoid Unexpectional Looping due to Letters are being converted to Number
         Func_Stdnt_ScholarshipCheck();
     }
@@ -3597,56 +3833,63 @@ void Func_Stdnt_ScholarshipCheck()
     printf("\xAF \xDD QUESTION #2 \xDD What is your lowest grade on any subject?");
     SetCursorCoord_XY(30, 26);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-    if (scanf("%2d", &OnProcess_StudentData.GradeLowest) != 1)
+    // here, checks scanf if data given is valid from the format specifier except with limiter.
+    // This is a work around when user attempts to add a letter.
+    if (scanf("%3d", &OnProcess_StudentData.GradeLowest) != 1)
     {
         SetCursorCoord_XY(30, 28);
         printf("\xAF \xDD ERROR \xDD You attempted to add letter! Reinitializing...");
-        Sleep(1750);
-        fflush(stdin);
+        Sleep(1500);
+        fflush(stdin); // Added Stream Input Flush to Avoid Unexpectional Looping due to Letters are being converted to Number
         Func_Stdnt_ScholarshipCheck();
     }
-    fflush(stdin);
+    fflush(stdin); // Added Stream Input Flush to Avoid Unexpectional Looping due to Letters are being converted to Number
     SetCursorCoord_XY(30, 28);
     printf("\xAF \xDD QUESTION #3 \xDD What is your highest grade on any subject?");
     SetCursorCoord_XY(30, 29);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-    if (scanf("%2d", &OnProcess_StudentData.GradeHighest) != 1)
+    // here, checks scanf if data given is valid from the format specifier except with limiter.
+    // This is a work around when user attempts to add a letter.
+    if (scanf("%d", &OnProcess_StudentData.GradeHighest) != 1)
     {
         SetCursorCoord_XY(30, 31);
         printf("\xAF \xDD ERROR \xDD You attempted to add letter! Reinitializing...");
-        Sleep(1750);
-        fflush(stdin);
+        Sleep(1500);
+        fflush(stdin); // Added Stream Input Flush to Avoid Unexpectional Looping due to Letters are being converted to Number
         Func_Stdnt_ScholarshipCheck();
     }
-    fflush(stdin);
+    fflush(stdin); // Added Stream Input Flush to Avoid Unexpectional Looping due to Letters are being converted to Number
 
     if (OnProcess_StudentData.GradeLowest >= 82 && OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84)
     {
         SetCursorCoord_XY(30, 31);
         printf("\xAF \xDD INFO \xDD Congratulations! You are eligible for scholarship!");
-        //Sleep(1500);
-        if ((OnProcess_StudentData.GradeLowest >= 82) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 86))
+        Sleep(1500);
+        /*
+        Unresolvable Bug: When Lower Grade is Higher and Gen Avg is Lower, Prompt oF Scholarship ecist but does not display of eligibility.
+        */
+        if ((OnProcess_StudentData.GradeLowest >= 82) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84))
         {
             strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "50%% Discount");
             strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "50%% Discount on Tuition Fee for one (1) semester | Entrance Scholarship");
             SetCursorCoord_XY(30, 32);
             printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
         }
-        else if ((OnProcess_StudentData.GradeLowest >= 84) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 86 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 88))
+        if ((OnProcess_StudentData.GradeLowest >= 84) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 85))
         {
             SetCursorCoord_XY(30, 32);
             strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "75%% Discount");
             strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "75%% Discount on Tuition Fee for one (1) semester | Entrance Scholarship");
             printf("\xA7 \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
         }
-        else if ((OnProcess_StudentData.GradeLowest >= 86) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 88 && OnProcess_StudentData.GradeGeneralAverage_LastSem <= 89))
+        if ((OnProcess_StudentData.GradeLowest >= 86) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 86))
         {
             SetCursorCoord_XY(30, 32);
             strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "100%% Discount");
             strcpy(OnProcess_StudentData.Granted_ScholarshipDetails, "Free tuition fee for one (1) semester | Entrance Scholarship");
             printf("\xAF \xDD ELIGIBILITY \xDD You are eligible for %s", OnProcess_StudentData.Granted_ScholarshipDetails);
         }
-        else if ((OnProcess_StudentData.GradeLowest >= 88) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 89))
+        if ((OnProcess_StudentData.GradeLowest >= 88) && (OnProcess_StudentData.GradeGeneralAverage_LastSem >= 87))
         {
             SetCursorCoord_XY(30, 32);
             strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "100%% + MISC.");
@@ -3660,45 +3903,50 @@ void Func_Stdnt_ScholarshipCheck()
         printf("\xDD INFO \xAF Sorry, you are not allowed to take scholarship... But your encoded grade is still recorded...");
         SetCursorCoord_XY(30, 34);
         printf("\xDD INFO \xAF Proceeding to Mode of Payment...");
-        //Sleep(1750);
+        Sleep(1500);
         Func_Mode_Of_Payment();
     }
-    //Sleep(1000);
+    Sleep(1000);
     while (1)
     {
+        /*
+        In this case, no strcpy is being attempted to do so except for case 'n' which sets to NULL for declining scholarship status.
+        OnProcess_StudentData.Granted_ScholarshipDetails will then be parsed when user selects yes.
+        */
         SetCursorCoord_XY(30, 34);
         printf("\xAF \xDD FINAL QUESTION \xDD Do you want to apply for a scholarship? [Y or N] \xAF ");
-        switch (Confirmation = getche())
+        switch (getche())
         {
         case 'Y':
         case 'y': //Falls Through
             SetCursorCoord_XY(30, 35);
             printf("\xDD INFO \xAF Data Acquired. Good to know :). Proceeding to Mode of Payment...");
-            //Sleep(1500);
-            //Func_Stdnt_ScholarshipCheck();
+            Sleep(1500);
             Func_Mode_Of_Payment();
         case 'N':
         case 'n': // Falls Through
             SetCursorCoord_XY(30, 35);
             printf("\xDD INFO \xAF Scholarship Grant Aborted :(. Proceeding to Mode of Payment...");
             strcpy(OnProcess_StudentData.Granted_ScholarshipStats, "NULL");
-            //Sleep(1500);
-            Func_Mode_Of_Payment();
+            Sleep(1500);
+            Func_Stdnt_ScholarshipCheck();
             break;
         default:
             SetCursorCoord_XY(30, 35);
             printf("\xDD ERROR \xAF Sorry, I don't understand that...");
-            //Sleep(1500);
+            Sleep(1500);
             continue;
         }
     }
 }
 
+/*
+Func_Mode_Of_Payment -> Nothing Special in this Function
+*/
 void Func_Mode_Of_Payment()
 {
     while (1)
     {
-        char Selection;
         system("CLS");
         SetCursorCoord_XY(30, 3);
         printf("\xC9\xCD\xCD \xDD CURRENT PROGRESS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
@@ -3726,33 +3974,38 @@ void Func_Mode_Of_Payment()
         printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
         SetCursorCoord_XY(30, 17);
         printf("\xC8\xAF \xDD INFO \xDD Press a key that corresponds your decision \xAF ");
-        switch (Selection = getche())
+        switch (getche())
         {
         case '1':
             strcpy(OnProcess_StudentData.PaymentMethod, "Cash");
             SetCursorCoord_XY(30, 19);
             printf("\xAF \xDD SUCCESS \xAF Selected %s as a Mode of Payment. Proceeding to Final Overview...", OnProcess_StudentData.PaymentMethod);
-            //Sleep(1750);
+            Sleep(1500);
             Func_PrintDocument_FinalTranscript();
         case '2':
             strcpy(OnProcess_StudentData.PaymentMethod, "Installment");
             SetCursorCoord_XY(30, 19);
             printf("\xAF \xDD SUCCESS \xAF Selected %s as a Mode of Payment. Proceeding to Final Overview...", OnProcess_StudentData.PaymentMethod);
-            //Sleep(1750);
+            Sleep(1500);
             Func_PrintDocument_FinalTranscript();
         default:
             SetCursorCoord_XY(30, 19);
             printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-            //Sleep(1750);
+            Sleep(1500);
             continue;
         }
     }
 }
+/*
+Func_PrintDocument_FinalTranscript -> Shows Final Output...
+Also runs Dynamic Data Creation Cateogry Function
+*/
 void Func_PrintDocument_FinalTranscript()
 {
     //Create an Student ID for New People
     int SetCoordinates_Dependent = 22, SubjectCount = 0, SubjectNumber = 1, TotalCreditUnits = 0, Reprint_SubjectCount = 0, Reprint_SubjectNumber = 1;
     short unsigned int exist = 0;
+    // Set Static Fees, Based from Project Leader's Registration Form
     float TuitionFee, LaboratoryFee = 7225.85, AthleticsFee = 761.20,
                       AudioVisualFee = 133.60, ClassroomEnergyFee = 1100, ComputerFee = 2650.75,
                       CulturalnActivityFee = 48.30, DevFee = 830.45, EnergExtFee = 890.63,
@@ -3760,43 +4013,45 @@ void Func_PrintDocument_FinalTranscript()
                       InsuranceFee = 12.00, InternetFee = 105.30, LibraryFee = 1520.35,
                       MedicalFee = 510.20, RedCrossFee = 1, StudentCouncilFee = 60,
                       TestPaperFee = 266, ScholarshipDiscount = 0, TotalFee = 0;
-    SYSTEMTIME GetTimePrinted;
-    GetLocalTime(&GetTimePrinted);
-    FILE *FileCreation_StudentCopy;
-    if (OnProcess_StudentData.stdnt_StudentID == 0)
+    SYSTEMTIME GetTimePrinted;                      // Create SPECIAL Variable to Print from the Enrollment Form of Date of Enrolled Process
+    GetLocalTime(&GetTimePrinted);                  // Reference to SYSTEMTIME
+    FILE *FileCreation_StudentCopy;                 // Create FILE Pointer to use for File Execution
+    if (OnProcess_StudentData.stdnt_StudentID == 0) // If student is a new student, this was already set to 0 hence, will run this function...
     {
         Increment_StudentID();
     }
     else
     {
+        // REFERENCE FUNCTION TO DELETE ENTRY AT MANAGEMENT MODE
         FILE *Database_Enrollment, *Database_Enrollment_Temporary;
         Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb+");
         Database_Enrollment_Temporary = fopen("LM KeyDatabase//TempMaster.lmdat", "wb+");
-        //Get Data Now
+        //The data that exist from the old student will be then override, hence it will be excluded from the temporary file
         while (1)
         {
+            // Read Elements by Line
             fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
-            if (feof(Database_Enrollment))
+            if (feof(Database_Enrollment)) // If file reach at end of line, break the loop
             {
                 break;
             }
-            if (OnProcess_StudentData.stdnt_StudentID == DataChange.Generated_StudentID)
+            if (OnProcess_StudentData.stdnt_StudentID == DataChange.Generated_StudentID) // If Old Student is exact to the Database then Increment Value of Exist.
             {
                 exist++;
             }
             else
             {
-                fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
+                fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary); // Write data to temporary for non-equal values to Student ID.
             }
         }
-        fclose(Database_Enrollment_Temporary);
-        fclose(Database_Enrollment);
+        fclose(Database_Enrollment_Temporary); // Close DataPointers and run next process.
+        fclose(Database_Enrollment);           // Close DataPointers and run next process.
         if (exist >= 1)
         {
             Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "wb+");
             Database_Enrollment_Temporary = fopen("LM KeyDatabase//TempMaster.lmdat", "rb+");
             while (1)
-            {
+            { // Read Temporary File and Overwrite Main File
                 fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment_Temporary);
                 if (feof(Database_Enrollment_Temporary))
                 {
@@ -3808,7 +4063,7 @@ void Func_PrintDocument_FinalTranscript()
             fclose(Database_Enrollment_Temporary);
         }
     }
-    GenerateUserPass_withGenerateFileName();
+    GenerateUserPass_withGenerateFileName(); // GenerateUser Pass and File Name Stored in TWO Folders
     FileCreation_StudentCopy = fopen(OnProcess_StudentData.FileName_Coordinate, "w+");
     system("CLS");
     SetCursorCoord_XY(20, 3);
@@ -3871,7 +4126,8 @@ void Func_PrintDocument_FinalTranscript()
         }
     }
 
-    TuitionFee = SubjectCount * 200 + 21500;
+    TuitionFee = SubjectCount * 200 + 21500; // Set Base of Tuition Fee Starting Point
+    // Conditions that parse given by the system.
     if (strcmp(OnProcess_StudentData.Granted_ScholarshipStats, "50%% Discount") == 0)
     {
         ScholarshipDiscount = TuitionFee * 0.5;
@@ -3912,6 +4168,7 @@ void Func_PrintDocument_FinalTranscript()
     {
         ScholarshipDiscount = 0;
     }
+    // Add All Values when Parsing is Done.
     TotalFee = (TuitionFee + LaboratoryFee + AthleticsFee +
                 AudioVisualFee + ClassroomEnergyFee + ComputerFee +
                 CulturalnActivityFee + DevFee + EnergExtFee +
@@ -3988,7 +4245,7 @@ void Func_PrintDocument_FinalTranscript()
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
     printf("\xAF \xDD INFO \xDD Here's the full overview of your registration form containing everything you need to enroll...");
-    //Sleep(5000);
+    Sleep(5000);
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(20, SetCoordinates_Dependent);
     SetCoordinates_Dependent++;
@@ -4015,8 +4272,11 @@ void Func_PrintDocument_FinalTranscript()
     printf("\xFE\xCD\xCD \xDD PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCursorCoord_XY(30, 11);
     printf("\xAF \xDD PROCESS FILE #1 \xDD Saving Data for Enrollee's Completed Registration Form...");
-    //Progress File to Enrollee Registration Form
-    setbuf(FileCreation_StudentCopy, NULL);
+    //Process File to Enrollee Registration Form
+    setbuf(FileCreation_StudentCopy, NULL); // setbuf use to set how data is being buffered
+    /*
+    The following example below shows an encoded special characters without needing \xAF, this will be garblish on non-UTF-8.
+    */
     fprintf(FileCreation_StudentCopy, "■══  STUDENTS REGISTRATION FORM - STUDENTS COPY ▌ ══════════════════════■\n\n");
     fprintf(FileCreation_StudentCopy, "▌ %-10s » %-10ld ▌ %-7s » %-5s\n", "Student Number", OnProcess_StudentData.stdnt_StudentID, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
     fprintf(FileCreation_StudentCopy, "▌ %-10s » %-s, %s %-50s ▌ %-10s » %-5s, %-5s\n", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_GName, OnProcess_StudentData.stdnt_MName, "Year Level and Semester", OnProcess_StudentData.Course_YearChoice, OnProcess_StudentData.Course_SemSelection);
@@ -4025,6 +4285,7 @@ void Func_PrintDocument_FinalTranscript()
     fprintf(FileCreation_StudentCopy, "■══ ▌ SUBJECT INFORMATION ▌ ════════════════════════════════════════════■\n\n");
     SubjectCount = 0;
     SubjectNumber = 1;
+    // Encode ALl Subjects, referenced to this same function to OverView Function.
     while (SubjectCount < ERLM_DataReceiver.Subject_Candidates)
     {
         if ((ERLM_DataReceiver.Subject_CodeName_Receiver[SubjectCount] == NULL) || (ERLM_DataReceiver.Subject_FullName_Receiver[SubjectCount] == NULL) || (ERLM_DataReceiver.Subject_LinearTime_Receiver[SubjectCount] == NULL))
@@ -4068,7 +4329,7 @@ void Func_PrintDocument_FinalTranscript()
     fprintf(FileCreation_StudentCopy, "▌ » Printed on %02d/%02d/%d - %02d:%02d:%02d\n\n", GetTimePrinted.wMonth, GetTimePrinted.wDay, GetTimePrinted.wYear, GetTimePrinted.wHour, GetTimePrinted.wMinute, GetTimePrinted.wSecond);
     fprintf(FileCreation_StudentCopy, "■═══════════════════════════════════════════════════════════════════════■");
     fclose(FileCreation_StudentCopy);
-    GetDataEnrolleeInformation();
+    GetDataEnrolleeInformation(); // Check Comment on the function from the side.
     SetCursorCoord_XY(30, 12);
     printf("\xAF \xDD SAVED \xAF FILENAME %s\n", OnProcess_StudentData.FileName_Coordinate);
     SetCursorCoord_XY(30, 14);
@@ -4086,15 +4347,15 @@ void Func_PrintDocument_FinalTranscript()
 }
 
 void GetDataEnrolleeInformation()
-{
+{ // This Function was created for transfering data to another file that contains student information. Those informations that are filled in step 1 is being taken at this point.
     FILE *FileCreation_StudentInformation;
     FileCreation_StudentInformation = fopen(OnProcess_StudentData.FileName_DataInformation, "w+");
     fprintf(FileCreation_StudentInformation, "Student Information of %s, %s %s\n", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_MName, OnProcess_StudentData.stdnt_GName);
     fprintf(FileCreation_StudentInformation, "Enrollee's Name » %s, %s %s\n", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_MName, OnProcess_StudentData.stdnt_GName);
     fprintf(FileCreation_StudentInformation, "Enrollee's Name of Father » %s\n", OnProcess_StudentData.stdnt_FathersName);
     fprintf(FileCreation_StudentInformation, "Enrollee's Current Occupation of Father » %s\n", OnProcess_StudentData.stdnt_FathersInfoJob);
-    fprintf(FileCreation_StudentInformation, "Enrollee's Contact Number of Father » %s", OnProcess_StudentData.stdnt_FathersInfoContact);
-    fprintf(FileCreation_StudentInformation, "Enrollee's Name of Mother » %s", OnProcess_StudentData.stdnt_MothersName);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Contact Number of Father » %s\n", OnProcess_StudentData.stdnt_FathersInfoContact);
+    fprintf(FileCreation_StudentInformation, "Enrollee's Name of Mother » %s\n", OnProcess_StudentData.stdnt_MothersName);
     fprintf(FileCreation_StudentInformation, "Enrollee's Current Occupation of Mother » %s\n", OnProcess_StudentData.stdnt_MothersInfoJob);
     fprintf(FileCreation_StudentInformation, "Enrollee's Contact Number of Mother » %s\n", OnProcess_StudentData.stdnt_MothersInfoContact);
     fprintf(FileCreation_StudentInformation, "Enrollee's Gender » %s\n", OnProcess_StudentData.stdnt_Gender);
@@ -4114,6 +4375,7 @@ void GetDataEnrolleeInformation()
     FILE *Database_Enrollment;
     Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "ab");
     // Did strcpy to add the following below in struct and save to a file containing login credientials
+    // This Was included to this function even the function is misleading... To sort out that this one will be on database...
     strcpy(DataChange.stdnt_GName, OnProcess_StudentData.stdnt_GName);
     strcpy(DataChange.stdnt_MName, OnProcess_StudentData.stdnt_MName);
     strcpy(DataChange.stdnt_LName, OnProcess_StudentData.stdnt_LName);
@@ -4141,12 +4403,11 @@ void GenerateUserPass_withGenerateFileName()
     char *PasswordSeperate = "_";
     char *FileNameSeperate = "-";
     // Code for Generating UserName
-    char UserGenerate_Container[MAX_PATH] = {0},
-         PasswordGenerate_Container[MAX_PATH] = {0},
-         FileName_Container[MAX_PATH] = {0},
-         Acquired_String_StudentID[MAX_PATH] = {0},
-         DataInfo_Container[MAX_PATH] = {0};
-    //Increment_StudentID();
+    char UserGenerate_Container[MAX_PATH] = {0},    // Initialize Array to Zero or Empty
+        PasswordGenerate_Container[MAX_PATH] = {0}, // Initialize Array to Zero or Empty
+        FileName_Container[MAX_PATH] = {0},         // Initialize Array to Zero or Empty
+        Acquired_String_StudentID[MAX_PATH] = {0},  // Initialize Array to Zero or Empty
+        DataInfo_Container[MAX_PATH] = {0};         // Initialize Array to Zero or Empty
     //Generate Username from BaseBranch + 2 Letters of GivenName + Surname
     // On This Function, Use STRNCAT To UserGenerate_Container for BaseBranch, means concatenate BaseBranch Value to UserGenerate_Container
     strncat(UserGenerate_Container, BaseBranch, sizeof(BaseBranch));
@@ -4155,29 +4416,34 @@ void GenerateUserPass_withGenerateFileName()
     strncat(UserGenerate_Container, OnProcess_StudentData.stdnt_LName, sizeof(OnProcess_StudentData.stdnt_LName));
     strncpy(OnProcess_StudentData.Generated_stdnt_NewUser, UserGenerate_Container, sizeof(OnProcess_StudentData.Generated_stdnt_NewUser));
 
-    GetLocalTime(&PasswordBaseDate);
+    GetLocalTime(&PasswordBaseDate); // Initialize Time
 
-    itoa(OnProcess_StudentData.stdnt_StudentID, Acquired_String_StudentID, 10);
+    itoa(OnProcess_StudentData.stdnt_StudentID, Acquired_String_StudentID, 10); // Convert int OnProcess_StudentData.stdnt_StudentID to Char for concatenation...
     strncat(PasswordGenerate_Container, Acquired_String_StudentID, sizeof(Acquired_String_StudentID));
     strncat(PasswordGenerate_Container, PasswordSeperate, 1);
+    //Concatenate the following data with data size set
     strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_MName, sizeof(OnProcess_StudentData.stdnt_MName));
     strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_GName, 3);
     strncat(PasswordGenerate_Container, OnProcess_StudentData.stdnt_LName, 3);
+    // After concatenation, transport data to OnProcess_StudentData.Generated_stdnt_NewPass
     strncpy(OnProcess_StudentData.Generated_stdnt_NewPass, PasswordGenerate_Container, sizeof(OnProcess_StudentData.Generated_stdnt_NewPass));
 
     //Create a File Name for Registration Form
     // We have to concatenate the directory first to seperate files of output
     strncat(FileName_Container, "Student_RegForm//", sizeof("Student_RegForm//"));
-    // We have to concatenate the directory first to seperate files of output
+    // Concatenate following data with the size of corresponding characters
     strncat(FileName_Container, Acquired_String_StudentID, sizeof(Acquired_String_StudentID));
     strncat(FileName_Container, FileNameSeperate, sizeof(FileNameSeperate));
     strncat(FileName_Container, OnProcess_StudentData.stdnt_GName, sizeof(OnProcess_StudentData.stdnt_GName));
     strncat(FileName_Container, OnProcess_StudentData.stdnt_LName, sizeof(OnProcess_StudentData.stdnt_LName));
     //Save File Name with Default Name Identifier with Extension of RTF
     strncat(FileName_Container, "RegistrationForm.rtf", sizeof("RegistrationForm.rtf"));
-
+    // After concatenation, transport data to OnProcess_StudentData.FileName_Coordinate
     strncpy(OnProcess_StudentData.FileName_Coordinate, FileName_Container, sizeof(OnProcess_StudentData.FileName_Coordinate));
 
+    // For File
+    // We have to concatenate the directory first to seperate files of output
+    // Concatenate following data with the size of corresponding characters
     strncat(DataInfo_Container, "DataInformation_Student//", sizeof("DataInformation_Student//"));
     strncat(DataInfo_Container, Acquired_String_StudentID, sizeof(Acquired_String_StudentID));
     strncat(DataInfo_Container, FileNameSeperate, sizeof(FileNameSeperate));
@@ -4185,25 +4451,26 @@ void GenerateUserPass_withGenerateFileName()
     strncat(DataInfo_Container, OnProcess_StudentData.stdnt_GName, sizeof(OnProcess_StudentData.stdnt_GName));
     strncat(DataInfo_Container, OnProcess_StudentData.stdnt_LName, sizeof(OnProcess_StudentData.stdnt_LName));
     strncat(DataInfo_Container, "DataInformation.rtf", sizeof("DataInformation.rtf"));
+    // After concatenation, transport data to OnProcess_StudentData.FileName_DataInformation
     strncpy(OnProcess_StudentData.FileName_DataInformation, DataInfo_Container, sizeof(OnProcess_StudentData.FileName_DataInformation));
 }
-//Gets Current Student ID Number on a File that is Non-Binary
-void Increment_StudentID()
+
+void Increment_StudentID() //Gets Current Student ID Number on a File that is Non-Binary
 {
     FILE *IncrementationDynamic;
     long long int StudentID_OnHold;
-    IncrementationDynamic = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "r");
+    IncrementationDynamic = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "r"); // Read Data File
     fscanf(IncrementationDynamic, "%ld", &StudentID_OnHold);
     fclose(IncrementationDynamic);
-    IncrementationDynamic = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "w");
-    StudentID_OnHold++;
-    OnProcess_StudentData.stdnt_StudentID = StudentID_OnHold;
+    IncrementationDynamic = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "w"); // Change Mode To Write For Overwritting with Incremented Value
+    StudentID_OnHold++;                                                                  // Increment
+    OnProcess_StudentData.stdnt_StudentID = StudentID_OnHold;                            // Bind Data
     fprintf(IncrementationDynamic, "%ld", StudentID_OnHold);
     fclose(IncrementationDynamic);
 }
 // MANAGEMENT MODE FUNCTIONS
 void FuncAdmin_Mgr_Login()
-{
+{ // Starting Point of Management Mode
     system("CLS");
     FILE *Database_MasterKey;
     Database_MasterKey = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "rb+");
@@ -4225,18 +4492,20 @@ void FuncAdmin_Mgr_Login()
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("Enter your Master Username \xAF ");
     scanf("%30s", &MasterUserCheck);
-    fflush(stdin);
+    fflush(stdin); // flush for exceeding data
     SetConsoleCounter++;
     SetConsoleCounter++;
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("Enter your Master Password \xAF ");
     scanf("%30s", &MasterPasswordCheck);
-    fflush(stdin);
+    fflush(stdin); // flush for exceeding data
     while (1)
     {
+        // Read File By Line
         fread(&MasterPoint, sizeof(MasterPoint), 1, Database_MasterKey);
         if (feof(Database_MasterKey))
         {
+            // Checks if one of the parameters are still true and the rest is incorrect.
             if ((strcmp(MasterUserCheck, MasterPoint.Master_User) != 0) || (strcmp(MasterPasswordCheck, MasterPoint.Master_Password) != 0))
             {
                 SetConsoleCounter++;
@@ -4244,13 +4513,13 @@ void FuncAdmin_Mgr_Login()
                 SetCursorCoord_XY(30, SetConsoleCounter);
                 printf("\xAF\xDD FAILED \xDD Login Failed! One of the following inputs are incorrect!");
                 Sleep(2000);
-                rewind(Database_MasterKey);
+                rewind(Database_MasterKey); // rewind for checking at the beginning again.
                 FuncAdmin_Mgr_Login();
             }
         }
         else if ((strcmp(MasterUserCheck, MasterPoint.Master_User) == 0) && (strcmp(MasterPasswordCheck, MasterPoint.Master_Password) == 0))
-        {
-            rewind(Database_MasterKey);
+        {                               // If data is valid from the input given
+            rewind(Database_MasterKey); // Rewind the file and read if the the same data is still present. This was done to check if there are duplicates
             while (1)
             {
                 fread(&DataChange, sizeof(DataChange), 1, Database_MasterKey);
@@ -4267,16 +4536,15 @@ void FuncAdmin_Mgr_Login()
             Sleep(2000);
             FuncAdmin_Mgr_Mode();
             break;
-            // Get Information of Student
         }
         else
         {
-            continue;
+            continue; // Continue until data was valid
         }
     }
 }
 
-void FuncAdmin_Mgr_Mode()
+void FuncAdmin_Mgr_Mode() // Shows Full of Choices. Please refer to the header file what does the function do in the following of each case
 {
     while (1)
     {
@@ -4391,6 +4659,10 @@ void FuncAdmin_Mgr_Mode()
 }
 void FuncAdmin_Mgr_AddEntry()
 {
+    /*
+    This program gets data with scanf. The only reason we didn't use fgets because of the data corruption that would result to or garblish data.
+    fflush(stdin) is mostly like present after scanf to clear buffer even the buffer is not exceeding to the required...
+    */
     int SetConsoleCounter = 3;
     system("CLS");
     FILE *Database_Enrollment;
@@ -4450,13 +4722,13 @@ void FuncAdmin_Mgr_AddEntry()
     SetConsoleCounter++;
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("\xAF\xDD INPUT \xDD\xAF ");
-    if (scanf("%7ld", &DataChange.Generated_StudentID) != 1)
+    if (scanf("%7ld", &DataChange.Generated_StudentID) != 1) // Check if data given is valid that corresponds to the format specifier...
     {
         SetConsoleCounter++;
         SetConsoleCounter++;
         SetCursorCoord_XY(30, SetConsoleCounter);
         printf("\xAF \xDD ERROR \xDD You attempted to add letter! Reinitializing...");
-        Sleep(1750);
+        Sleep(1500);
         fflush(stdin);
         FuncAdmin_Mgr_AddEntry();
     }
@@ -4518,14 +4790,17 @@ void FuncAdmin_Mgr_AddEntry()
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("\xAF \xDD INFO-SUCCESS \xDD Manual Student Data Input is Done!");
     Sleep(2000);
-    FuncAdmin_Mgr_Mode();
+    FuncAdmin_Mgr_Mode(); // Return Back
 }
 void FuncAdmin_Mgr_ReadAllEntry()
 {
+    /*
+    Reads File and Outputs Available Data
+    */
     system("CLS");
     FILE *Database_Enrollment;
     int SetConsoleCounter = 5, SizeCheck = 0;
-    Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb");
+    Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb"); // Read in binary because data is written in binary.
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetConsoleCounter++;
@@ -4541,9 +4816,9 @@ void FuncAdmin_Mgr_ReadAllEntry()
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetConsoleCounter++;
-    fseek(Database_Enrollment, 0, SEEK_END);
-    SizeCheck = ftell(Database_Enrollment);
-    if (SizeCheck == 0)
+    fseek(Database_Enrollment, 0, SEEK_END); // Make Pointer Location put until the end of the file
+    SizeCheck = ftell(Database_Enrollment);  // ftell tells is the pointer is.
+    if (SizeCheck == 0)                      // Data that has no size is already set to zero as we logically think about it.
     {
         SetConsoleCounter++;
         SetCursorCoord_XY(30, SetConsoleCounter);
@@ -4557,16 +4832,16 @@ void FuncAdmin_Mgr_ReadAllEntry()
         FuncAdmin_Mgr_Mode();
     }
     else
-    {
+    { // In any case that the file is not blank, reset the cursor or pointer to beginning of the file
         fseek(Database_Enrollment, 0, SEEK_SET);
         SetConsoleCounter++;
         SetCursorCoord_XY(1, SetConsoleCounter);
         printf("%-20s%-20s%-20s %-20s%-20s%-20s%-20s%-20s%-20s", "Student ID", "First name", "Middle name", "Last Name", "Program Name", "Year Level", "Semester", "Stdnt UserName", "Stdnt Password");
         SetConsoleCounter++;
         while (1)
-        {
+        { // Start Reading and Outputting Available Data
             fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
-            if (feof(Database_Enrollment))
+            if (feof(Database_Enrollment)) // Will stop at this point and tell to the manager that is already in the ond of line of the database file.
             {
                 SetConsoleCounter++;
                 SetConsoleCounter++;
@@ -4581,7 +4856,7 @@ void FuncAdmin_Mgr_ReadAllEntry()
             else
             {
                 SetConsoleCounter++;
-                SetCursorCoord_XY(1, SetConsoleCounter);
+                SetCursorCoord_XY(1, SetConsoleCounter); // Displays at X at 1 due to long data as it sets of the window
                 printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
             }
         }
@@ -4636,10 +4911,10 @@ void FuncAdmin_Mgr_SearchNameEntry()
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     while (1)
-    {
+    { // Check Data
         fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
         if (feof(Database_Enrollment))
-        {
+        { // The Difference of DataReadCounter IF and ELSE is that in If, it display no data found while on else statement it only display end of line file.
             if (DataReadCounter == 0)
             {
                 SetConsoleCounter++;
@@ -4670,18 +4945,18 @@ void FuncAdmin_Mgr_SearchNameEntry()
             }
         }
         else if ((strcmp(stdnt_GName_Placeholder, DataChange.stdnt_GName) == 0) && (strcmp(stdnt_MName_Placeholder, DataChange.stdnt_MName) == 0) && (strcmp(stdnt_LName_Placeholder, DataChange.stdnt_LName) == 0))
-        {
+        { // If found one it will first display the first data
             SetConsoleCounter++;
             SetConsoleCounter++;
             SetCursorCoord_XY(1, SetConsoleCounter);
             printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Student ID", "First name", "Middle name", "Last Name", "Program Name", "Year Level", "Semester", "Stdnt UserName", "Stdnt Password");
-            DataReadCounter++;
+            DataReadCounter++; // Incremented for different output check nested if and else of feof() function;
             SetConsoleCounter++;
             SetConsoleCounter++;
             SetCursorCoord_XY(1, SetConsoleCounter);
             printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
             while (1)
-            {
+            { // And it will iterate inside of this function with the same conditions
                 fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
                 if (feof(Database_Enrollment))
                 {
@@ -4703,11 +4978,11 @@ void FuncAdmin_Mgr_SearchNameEntry()
                     SetCursorCoord_XY(1, SetConsoleCounter);
                     printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
                 }
-            }
+            } // This while loop was created to loop inside without looping outside of this while loop as it takes one output only when there are alot to input.
         }
         else
         {
-            continue;
+            continue; // Continue until data is valid
         }
     }
 }
@@ -4743,12 +5018,12 @@ void FuncAdmin_Mgr_SearchProgramEntry()
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     while (1)
-    {
+    { // After Input, Read and check for data validity in Database
         fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
         if (feof(Database_Enrollment))
         {
             if (DataReadCounter == 0)
-            {
+            { // The Difference of DataReadCounter IF and ELSE is that in If, it display no data found while on else statement it only display end of line file.
                 SetConsoleCounter++;
                 SetConsoleCounter++;
                 SetCursorCoord_XY(30, SetConsoleCounter);
@@ -4762,7 +5037,7 @@ void FuncAdmin_Mgr_SearchProgramEntry()
                 SetCursorCoord_XY(30, SetConsoleCounter);
                 printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
                 getch();
-                rewind(Database_Enrollment);
+                rewind(Database_Enrollment); // Assurance of Going to the beginning of the file
                 break;
             }
             else
@@ -4772,12 +5047,12 @@ void FuncAdmin_Mgr_SearchProgramEntry()
                 SetCursorCoord_XY(30, SetConsoleCounter);
                 printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
                 getch();
-                rewind(Database_Enrollment);
+                rewind(Database_Enrollment); // Assurance of Going to the beginning of the file
                 break;
             }
         }
         else if ((strcmp(stdnt_ActiveCourseCodeName, DataChange.stdnt_Course_Codename) == 0))
-        {
+        { // If Data found, it will display its first search data
             SetConsoleCounter++;
             SetConsoleCounter++;
             SetCursorCoord_XY(1, SetConsoleCounter);
@@ -4788,7 +5063,7 @@ void FuncAdmin_Mgr_SearchProgramEntry()
             SetCursorCoord_XY(1, SetConsoleCounter);
             printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
             while (1)
-            {
+            { // And loop to look for the others
                 fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
                 if (feof(Database_Enrollment))
                 {
@@ -4810,7 +5085,7 @@ void FuncAdmin_Mgr_SearchProgramEntry()
                     SetCursorCoord_XY(1, SetConsoleCounter);
                     printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
                 }
-            }
+            } // This while loop was created to loop inside without looping outside of this while loop as it takes one output only when there are alot to input.
         }
         else
         {
@@ -4818,6 +5093,9 @@ void FuncAdmin_Mgr_SearchProgramEntry()
         }
     }
 }
+/*
+    IMPORTANT NOTICE, PLEASE REFER TO THE ABOVE FUNCTION AS IT WAS THE SAME FUNCTION FOR SEARCH AND ADD, THE ONLY DIFFERENCE IS THAT IT CHECKS FOR DIFFERENT DATA
+*/
 void FuncAdmin_Mgr_SearchID()
 {
     system("CLS");
@@ -4856,7 +5134,7 @@ void FuncAdmin_Mgr_SearchID()
         if (feof(Database_Enrollment))
         {
             if (DataReadCounter == 0)
-            {
+            { // The Difference of DataReadCounter IF and ELSE is that in If, it display no data found while on else statement it only display end of line file.
                 SetConsoleCounter++;
                 SetConsoleCounter++;
                 SetCursorCoord_XY(30, SetConsoleCounter);
@@ -4926,6 +5204,9 @@ void FuncAdmin_Mgr_SearchID()
         }
     }
 }
+/*
+THERE ARE AT LEAST TWO PROCESS, ONE IS AVOIDING THE VALID DATA AND COPY DATA TO TEMPORARY, AND LASTLY TEMPORARY OVERWRITES CURRENT FILE 
+*/
 void FuncAdmin_Mgr_Delete_Entry()
 {
     system("CLS");
@@ -4962,12 +5243,12 @@ void FuncAdmin_Mgr_Delete_Entry()
     SetConsoleCounter++;
     SetConsoleCounter++;
     SetCursorCoord_XY(30, SetConsoleCounter);
-    printf("\xAF\xDD INPUT #2 \xDD\xAF Enter Year Level \xAF [Syntax \xAF Ordinal Numbers Only, e.g 1st, 2nd, 3rd] ");
+    printf("\xAF\xDD INPUT #2 \xDD\xAF Enter Year Level \xAF ");
     scanf("%20s", &stdnt_Year_Placeholder);
     SetConsoleCounter++;
     SetConsoleCounter++;
     SetCursorCoord_XY(30, SetConsoleCounter);
-    printf("\xAF\xDD INPUT #3 \xDD\xAF Enter Semester \xAF [Syntax \xAF Input 'First' or 'Second' Only!] ");
+    printf("\xAF\xDD INPUT #3 \xDD\xAF Enter Semester \xAF ");
     scanf("%20s", &stdnt_Semester_Placeholder);
     fflush(stdin);
     SetConsoleCounter++;
@@ -4975,12 +5256,12 @@ void FuncAdmin_Mgr_Delete_Entry()
     SetCursorCoord_XY(30, SetConsoleCounter);
     printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     while (1)
-    {
+    { // Read Data
         fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
         if (feof(Database_Enrollment))
         {
             if (DataReadCounter == 0)
-            {
+            { // The Difference of DataReadCounter IF and ELSE is that in If, it display no data found while on else statement it only display end of line file.
                 SetConsoleCounter++;
                 SetConsoleCounter++;
                 SetCursorCoord_XY(30, SetConsoleCounter);
@@ -4994,7 +5275,7 @@ void FuncAdmin_Mgr_Delete_Entry()
                 SetCursorCoord_XY(30, SetConsoleCounter);
                 printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
                 getch();
-                rewind(Database_Enrollment);
+                rewind(Database_Enrollment); // Assurance
                 break;
             }
             else
@@ -5003,14 +5284,14 @@ void FuncAdmin_Mgr_Delete_Entry()
                 SetConsoleCounter++;
                 SetCursorCoord_XY(30, SetConsoleCounter);
                 printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
-                rewind(Database_Enrollment);
+                rewind(Database_Enrollment); // Assurance
                 break;
             }
         }
         if ((DataEntryBase_ID == DataChange.Generated_StudentID) && (strcmp(stdnt_Year_Placeholder, DataChange.stdnt_Year_Choice) == 0) && (strcmp(stdnt_Semester_Placeholder, DataChange.stdnt_Course_Semester) == 0))
         {
-            exist++;
-            DataReadCounter++;
+            exist++;           // Increment Value to Let Function know that something exist and its valid. This one is used on the other process
+            DataReadCounter++; // DataCounter Reason is the same as for exist. This one only checks at FEOP()
             SetConsoleCounter++;
             SetConsoleCounter++;
             SetCursorCoord_XY(1, SetConsoleCounter);
@@ -5019,8 +5300,9 @@ void FuncAdmin_Mgr_Delete_Entry()
             SetConsoleCounter++;
             SetCursorCoord_XY(1, SetConsoleCounter);
             printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s --ENTRY DELETED--", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+            // DataValid shows here
             while (1)
-            {
+            { // Loop to look some more valid date
                 fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
                 if (feof(Database_Enrollment))
                 {
@@ -5033,10 +5315,12 @@ void FuncAdmin_Mgr_Delete_Entry()
                     SetConsoleCounter++;
                     SetCursorCoord_XY(1, SetConsoleCounter);
                     printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s --ENTRY DELETED--", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+                    // Data Found which cannot be fwrite to the Temporary File
                 }
                 else
                 {
                     fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
+                    // Write that is non-valid to the Inputs.
                 }
             }
             SetConsoleCounter++;
@@ -5056,10 +5340,13 @@ void FuncAdmin_Mgr_Delete_Entry()
         else
         {
             fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
+            // Write that is non-valid to the Inputs.
         }
     }
     fclose(Database_Enrollment_Temporary);
     fclose(Database_Enrollment);
+    // PROCESS NUMBER 2
+
     if (exist >= 1)
     {
         Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "wb+");
@@ -5069,7 +5356,7 @@ void FuncAdmin_Mgr_Delete_Entry()
         SetCursorCoord_XY(30, SetConsoleCounter);
         printf("\xAF\xDD FILE #1 -> FILE#2 \xDD\xAF Data Read Completed! Preparing for Data Transport...");
         while (1)
-        {
+        { // START READING AT TEMPORARY FILE AND OVERRIDE MAIN DATABASE FILE
             fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment_Temporary);
             if (feof(Database_Enrollment_Temporary))
             {
@@ -5083,7 +5370,7 @@ void FuncAdmin_Mgr_Delete_Entry()
         printf("\xAF\xDD FILE #1 == FILE#2 \xDD\xAF Data Transfer Complete!");
         fclose(Database_Enrollment);
         fclose(Database_Enrollment_Temporary);
-        remove("LM KeyDatabase//TempMaster.lmdat");
+        remove("LM KeyDatabase//TempMaster.lmdat"); // Remove Temporary File
         getch();
         FuncAdmin_Mgr_Mode();
     }
@@ -5198,6 +5485,7 @@ void FuncAdmin_Mgr_ReadMaster()
         FuncAdmin_Mgr_Mode();
     }
 }
+/*Please Refer to FuncAdmin_Mgr_Delete_Entry Function as it has the same function but different data to check */
 void FuncAdmin_Mgr_DeleteMaster()
 {
     system("CLS");
@@ -5351,3 +5639,4 @@ void FuncAdmin_Mgr_DeleteMaster()
         FuncAdmin_Mgr_Mode();
     }
 }
+// MINIMAL COMMENTS ENDED AT 09/30/2018 10:55 PM
