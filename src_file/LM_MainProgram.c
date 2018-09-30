@@ -12,7 +12,7 @@ Code Tester / ???? - Sim Harvey Agustin Marquez, Julie Ann Luzano, Matt Matamis
 #include <windows.h> // Windows Designed Only Header, This Rips Compatibility.
 #include <string.h>  // String Handling for Usage of Structure and Database
 // Defined STRINGS, Call this and the string will show up or error code
-#define VERSION_NUMBER "1530-09172018-CLOSED BETA"                                                                       // Defines Version of the Program
+#define VERSION_NUMBER "1748-09302018-STABLE VER."                                                                       // Defines Version of the Program
 #define PRODUCT_NAME "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime" // Defines PRODUCT_NAME as the following string in SetTitleConsole();
 // #define FUNCTION_UNFINISHED 1362565 == Used for Debugging... Calls when Function is at end of the line with successfull attempts to execute.
 #define DATABASE_NOT_FOUND 40                  // Define Return Value for Database Not Found, Basically Deprecated Due to POST Check
@@ -26,6 +26,7 @@ Code Tester / ???? - Sim Harvey Agustin Marquez, Julie Ann Luzano, Matt Matamis
 #define FUNCTION_STEP5 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF 5th Step | Scholarship and Mode of Payment"
 #define FUNCTION_STEP6 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF Confirmation | Overall Overview"
 #define FUNCTION_STEP7 "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF End of Process"
+#define FUNCTION_SPECIAL "Team LM | ARiS Alternative Enrollment System for TiP Engineering and Architecture | C CLI Runtime | Current Step \xAF MANAGEMENT MODE"
 
 // A Structure that Holds Data Records on the Process of Enrollment
 struct OnHold_DataRecords
@@ -43,7 +44,7 @@ struct OnHold_DataRecords
         stdnt_FathersInfoJob[30],
         stdnt_FathersInfoContact[30],
         stdnt_SourceInterest[MAX_PATH],
-        stdnt_LastSchoolYear[30],
+        stdnt_LastSchoolYear[MAX_PATH],
         stdnt_LastSchoolStrand[30],
         stdnt_Gender[6],
         stdnt_Birthday[30],
@@ -89,23 +90,33 @@ struct Management_Override
         stdnt_MName[30],
         stdnt_LName[30],
         stdnt_Course_Codename[40],
-        stdnt_Course_Choice[20],
+        stdnt_Year_Choice[20],
         stdnt_Course_Semester[20],
         stdnt_Username[100],
         stdnt_Password[100];
     long int Generated_StudentID;
 };
-
+// Database Struct that can be used for Managing Master Users
+struct MasterKey
+{
+    char Master_User[50],
+        Master_Password[50];
+};
 // Define Following Structs to these another variables that holds the same copy of the following members.
+
 struct OnHold_DataRecords OnProcess_StudentData;
 struct Enrollment_InformationReceiver ERLM_DataReceiver;
 struct Management_Override DataChange;
+struct MasterKey MasterPoint;
 
-// Current Student Functions, Login Function and Defined Names are being passed for fewer step execution.
+int FunctionCount = 0;
+int FillUp_Stage = 0;
+
+// Current Student Functions, Login Functions.
 void Func_OldStd_ERLM_Menu();
-void Func_OldStdnt_ERLM();
+void Func_OldStdnt_ERLM(); // Menu for Checking Data that is being parsed by the program, asking the user if the data checked reflect to his/her information
 
-// New Student Functions, Current Students will use most of these functions as well.
+// New Student Functions, Current Students will use most of these functions as well. There are at least 2-3 functions that are being skipped.
 void Func_NewStdnt_FillUp();
 void Func_NewStdnt_InfoCheck();
 void Func_NewStdnt_CourseReg();
@@ -117,21 +128,24 @@ void GetDataEnrolleeInformation();
 void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCandidates); // Pass those variables than creating another struct member that is going to be used twice or ones.
 void Func_PrintDocument_FinalTranscript();
 
-// POST and Critical Component Function Prototypes
+// POST and Critical Component Function Prototypes, used for Pre runnning the application
 void Function_CriticalComp_CheckCreate();             // Checks Components First Before Actual Initialization
 void Argument_Initialization(int argc, char *argv[]); // Program Arguments Checker for Management Mode or Normal Mode or Restrict Window and Button Mode
-void Main_Menu();
+
+void Main_Menu(); // Main Menu for Normal Students, Runs without /mgr_md parameter, can be run with /rstrict_wnd
 
 // Functions for Management Mode
 void FuncAdmin_Mgr_Login();              // Function for Login Data for Masters / Managements
 void FuncAdmin_Mgr_Mode();               // Function for Displaying Management List
 void FuncAdmin_Mgr_AddEntry();           // Function for Manual Override / Adding Datas without Prompting on New Enrollment Steps
 void FuncAdmin_Mgr_ReadAllEntry();       // Shows Current Entries without any Sort
-void FuncAdmin_Mgr_SearchNameEntry();    // Function for Searching by Name
-void FuncAdmin_Mgr_SearchProgramEntry(); // Function for Searching by Program
-void FuncAdmin_Mgr_SearchID();           // Functioon for Searching by ID
+void FuncAdmin_Mgr_SearchNameEntry();    // Function for Searching by Name of a Student
+void FuncAdmin_Mgr_SearchProgramEntry(); // Function for Searching by Program of a Student
+void FuncAdmin_Mgr_SearchID();           // Functioon for Searching by ID of a Student
 void FuncAdmin_Mgr_Delete_Entry();       // Function for Deleting Entries for Mistakes and Potential Data Corruption
-
+void FuncAdmin_Mgr_AddMaster();          // Function for Creating a Master Credential
+void FuncAdmin_Mgr_ReadMaster();         // Function for CHecking Master Credentials
+void FuncAdmin_Mgr_DeleteMaster();       // Function for Deleting Master Credentials
 // Functions for Dynamic Data Creation
 void Increment_StudentID();                   // Accesses Files that contains number that is non binary and return incremented value of the received value.
 void GenerateUserPass_withGenerateFileName(); // Generate Username, Password for Student Based on their Name and Student Number.
@@ -141,29 +155,25 @@ int main(int argc, char *argv[])
 {
     HWND consoleWindow = GetConsoleWindow();
     int Argument_Checker = 0;
-    // Placeholder Debugging Print Output. When program is stucked after outputting this string, there is something wrong.
-    printf("@ Function \t|\t INITIALIZING \t|\t  int main() => Argument_Initialization\n");
-    // When Program detects that parameter count is one and obove, initialize this function for initiating the parameters passed.
-    if (argc > 1)
+    printf("@ Function \t|\t INITIALIZING \t|\t  int main() => Argument_Initialization\n"); // Placeholder Debugging Print Output. When program is stucked after outputting this string, there is something wrong.
+    if (argc > 1)                                                                           // When Program detects that parameter count is one and obove, initialize this function for initiating the parameters passed. Cannot be 'ARGC == 1' due to one ARGV[1] is directory that program resides.
     {
-        while (Argument_Checker < argc)
+        while (Argument_Checker < argc) // Using =< will result to a segmentation fault.
         {
-            if (strcmp(argv[Argument_Checker], "/rstrict_wnd") == 0)
+            if (strcmp(argv[Argument_Checker], "/rstrict_wnd") == 0) // Restrict Window Parameter Check
             {
-                SetWindowLong(consoleWindow, GWL_STYLE,
-                              GetWindowLong(consoleWindow, GWL_STYLE) &
-                                  ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
+                // SetWindowLong consists of the following contents: (consoleWindow is )
+                SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
             }
-            // SetWindowLong consists of the following contents: (consoleWindow is )
-            if (strcmp(argv[Argument_Checker], "/mgr_md") == 0)
+            if (strcmp(argv[Argument_Checker], "/mgr_md") == 0) // Management Mode Parameter Check
             {
-                FuncAdmin_Mgr_Mode();
+                FunctionCount = 1; // Technically Sends Function Count Value to 1 and which runs functions to ManagerMode.
             }
-            Argument_Checker++;
+            Argument_Checker++; // Increments When First Check is done, and so on...
         }
     }
-    system("CLS");
-    Function_CriticalComp_CheckCreate();
+    system("CLS");                       // Clears Screen to show that functions runs succesfully.
+    Function_CriticalComp_CheckCreate(); // If the parameters are being called or not, program will run POST / Critical Components Checker to sure program runs successfully.
 }
 
 void Function_CriticalComp_CheckCreate()
@@ -173,9 +183,9 @@ void Function_CriticalComp_CheckCreate()
     FILE *FileDatabase_Check;
     SYSTEMTIME GetDate_Local;
     // Set Char Pointer of Strings with Directories to Execute and Check
-    char *datapoint_filelist[5] = {"LM KeyDatabase//LM_CEA_Enrollment.lmdat", "LM KeyDatabase//LM_CEA_MasterKey.lmdat", "LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat"};
+    char *datapoint_filelist[3] = {"LM KeyDatabase//LM_CEA_Enrollment.lmdat", "LM KeyDatabase//LM_CEA_MasterKey.lmdat", "LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat"};
     int Counter_DataPoint_Check;
-    int SetCursorCounter = 3;
+    int SetCursorCounter = 5, SizeCheck = 0, SizeCheck_1 = 0;
     SetConsoleTitle("Intializing Critical Components | LM Enrollment System\n");
     SetCursorCoord_XY(30, SetCursorCounter); // SetCursorConuner Value is 3
     SetCursorCounter++;                      // SetCursorConuner Value is now 4. This Will repeat depends on the current code structure given.
@@ -188,28 +198,28 @@ void Function_CriticalComp_CheckCreate()
     Sleep(2500);
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
-    printf("Initializing and Checking Critical Components Before Actual Program Initialization\n");
+    printf("\xAF\xDD INITIALIZATION  #1 \xDD\xAF Initializing and Checking Critical Components Before Actual Program Initialization");
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
-    printf("COMPONENT MATERIAL\t\xDD\t STATUS\t\t\xDD DESCRIPTION\t\n");
+    printf("COMPONENT MATERIAL\t\xDD\t STATUS\t\t\xDD DESCRIPTION\t");
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
-    printf("\xDD\xAF Init.Component # 1 \t\xDD\t COMPLETE \t\xDD Set Command Line to Full Screen\n");
+    printf("\xDD\xAF Init.Component # 1 \t\xDD\t COMPLETE \t\xDD Set Command Line to Full Screen");
     ShowWindow(hwnd, SW_MAXIMIZE);
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
-    printf("\xDD\xAF Init.Component # 2 \t\xDD\t COMPLETE \t\xDD Disable Close Button\n");
+    printf("\xDD\xAF Init.Component # 2 \t\xDD\t COMPLETE \t\xDD Disable Close Button");
     EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
     SetCursorCoord_XY(30, SetCursorCounter);
     SetCursorCounter++;
-    printf("\xDD\xAF Init.Component # 3.1 \t\xDD\t CHECKING \t\xDD Checking Local Database on Local Storage (Using .lmdat File)\n");
-    for (Counter_DataPoint_Check = 0; Counter_DataPoint_Check < 4; Counter_DataPoint_Check++)
+    printf("\xDD\xAF Init.Component # 3.1 \t\xDD\t CHECKING \t\xDD Checking Local Database on Local Storage (Using .lmdat File)");
+    for (Counter_DataPoint_Check = 0; Counter_DataPoint_Check < 3; Counter_DataPoint_Check++)
     {
         FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "r");
         if (FileDatabase_Check == NULL)
@@ -217,48 +227,135 @@ void Function_CriticalComp_CheckCreate()
             mkdir("LM KeyDatabase");
             mkdir("Student_RegForm");
             mkdir("DataInformation_Student");
-            SetCursorCoord_XY(30, SetCursorCounter);
             SetCursorCounter++;
-            printf("\xDD\xAF Init.Component # 3.%i \t\xDD\t ERROR \t\t\xDD #%i File Database not found! Creating File...\n", Counter_DataPoint_Check + 1, Counter_DataPoint_Check + 1);
+            SetCursorCoord_XY(30, SetCursorCounter);
+            printf("\xDD\xAF Init.Components \t\xDD\t ERROR \t\t\xDD File Database not found! Creating File...");
             FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "w");
-            if (datapoint_filelist[Counter_DataPoint_Check] == "LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat")
+
+            if (strcmp(datapoint_filelist[Counter_DataPoint_Check], "LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat") == 0)
             {
                 fprintf(FileDatabase_Check, "1800000"); // Starting Point of Student Number, Changeable Default as File Holder for this Value has been deleted...
-            }
-            if (FileDatabase_Check == NULL)
-            {
-                SetCursorCoord_XY(30, SetCursorCounter);
                 SetCursorCounter++;
-                printf("\xDD\xAF Init.Component # 3.%i \t\xDD\t ERROR \t\t\xDD I cannot create the file, give me a adminstrative priviledge or move me somewhere???\n");
+                SetCursorCoord_XY(30, SetCursorCounter);
+                printf("\xDD\xAF Init.Components \t\xDD\t COMPLETE \t\xDD Database Now Found!");
+            }
+            else if (strcmp(datapoint_filelist[Counter_DataPoint_Check], "LM KeyDatabase//LM_CEA_MasterKey.lmdat") == 0)
+            {
+                FileDatabase_Check = fopen(datapoint_filelist[Counter_DataPoint_Check], "wb");
+                strcpy(MasterPoint.Master_User, "ADMIN");
+                strcpy(MasterPoint.Master_Password, "LM123");
+                fwrite(&MasterPoint, sizeof(MasterPoint), 1, FileDatabase_Check);
+                SetCursorCounter++;
+                SetCursorCoord_XY(30, SetCursorCounter);
+                printf("\xDD\xAF Init.Components \t\xDD\t COMPLETE \t\xDD Database Now Found!");
+                continue;
+            }
+            else if (FileDatabase_Check == NULL)
+            {
+                SetCursorCounter++;
+                SetCursorCoord_XY(30, SetCursorCounter);
+                printf("\xDD\xAF Init.Components \t\xDD\t ERROR \t\t\xDD I cannot create the file, give me a adminstrative priviledge or move me somewhere???");
                 fclose(FileDatabase_Check);
                 Sleep(3000);
                 exit(FUNCTION_LINEAR_DISCONTINUE);
             }
             else
             {
-                SetCursorCoord_XY(30, SetCursorCounter);
                 SetCursorCounter++;
-                printf("\xDD\xAF Init.Component # 3.%i \t\xDD\t COMPLETE \t\xDD #%i Database Now Found!\n", Counter_DataPoint_Check + 1, Counter_DataPoint_Check + 1);
+                SetCursorCoord_XY(30, SetCursorCounter);
+                printf("\xDD\xAF Init.Components \t\xDD\t COMPLETE \t\xDD Database Now Found!");
             }
         }
         else
         {
-            SetCursorCoord_XY(30, SetCursorCounter);
             SetCursorCounter++;
-            printf("\xDD\xAF Init.Component # 3.%i \t\xDD\t VERIFIED \t\xDD #%i Database Found!\n", Counter_DataPoint_Check + 1, Counter_DataPoint_Check + 1);
+            SetCursorCoord_XY(30, SetCursorCounter);
+            printf("\xDD\xAF Init.Components \t\xDD\t VERIFIED \t\xDD Database File Found!");
         }
         fclose(FileDatabase_Check);
     }
-    Sleep(3000);
-    Main_Menu();
+    fclose(FileDatabase_Check);
+    SetCursorCounter++;
+    SetCursorCounter++;
+    SetCursorCoord_XY(30, SetCursorCounter);
+    SetCursorCounter++;
+    printf("\xAF\xDD INITIALIZATION #2 \xDD\xAF Checking Two Special File Contents...");
+    FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "r");
+    fseek(FileDatabase_Check, 0, SEEK_END);
+    SizeCheck = ftell(FileDatabase_Check);
+    fclose(FileDatabase_Check);
+    if (SizeCheck == 0)
+    {
+        fseek(FileDatabase_Check, 0, SEEK_SET);
+        FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "w");
+        SetCursorCounter++;
+        SetCursorCoord_XY(30, SetCursorCounter);
+        printf("\xDD\xAF Init.Components \t\xDD\t ERROR \t\t\xDD File Found, But File is blank...");
+        fprintf(FileDatabase_Check, "1800000"); // Starting Point of Student Number, Changeable Default as File Holder for this Value has been deleted...
+        SetCursorCounter++;
+        SetCursorCoord_XY(30, SetCursorCounter);
+        printf("\xDD\xAF Init.Components \t\xDD\t SUCCESS \t\xDD File Content Added...");
+        fclose(FileDatabase_Check);
+    }
+    else
+    {
+        SetCursorCounter++;
+        SetCursorCoord_XY(30, SetCursorCounter);
+        printf("\xDD\xAF Init.Components \t\xDD\t VERIFIED \t\xDD File Has Size and Content");
+        fclose(FileDatabase_Check);
+    }
+    FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "rb");
+    fseek(FileDatabase_Check, 0, SEEK_END);
+    SizeCheck_1 = ftell(FileDatabase_Check);
+    fclose(FileDatabase_Check);
+    if (SizeCheck_1 == 0)
+    {
+        fseek(FileDatabase_Check, 0, SEEK_SET);
+        SetCursorCounter++;
+        SetCursorCoord_XY(30, SetCursorCounter);
+        printf("\xDD\xAF Init.Components \t\xDD\t ERROR \t\t\xDD File Found, But File is blank. Data Added");
+        FileDatabase_Check = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "wb");
+        strcpy(MasterPoint.Master_User, "ADMIN");
+        strcpy(MasterPoint.Master_Password, "LM123");
+        fwrite(&MasterPoint, sizeof(MasterPoint), 1, FileDatabase_Check);
+        SetCursorCounter++;
+        SetCursorCoord_XY(30, SetCursorCounter);
+        printf("\xDD\xAF Init.Components \t\xDD\t SUCCESS \t\xDD File Content Added...");
+        fclose(FileDatabase_Check);
+    }
+    else
+    {
+        SetCursorCounter++;
+        SetCursorCoord_XY(30, SetCursorCounter);
+        printf("\xDD\xAF Init.Components \t\xDD\t VERIFIED \t\xDD File Has Size and Content");
+        fclose(FileDatabase_Check);
+    }
+    if (FunctionCount == 1)
+    {
+        SetCursorCounter++;
+        SetCursorCounter++;
+        SetCursorCoord_XY(30, SetCursorCounter);
+        printf("\xAF \xDD INFO \xDD \xAF End of Check File, and Launching Management Mode...");
+        Sleep(2500);
+        FuncAdmin_Mgr_Login();
+    }
+    else
+    {
+        SetCursorCounter++;
+        SetCursorCounter++;
+        SetCursorCoord_XY(30, SetCursorCounter);
+        printf("\xAF \xDD INFO \xDD \xAF End of Check File, and Launching Normal Mode...");
+        Sleep(2500);
+        Main_Menu();
+    }
 }
 void Main_Menu()
 {
     SetConsoleTitle(PRODUCT_NAME);
     system("CLS");
     while (1)
-    { // This will loop forever because wtf is 1?
-        int Selection_1 = 0;
+    {                     // This will loop forever because wtf is 1?
+        FillUp_Stage = 0; // Set FillUp_Stage Variable as a Reset of Values After Enrollment Process
         system("CLS");
         SetCursorCoord_XY(30, 3);
         // \x is a Format Specifier for Hexadecimal, There are two characters to be inputed to complete an \x format specifier.
@@ -288,7 +385,7 @@ void Main_Menu()
         printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
         SetCursorCoord_XY(30, 20);
         printf("\xC8\xAF Press a key that corresponds your decision [1 - 3] \xDD\xAF ");
-        switch (Selection_1 = getche())
+        switch (getche())
         {
         case '1':
             Func_OldStdnt_ERLM();
@@ -298,22 +395,22 @@ void Main_Menu()
             break;
         case '3':
             SetConsoleTitle("Terminating Enrollment System | LM Enrollment System");
-            SetCursorCoord_XY(30, 26);
+            SetCursorCoord_XY(30, 22);
             printf("\xC9\xCD\xCD \xDD INFORMATION \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB");
-            SetCursorCoord_XY(30, 27);
+            SetCursorCoord_XY(30, 23);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            SetCursorCoord_XY(30, 28);
-            printf("\xBA \xAF Terminating LM Enrollment System...\t\t\t\t\t\t\t\t       \xBA");
-            SetCursorCoord_XY(30, 29);
+            SetCursorCoord_XY(30, 24);
+            printf("\xBA \xAF LM Enrollment System => Terminated... Have A Nice Day...\t\t\t\t\t\t\t\t       \xBA");
+            SetCursorCoord_XY(30, 25);
             printf("\xBA\t\t\t\t\t\t\t\t\t\t\t\t\t       \xBA");
-            SetCursorCoord_XY(30, 30);
+            SetCursorCoord_XY(30, 26);
             printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
             //Sleep(2500);
             exit(EXIT_SUCCESS);
         case '6':
             //Increment_StudentID();
             //GenerateUserPass_withGenerateFileName();
-            Func_PrintDocument_FinalTranscript();
+            FuncAdmin_Mgr_Mode();
             //Func_SubjectUnit_Selection(Subject_CodeName, Subject_FullName, Subject_LinearTime, Subject_Units);
         default:
             SetCursorCoord_XY(30, 26);
@@ -357,14 +454,23 @@ void Func_OldStdnt_ERLM()
         SetCursorCoord_XY(30, 9);
         printf("\xFE\xCD\xCD \xDD USER INPUT CREDENTIALS \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
         SetCursorCoord_XY(30, 11);
-        printf("Enter your Username \xAF ");
+        printf("Enter your Username \xAF [ \xDD NOTE \xAF If you want to go back to main menutype 'RBF-0'] \xAF ");
         scanf("%30s", &stdnt_Username_Placeholder);
+        if (strcmp(stdnt_Username_Placeholder, "RBF-0") == 0)
+        {
+            SetCursorCoord_XY(30, 13);
+            printf("\xAF \xDD INFO \xDD \xAF Returning to Main Menu...");
+            Sleep(2000);
+            Main_Menu();
+        }
         SetCursorCoord_XY(30, 13);
         printf("Enter your Password \xAF ");
         scanf("%30s", &stdnt_Password_Placeholder);
+        fflush(stdin);
         SetCursorCoord_XY(30, 15);
         printf("Enter Student ID \xAF ");
         scanf("%10lld", &stdnt_GeneratedID_Placeholder);
+        fflush(stdin);
         while (1)
         {
             fread(&DataChange, sizeof(DataChange), 1, FileDatabase_Enrollment);
@@ -396,7 +502,7 @@ void Func_OldStdnt_ERLM()
                         strcpy(OnProcess_StudentData.stdnt_LName, DataChange.stdnt_LName);
                         strcpy(OnProcess_StudentData.MainCourse_CodeName_Passer, DataChange.stdnt_Course_Codename);
                         OnProcess_StudentData.stdnt_StudentID = DataChange.Generated_StudentID;
-                        strcpy(OnProcess_StudentData.Course_YearChoice, DataChange.stdnt_Course_Choice);
+                        strcpy(OnProcess_StudentData.Course_YearChoice, DataChange.stdnt_Year_Choice);
                         strcpy(OnProcess_StudentData.Course_SemSelection, DataChange.stdnt_Course_Semester);
                         if (strcmp(OnProcess_StudentData.MainCourse_CodeName_Passer, "BSCE") == 0)
                         {
@@ -558,8 +664,6 @@ void Func_OldStd_ERLM_Menu()
 /////////////////////////////////////////////////////////////////////////////////////
 void Func_NewStdnt_FillUp()
 {
-    // Initialize This From Struct Variable
-    int FillUp_Stage = 0;
     system("CLS");
     SetConsoleTitle(FUNCTION_STEP1);
     while (1)
@@ -603,14 +707,13 @@ void Func_NewStdnt_FillUp()
             printf("\xC8\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_MName, sizeof(OnProcess_StudentData.stdnt_MName), stdin);
             strtok(OnProcess_StudentData.stdnt_MName, "\n");
+            fflush(stdin);
             SetCursorCoord_XY(30, 26);
             printf("\xAF [3] Enrollee's Last Name ");
             SetCursorCoord_XY(30, 28);
             printf("\xC8\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_LName, sizeof(OnProcess_StudentData.stdnt_LName), stdin);
             strtok(OnProcess_StudentData.stdnt_LName, "\n");
-            //Func_PrintDocument_FinalTranscript();
-            //Func_EndofProcess();
             SetCursorCoord_XY(30, 30);
             printf("\xAF [4] Father's Name \xDD [Surname, First Name]");
             SetCursorCoord_XY(30, 32);
@@ -647,11 +750,23 @@ void Func_NewStdnt_FillUp()
             printf("\xC8\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_MothersInfoContact, sizeof(OnProcess_StudentData.stdnt_MothersInfoContact), stdin);
             strtok(OnProcess_StudentData.stdnt_MothersInfoContact, "\n");
-            SetCursorCoord_XY(30, 54);
-            printf("\xFE\xCD\xCD USER INPUT DONE FOR IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
             //Sleep(3000);
-            FillUp_Stage++;
-            continue;
+            //printf(" %d | %d | %d | %d | %d | %d | %d | %d | %d", Test_2, Test_3, Test_4, Test_5, Test_6, Test_7, Test_9, Test_10, Test_11);
+            if ((strlen(OnProcess_StudentData.stdnt_GName) <= 2) || (strlen(OnProcess_StudentData.stdnt_MName) <= 2) || (strlen(OnProcess_StudentData.stdnt_LName) <= 2) || (strlen(OnProcess_StudentData.stdnt_FathersName) <= 2) || (strlen(OnProcess_StudentData.stdnt_FathersInfoJob) <= 2) || (strlen(OnProcess_StudentData.stdnt_FathersInfoContact) <= 2) || (strlen(OnProcess_StudentData.stdnt_MothersName) <= 2) || (strlen(OnProcess_StudentData.stdnt_MothersInfoJob) <= 2) || (strlen(OnProcess_StudentData.stdnt_MothersInfoContact) <= 2))
+            {
+                SetCursorCoord_XY(30, 54);
+                printf("\xAF \xDD ERROR \xDD One of the required input must contain 3 characters in order to continue...");
+                getch();
+                continue;
+            }
+            else
+            {
+                SetCursorCoord_XY(30, 54);
+                printf("\xFE\xCD\xCD USER INPUT DONE FOR IDENTITY INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                FillUp_Stage++;
+                Sleep(1750);
+                Func_NewStdnt_FillUp();
+            }
         }
         else if (FillUp_Stage == 1)
         {
@@ -712,11 +827,21 @@ void Func_NewStdnt_FillUp()
             printf("\xC8\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_POC_Emergency, sizeof(OnProcess_StudentData.stdnt_POC_Emergency), stdin);
             strtok(OnProcess_StudentData.stdnt_POC_Emergency, "\n");
-            SetCursorCoord_XY(30, 53);
-            printf("\xFE\xCD\xCD USER INPUT DONE FOR GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-            //Sleep(3000);
-            FillUp_Stage++;
-            continue;
+            if ((strlen(OnProcess_StudentData.stdnt_Gender) <= 2) || (strlen(OnProcess_StudentData.stdnt_Birthday) <= 2) || (strlen(OnProcess_StudentData.stdnt_Address) <= 2) || (strlen(OnProcess_StudentData.stdnt_Nationality) <= 2) || (strlen(OnProcess_StudentData.stdnt_MobileNum) <= 2) || (strlen(OnProcess_StudentData.stdnt_PhoneNum) <= 2) || (strlen(OnProcess_StudentData.stdnt_EmerNum) <= 2) || (strlen(OnProcess_StudentData.stdnt_POC_Emergency) <= 2))
+            {
+                SetCursorCoord_XY(30, 53);
+                printf("\xAF \xDD ERROR \xDD One of the required input must contain 3 characters in order to continue...");
+                getch();
+                continue;
+            }
+            else
+            {
+                SetCursorCoord_XY(30, 53);
+                printf("\xFE\xCD\xCD USER INPUT DONE FOR GENERAL INFORMATION \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                FillUp_Stage++;
+                Sleep(1750);
+                Func_NewStdnt_FillUp();
+            }
         }
         else if (FillUp_Stage == 2)
         {
@@ -752,18 +877,27 @@ void Func_NewStdnt_FillUp()
             printf("\xC8\xAF INPUT \xDD\xAF ");
             fgets(OnProcess_StudentData.stdnt_SpecialBehavioral, sizeof(OnProcess_StudentData.stdnt_SpecialBehavioral), stdin);
             strtok(OnProcess_StudentData.stdnt_SpecialBehavioral, "\n");
-            FillUp_Stage++;
-            break;
+            if ((strlen(OnProcess_StudentData.stdnt_SourceInterest) <= 2) || (strlen(OnProcess_StudentData.stdnt_LastSchoolYear) <= 2) || (strlen(OnProcess_StudentData.stdnt_LastSchoolStrand) <= 2) || (strlen(OnProcess_StudentData.stdnt_Email) <= 2) || (strlen(OnProcess_StudentData.stdnt_SpecialBehavioral) <= 2))
+            {
+                SetCursorCoord_XY(30, 38);
+                printf("\xAF \xDD ERROR \xDD One of the required input must contain 3 characters in order to continue...");
+                getch();
+                continue;
+            }
+            else
+            {
+                SetCursorCoord_XY(30, 38);
+                printf("\xFE\xCD\xCD USER INPUT DONE \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                FillUp_Stage = 0;
+                Sleep(1750);
+                Func_NewStdnt_InfoCheck();
+            }
         }
         else
         {
-            break;
+            Func_NewStdnt_InfoCheck();
         }
     }
-    SetCursorCoord_XY(30, 38);
-    printf("\xFE\xCD\xCD USER INPUT DONE \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
-    //Sleep(1750);
-    Func_NewStdnt_InfoCheck();
 }
 
 void Func_NewStdnt_InfoCheck()
@@ -829,26 +963,24 @@ void Func_NewStdnt_InfoCheck()
     SetCursorCoord_XY(30, 51);
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
     SetCursorCoord_XY(30, 52);
-    printf("\xC8\xAF Press a key that corresponds your decision [|Y|es or |N|o] \xDD\xAF ");
-    Data_Confirmation = getche();
-    if (Data_Confirmation == 'Y' || Data_Confirmation == 'y')
+    printf("\xC8\xAF Press a key that corresponds to your decision [|Y|es or |N|o] \xDD\xAF ");
+    switch (getche())
     {
+    case 'Y':
+    case 'y':
         SetCursorCoord_XY(30, 54);
         // Set Student Id as 0 already to let developers know that it is definitely a new student..
         OnProcess_StudentData.stdnt_StudentID = 0;
         printf("\xAF \xDD INFO \xDD Data Received, Proceeding to Step 2 \xDD Course Registration...");
         //Sleep(1750);
         Func_NewStdnt_CourseReg();
-    }
-    else if (Data_Confirmation == 'N' || Data_Confirmation == 'n')
-    {
+    case 'N':
+    case 'n':
         SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD INFO \xDD Returning To Step 1 \xDD Filling up Personal Information...");
         //Sleep(3000);
         Func_NewStdnt_FillUp();
-    }
-    else
-    {
+    default:
         SetCursorCoord_XY(30, 54);
         printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
         //Sleep(1750);
@@ -3308,7 +3440,8 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
         {
             SetCursorCoord_XY(20, 47);
             printf("\xDD WARNING \xAF The button you pressed might be wrong. We can't go non-linear!");
-            //Sleep(1750);
+            Sleep(1750);
+            fflush(stdin);
             continue;
         }
     }
@@ -3320,7 +3453,7 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     SetConsoleTitle(FUNCTION_STEP4);
     char *StudentType;
     char *StatusTake;
-    int Subject_Pass_Reader = 0, Subject_Pass_Reader_Counter = 0, SetCoordinates_Dependent = 13;
+    int Subject_Pass_Reader = 0, Subject_Pass_Reader_Counter = 1, SetCoordinates_Dependent = 13;
     if (Final_Comp_SelectedSubjects < Subject_ExpectedCandidates)
     {
         StudentType = "Irregular Student";
@@ -3391,7 +3524,7 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
-    printf("\xDD Student Type \xAF %s\t\xDD\t Subjects Enrolled \xAF %d / %d => %-28s", StudentType, Subject_Pass_Reader_Counter, Subject_ExpectedCandidates, StatusTake);
+    printf("\xDD Student Type \xAF %s\t\xDD\t Subjects Enrolled \xAF %d / %d => %-28s", StudentType, Subject_Pass_Reader, Subject_ExpectedCandidates, StatusTake);
     SetCoordinates_Dependent++;
     SetCoordinates_Dependent++;
     SetCursorCoord_XY(30, SetCoordinates_Dependent);
@@ -3411,7 +3544,7 @@ void Func_Final_Overview(int Final_Comp_SelectedSubjects, int Subject_ExpectedCa
 void Func_Stdnt_ScholarshipCheck()
 {
     char Confirmation;
-    OnProcess_StudentData.GradeLowest = 0, OnProcess_StudentData.GradeHighest, OnProcess_StudentData.GradeGeneralAverage_LastSem = 0;
+    OnProcess_StudentData.GradeLowest = 0, OnProcess_StudentData.GradeHighest = 0, OnProcess_StudentData.GradeGeneralAverage_LastSem = 0;
     //char *OnProcess_StudentData.Granted_ScholarshipStats[0], *Granted_ScholarshipStats;
     system("CLS");
     SetCursorCoord_XY(30, 3);
@@ -3450,20 +3583,43 @@ void Func_Stdnt_ScholarshipCheck()
     printf("\xAF \xDD QUESTION #1 \xDD What is your general average grade from your last semester?");
     SetCursorCoord_XY(30, 23);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-    scanf("%d", &OnProcess_StudentData.GradeGeneralAverage_LastSem);
+
+    if (scanf("%2d", &OnProcess_StudentData.GradeGeneralAverage_LastSem) != 1)
+    {
+        SetCursorCoord_XY(30, 25);
+        printf("\xAF \xDD ERROR \xDD You attempted to add letter! Reinitializing...");
+        Sleep(1750);
+        fflush(stdin); // Added Stream Input Flush to Avoid Unexpectional Looping due to Letters are being converted to Number
+        Func_Stdnt_ScholarshipCheck();
+    }
     fflush(stdin);
     SetCursorCoord_XY(30, 25);
     printf("\xAF \xDD QUESTION #2 \xDD What is your lowest grade on any subject?");
     SetCursorCoord_XY(30, 26);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-    scanf("%d", &OnProcess_StudentData.GradeLowest);
+    if (scanf("%2d", &OnProcess_StudentData.GradeLowest) != 1)
+    {
+        SetCursorCoord_XY(30, 28);
+        printf("\xAF \xDD ERROR \xDD You attempted to add letter! Reinitializing...");
+        Sleep(1750);
+        fflush(stdin);
+        Func_Stdnt_ScholarshipCheck();
+    }
     fflush(stdin);
     SetCursorCoord_XY(30, 28);
     printf("\xAF \xDD QUESTION #3 \xDD What is your highest grade on any subject?");
     SetCursorCoord_XY(30, 29);
     printf("[No Decimal Places, Round Off when the first decimal is only .9] \xAF ");
-    scanf("%d", &OnProcess_StudentData.GradeHighest);
+    if (scanf("%2d", &OnProcess_StudentData.GradeHighest) != 1)
+    {
+        SetCursorCoord_XY(30, 31);
+        printf("\xAF \xDD ERROR \xDD You attempted to add letter! Reinitializing...");
+        Sleep(1750);
+        fflush(stdin);
+        Func_Stdnt_ScholarshipCheck();
+    }
     fflush(stdin);
+
     if (OnProcess_StudentData.GradeLowest >= 82 && OnProcess_StudentData.GradeGeneralAverage_LastSem >= 84)
     {
         SetCursorCoord_XY(30, 31);
@@ -3595,7 +3751,7 @@ void Func_Mode_Of_Payment()
 void Func_PrintDocument_FinalTranscript()
 {
     //Create an Student ID for New People
-    int SetCoordinates_Dependent = 20, SubjectCount = 0, SubjectNumber = 1, TotalCreditUnits = 0, Reprint_SubjectCount = 0, Reprint_SubjectNumber = 1;
+    int SetCoordinates_Dependent = 22, SubjectCount = 0, SubjectNumber = 1, TotalCreditUnits = 0, Reprint_SubjectCount = 0, Reprint_SubjectNumber = 1;
     short unsigned int exist = 0;
     float TuitionFee, LaboratoryFee = 7225.85, AthleticsFee = 761.20,
                       AudioVisualFee = 133.60, ClassroomEnergyFee = 1100, ComputerFee = 2650.75,
@@ -3615,7 +3771,7 @@ void Func_PrintDocument_FinalTranscript()
     {
         FILE *Database_Enrollment, *Database_Enrollment_Temporary;
         Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb+");
-        Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "wb+");
+        Database_Enrollment_Temporary = fopen("LM KeyDatabase//TempMaster.lmdat", "wb+");
         //Get Data Now
         while (1)
         {
@@ -3638,7 +3794,7 @@ void Func_PrintDocument_FinalTranscript()
         if (exist >= 1)
         {
             Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "wb+");
-            Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "rb+");
+            Database_Enrollment_Temporary = fopen("LM KeyDatabase//TempMaster.lmdat", "rb+");
             while (1)
             {
                 fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment_Temporary);
@@ -3668,16 +3824,20 @@ void Func_PrintDocument_FinalTranscript()
     SetCursorCoord_XY(20, 9);
     printf("\xFE\xCD\xCD \xDD STUDENTS REGISTRATION FORM - STUDENTS COPY \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCursorCoord_XY(20, 11);
-    printf(" \xDD %-18s \xAF %-50ld \xDD %-6s \xAF %-10s", "Student Number", OnProcess_StudentData.stdnt_StudentID, "Program", OnProcess_StudentData.MainCourse_CodeName_Passer, OnProcess_StudentData.MainCourse_CodeName_Passer);
+    printf(" \xDD %-18s \xAF %-50ld", "Student Number", OnProcess_StudentData.stdnt_StudentID);
     SetCursorCoord_XY(20, 12);
-    printf(" \xDD %-18s \xAF %-s, %s %-30s \xDD%-10s \xAF %-15s \xAF %-10s", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_GName, OnProcess_StudentData.stdnt_MName, "Year Level and Semester", OnProcess_StudentData.Course_YearChoice, OnProcess_StudentData.Course_SemSelection);
+    printf(" \xDD %-18s \xAF %-10s", "Program", OnProcess_StudentData.MainCourse_CodeName_Passer);
     SetCursorCoord_XY(20, 13);
-    printf(" \xDD %-18s \xAF %-50s", "Permanent Address", OnProcess_StudentData.stdnt_Address);
+    printf(" \xDD %-18s \xAF %-s, %s %-30s", "Name of Student", OnProcess_StudentData.stdnt_LName, OnProcess_StudentData.stdnt_GName, OnProcess_StudentData.stdnt_MName);
     SetCursorCoord_XY(20, 14);
-    printf(" \xDD %-18s \xAF %-50s", "Student Type", OnProcess_StudentData.stdnt_StudentType);
+    printf(" \xDD %-10s \xAF %-15s \xAF %-10s", "Year Level and Semester", OnProcess_StudentData.Course_YearChoice, OnProcess_StudentData.Course_SemSelection);
+    SetCursorCoord_XY(20, 15);
+    printf(" \xDD %-18s \xAF %-70s", "Permanent Address", OnProcess_StudentData.stdnt_Address);
     SetCursorCoord_XY(20, 16);
-    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    printf(" \xDD %-18s \xAF %-50s", "Student Type", OnProcess_StudentData.stdnt_StudentType);
     SetCursorCoord_XY(20, 18);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetCursorCoord_XY(20, 20);
     printf("\xFE\xCD\xCD \xDD SUBJECT INFORMATION \xDD \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SubjectCount = 0;
     SubjectNumber = 1;
@@ -3852,7 +4012,7 @@ void Func_PrintDocument_FinalTranscript()
     printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC");
 
     SetCursorCoord_XY(30, 9);
-    printf("\xFE\xCD\xCD \xDD PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    printf("\xFE\xCD\xCD \xDD PROGRESS \xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     SetCursorCoord_XY(30, 11);
     printf("\xAF \xDD PROCESS FILE #1 \xDD Saving Data for Enrollee's Completed Registration Form...");
     //Progress File to Enrollee Registration Form
@@ -3960,7 +4120,7 @@ void GetDataEnrolleeInformation()
     strcpy(DataChange.stdnt_Username, OnProcess_StudentData.Generated_stdnt_NewUser);
     strcpy(DataChange.stdnt_Password, OnProcess_StudentData.Generated_stdnt_NewPass);
     strcpy(DataChange.stdnt_Course_Codename, OnProcess_StudentData.MainCourse_CodeName_Passer);
-    strcpy(DataChange.stdnt_Course_Choice, OnProcess_StudentData.Course_YearChoice);
+    strcpy(DataChange.stdnt_Year_Choice, OnProcess_StudentData.Course_YearChoice);
     strcpy(DataChange.stdnt_Course_Semester, OnProcess_StudentData.Course_SemSelection);
     DataChange.Generated_StudentID = OnProcess_StudentData.stdnt_StudentID;
     fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment);
@@ -4034,6 +4194,7 @@ void Increment_StudentID()
     long long int StudentID_OnHold;
     IncrementationDynamic = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "r");
     fscanf(IncrementationDynamic, "%ld", &StudentID_OnHold);
+    fclose(IncrementationDynamic);
     IncrementationDynamic = fopen("LM KeyDatabase//LM_CEA_CurrentStudentID.lmdat", "w");
     StudentID_OnHold++;
     OnProcess_StudentData.stdnt_StudentID = StudentID_OnHold;
@@ -4041,88 +4202,321 @@ void Increment_StudentID()
     fclose(IncrementationDynamic);
 }
 // MANAGEMENT MODE FUNCTIONS
+void FuncAdmin_Mgr_Login()
+{
+    system("CLS");
+    FILE *Database_MasterKey;
+    Database_MasterKey = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "rb+");
+    char MasterUserCheck[50],
+        MasterPasswordCheck[50];
+    int SetConsoleCounter = 3;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("Master Credentials Login");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("Enter your Master Username \xAF ");
+    scanf("%30s", &MasterUserCheck);
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("Enter your Master Password \xAF ");
+    scanf("%30s", &MasterPasswordCheck);
+    fflush(stdin);
+    while (1)
+    {
+        fread(&MasterPoint, sizeof(MasterPoint), 1, Database_MasterKey);
+        if (feof(Database_MasterKey))
+        {
+            if ((strcmp(MasterUserCheck, MasterPoint.Master_User) != 0) || (strcmp(MasterPasswordCheck, MasterPoint.Master_Password) != 0))
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD FAILED \xDD Login Failed! One of the following inputs are incorrect!");
+                Sleep(2000);
+                rewind(Database_MasterKey);
+                FuncAdmin_Mgr_Login();
+            }
+        }
+        else if ((strcmp(MasterUserCheck, MasterPoint.Master_User) == 0) && (strcmp(MasterPasswordCheck, MasterPoint.Master_Password) == 0))
+        {
+            rewind(Database_MasterKey);
+            while (1)
+            {
+                fread(&DataChange, sizeof(DataChange), 1, Database_MasterKey);
+                if (feof(Database_MasterKey))
+                {
+                    break;
+                }
+            }
+            fclose(Database_MasterKey);
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("\xDD\xAF INFO \xDD\xAF Login Success!");
+            Sleep(2000);
+            FuncAdmin_Mgr_Mode();
+            break;
+            // Get Information of Student
+        }
+        else
+        {
+            continue;
+        }
+    }
+}
+
 void FuncAdmin_Mgr_Mode()
 {
     while (1)
     {
+        int SetConsoleCounter = 3;
         system("CLS");
-        int Selection_Menu;
-        printf("1. Manually Add Data\n");
-        printf("2. Read All Encoded Data\n");
-        printf("3. Search Data by Student Name\n");
-        printf("4. Search Data by Current Program\n");
-        printf("5. Search Data by ID\n");
-        printf("6. Delete Data by ID\n");
-        printf("Enter number: ");
-        scanf("%i", &Selection_Menu);
-        switch (Selection_Menu)
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xB2 Enrollment Management Mode \xDD\xAF Login as %s", MasterPoint.Master_User);
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[1] \xDD\xAF Manually Add Student Data");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[2] \xDD\xAF Read All Encoded Student Data");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[3] \xDD\xAF Search Data of Student by Student Name");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[4] \xDD\xAF Search Data of Student by Current Program");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[5] \xDD\xAF Search Data of Student by ID");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[6] \xDD\xAF Delete Data of Student by Specific Data Requirement");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[7] \xDD\xAF Create a Master Admin Credentials");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[8] \xDD\xAF Read All Encoded Master Admin Credentials");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[9] \xDD\xAF Delete A Specific Master Admin Credentials by Username");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[E] \xDD\xAF Exit");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("[M] \xDD\xAF Go To Normal Mode \xAF LM Enrollment Main Menu");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xDD\xAF \xDD INPUT \xDD Press a number that corresponds to your desired decision \xAF ");
+        switch (getche())
         {
-        case 1:
-        {
+        case '1':
             FuncAdmin_Mgr_AddEntry();
             break;
-        }
-        case 2:
-        {
+        case '2':
             FuncAdmin_Mgr_ReadAllEntry();
             break;
-        }
-        case 3:
-        {
+        case '3':
             FuncAdmin_Mgr_SearchNameEntry();
             break;
-        }
-        case 4:
-        {
+        case '4':
             FuncAdmin_Mgr_SearchProgramEntry();
             break;
-        }
-        case 5:
-        {
+        case '5':
             FuncAdmin_Mgr_SearchID();
             break;
-        }
-        case 6:
-        {
+        case '6':
             FuncAdmin_Mgr_Delete_Entry();
             break;
-        }
-        default:
-        {
-            printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
-            _getch();
-            system("cls");
+        case '7':
+            FuncAdmin_Mgr_AddMaster();
             break;
-        }
+        case '8':
+            FuncAdmin_Mgr_ReadMaster();
+            break;
+        case '9':
+            FuncAdmin_Mgr_DeleteMaster();
+            break;
+        case 'E':
+            exit(EXIT_SUCCESS);
+        case 'M':
+            Main_Menu();
+            break;
+        default:
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("\xAF \xDD ERROR \xAF Sorry, I don't understand that...");
+            getch();
+            system("CLS");
+            break;
         }
     }
 }
 void FuncAdmin_Mgr_AddEntry()
 {
+    int SetConsoleCounter = 3;
     system("CLS");
     FILE *Database_Enrollment;
     Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "ab");
-    printf("[1] Enter first name \xAF [Syntax \xAF When Secondary Given Name Exist, Put '-' between the first given name] \xDD\xAF ");
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Manual Student Data Input");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 \xDD WARNING \xDD Please be mindful about adding data.");
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xC8\xDD\xAF Adding data that doesn't any follow syntax that has been prescribe may result in error when enrolling or even data corruption.");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[1] Enter first name \xAF [Syntax \xAF When Secondary Given Name Exist, Put '-' between the first given name] ");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
     scanf("%30s", &DataChange.stdnt_GName);
-    printf("[2] Enter middle name \xAF [Syntax \xAF Complete Middle Name, No Initial Letter Allowed] \xDD\xAF ");
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[2] Enter middle name \xAF [Syntax \xAF Complete Middle Name, No Initial Letter Allowed] ");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
     scanf("%30s", &DataChange.stdnt_MName);
-    printf("[3] Enter last name \xAF [Syntax \xAF None] \xDD\xAF ");
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[3] Enter last name \xAF [Syntax \xAF None] ");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
     scanf("%30s", &DataChange.stdnt_LName);
-    printf("[4] Enter ID number \xAF [Syntax \xAF Max is 7 Numbers] \xDD\xAF ");
-    scanf("%7lld", &DataChange.Generated_StudentID);
-    printf("[5] Enter Program name \xAF [Syntax \xAF BS<ProgramCodeName>] \xDD\xAF ");
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[4] Enter ID number \xAF [Syntax \xAF Last 2 # of Year, 2 # of Batch Num, 3# of Stdnt # Ex, 1810386] ");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
+    if (scanf("%7ld", &DataChange.Generated_StudentID) != 1)
+    {
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xAF \xDD ERROR \xDD You attempted to add letter! Reinitializing...");
+        Sleep(1750);
+        fflush(stdin);
+        FuncAdmin_Mgr_AddEntry();
+    }
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[5] Enter Program name \xAF [Syntax \xAF BS<ProgramCodeName>] ");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
     scanf("%6s", &DataChange.stdnt_Course_Codename);
-    printf("[6] Enter Year Level \xAF [Syntax \xAF Ordinal Numbers Only, e.g 1st, 2nd, 3rd] \xDD\xAF ");
-    scanf("%20s", &DataChange.stdnt_Course_Choice);
-    printf("[7] Enter Semester \xAF [Syntax \xAF Input 'First' or 'Second' Only!] \xDD\xAF ");
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[6] Enter Year Level \xAF [Syntax \xAF Ordinal Numbers Only, e.g 1st, 2nd, 3rd] ");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
+    scanf("%20s", &DataChange.stdnt_Year_Choice);
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[7] Enter Semester \xAF [Syntax \xAF Input 'First' or 'Second' Only!] ");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
     scanf("%20s", &DataChange.stdnt_Course_Semester);
-    printf("[8] Enter Username \xAF [Syntax \xAF Any, Do not include space!] \xDD\xAF ");
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[8] Enter Username \xAF [Syntax \xAF Any, Do not include space!] ");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
     scanf("%30s", &DataChange.stdnt_Username);
-    printf("[9] Enter Password \xDD\xAF");
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[9] Enter Password");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT \xDD\xAF ");
     scanf("%30s", &DataChange.stdnt_Password);
+    fflush(stdin);
     fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment);
     fclose(Database_Enrollment);
-    printf("\xAF\xDD INFO \xDD Manual Data Input is Done!!!");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF \xDD INFO-SUCCESS \xDD Manual Student Data Input is Done!");
     Sleep(2000);
     FuncAdmin_Mgr_Mode();
 }
@@ -4130,85 +4524,184 @@ void FuncAdmin_Mgr_ReadAllEntry()
 {
     system("CLS");
     FILE *Database_Enrollment;
+    int SetConsoleCounter = 5, SizeCheck = 0;
     Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb");
-    printf("List of Students: \n");
-    printf("%-20s", "Student ID");
-    printf("%-20s", "First name");
-    printf("%-20s", "Middle name");
-    printf("%-20s", "Last Name");
-    printf("%-20s", "Program Name");
-    printf("%-20s", "Year Level");
-    printf("%-20s", "Semester");
-    printf("%-20s", "Stdnt UserName");
-    printf("%-20s\n", "Stdnt Password");
-    while (1)
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Read All List of Students That is Encoded in Database");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 \xAF \xDD NOTE \xDD \xAF Keep in mind that data will be set out from the window. Please scroll right to view more info.");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    fseek(Database_Enrollment, 0, SEEK_END);
+    SizeCheck = ftell(Database_Enrollment);
+    if (SizeCheck == 0)
     {
-        fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
-        if (feof(Database_Enrollment))
-        {
-            break;
-        }
-        else
-        {
-            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
-        }
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xAF\xDD INFO - FILE \xDD\xAF No Data Found To Display...");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        fclose(Database_Enrollment);
+        getch();
+        FuncAdmin_Mgr_Mode();
     }
-    fclose(Database_Enrollment);
-    getch();
-    FuncAdmin_Mgr_Mode();
+    else
+    {
+        fseek(Database_Enrollment, 0, SEEK_SET);
+        SetConsoleCounter++;
+        SetCursorCoord_XY(1, SetConsoleCounter);
+        printf("%-20s%-20s%-20s %-20s%-20s%-20s%-20s%-20s%-20s", "Student ID", "First name", "Middle name", "Last Name", "Program Name", "Year Level", "Semester", "Stdnt UserName", "Stdnt Password");
+        SetConsoleCounter++;
+        while (1)
+        {
+            fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+            if (feof(Database_Enrollment))
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                break;
+            }
+            else
+            {
+                SetConsoleCounter++;
+                SetCursorCoord_XY(1, SetConsoleCounter);
+                printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+            }
+        }
+        fclose(Database_Enrollment);
+        getch();
+        FuncAdmin_Mgr_Mode();
+    }
 }
 void FuncAdmin_Mgr_SearchNameEntry()
 {
     system("CLS");
     FILE *Database_Enrollment;
     Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb");
+    int SetConsoleCounter = 5, DataReadCounter = 0;
     char stdnt_GName_Placeholder[30];
     char stdnt_MName_Placeholder[30];
     char stdnt_LName_Placeholder[30];
-    printf("Enter first name: ");
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Search Student Data by Name Entry");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 \xAF \xDD NOTE \xDD \xAF Keep in mind that data will be set out from the window. Please scroll right to view more info.");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT #1 \xDD\xAF Enter First Name To Search \xAF ");
     scanf("%30s", &stdnt_GName_Placeholder);
-    printf("Enter middle name: ");
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT #2 \xDD\xAF Enter Middle Name To Search \xAF ");
     scanf("%30s", &stdnt_MName_Placeholder);
-    printf("Enter last name: ");
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT #3 \xDD\xAF Enter Last Name To Search \xAF ");
     scanf("%30s", &stdnt_LName_Placeholder);
-
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     while (1)
     {
         fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
         if (feof(Database_Enrollment))
         {
-            system("CLS");
-            printf("\xAF\xDD FAILED \xDD Data Inputted is incorrect!");
-            Sleep(2000);
-            rewind(Database_Enrollment);
-            break;
+            if (DataReadCounter == 0)
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF No Data Found...");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                getch();
+                rewind(Database_Enrollment);
+                break;
+            }
+            else
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                getch();
+                rewind(Database_Enrollment);
+                break;
+            }
         }
         else if ((strcmp(stdnt_GName_Placeholder, DataChange.stdnt_GName) == 0) && (strcmp(stdnt_MName_Placeholder, DataChange.stdnt_MName) == 0) && (strcmp(stdnt_LName_Placeholder, DataChange.stdnt_LName) == 0))
         {
-            system("CLS");
-            printf("%-20s", "Student ID");
-            printf("%-20s", "First name");
-            printf("%-20s", "Middle name");
-            printf("%-20s", "Last Name");
-            printf("%-20s", "Program Name");
-            printf("%-20s", "Year Level");
-            printf("%-20s", "Semester");
-            printf("%-20s", "Stdnt UserName");
-            printf("%-20s\n", "Stdnt Password");
-            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(1, SetConsoleCounter);
+            printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Student ID", "First name", "Middle name", "Last Name", "Program Name", "Year Level", "Semester", "Stdnt UserName", "Stdnt Password");
+            DataReadCounter++;
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(1, SetConsoleCounter);
+            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
             while (1)
             {
                 fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
                 if (feof(Database_Enrollment))
                 {
-                    printf("Data Check Completed!");
+                    SetConsoleCounter++;
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(30, SetConsoleCounter);
+                    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                    SetConsoleCounter++;
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(30, SetConsoleCounter);
+                    printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
                     rewind(Database_Enrollment);
                     getch();
                     FuncAdmin_Mgr_Mode();
                 }
                 else if ((strcmp(stdnt_GName_Placeholder, DataChange.stdnt_GName) == 0) && (strcmp(stdnt_MName_Placeholder, DataChange.stdnt_MName) == 0) && (strcmp(stdnt_LName_Placeholder, DataChange.stdnt_LName) == 0))
                 {
-                    printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(1, SetConsoleCounter);
+                    printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
                 }
             }
         }
@@ -4223,48 +4716,99 @@ void FuncAdmin_Mgr_SearchProgramEntry()
     system("CLS");
     FILE *Database_Enrollment;
     char stdnt_ActiveCourseCodeName[100];
+    int SetConsoleCounter = 5, DataReadCounter = 0;
     Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb");
-    printf("SEARCH - COURSE\n\n");
-    printf("Enter course name \xAF Current Program Only! \xDD [Syntax \xAF BS<ProgramCodeName>]");
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Search Student Data by Program Entry");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 \xAF \xDD NOTE \xDD \xAF Please keep in mind that the data will display exceeded out of the window. Please scroll right to view more info.");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF \xDD Enter course name \xDD \xAF Current Program Only! \xDD [Syntax \xAF BS<ProgramCodeName>] \xAF ");
     scanf("%s", &stdnt_ActiveCourseCodeName);
-
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
     while (1)
     {
         fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
         if (feof(Database_Enrollment))
         {
-            system("CLS");
-            printf("\xAF\xDD FAILED \xDD Data Inputted is incorrect!");
-            Sleep(2000);
-            rewind(Database_Enrollment);
-            break;
+            if (DataReadCounter == 0)
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF No Data Found...");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                getch();
+                rewind(Database_Enrollment);
+                break;
+            }
+            else
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                getch();
+                rewind(Database_Enrollment);
+                break;
+            }
         }
         else if ((strcmp(stdnt_ActiveCourseCodeName, DataChange.stdnt_Course_Codename) == 0))
         {
-            system("CLS");
-            printf("%-20s", "Student ID");
-            printf("%-20s", "First name");
-            printf("%-20s", "Middle name");
-            printf("%-20s", "Last Name");
-            printf("%-20s", "Program Name");
-            printf("%-20s", "Year Level");
-            printf("%-20s", "Semester");
-            printf("%-20s", "Stdnt UserName");
-            printf("%-20s\n", "Stdnt Password");
-            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(1, SetConsoleCounter);
+            printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Student ID", "First name", "Middle name", "Last Name", "Program Name", "Year Level", "Semester", "Stdnt UserName", "Stdnt Password");
+            DataReadCounter++;
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(1, SetConsoleCounter);
+            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
             while (1)
             {
                 fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
                 if (feof(Database_Enrollment))
                 {
-                    printf("Data Check Completed!");
+                    SetConsoleCounter++;
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(30, SetConsoleCounter);
+                    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                    SetConsoleCounter++;
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(30, SetConsoleCounter);
+                    printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
                     rewind(Database_Enrollment);
                     getch();
                     FuncAdmin_Mgr_Mode();
                 }
                 else if ((strcmp(stdnt_ActiveCourseCodeName, DataChange.stdnt_Course_Codename) == 0))
                 {
-                    printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(1, SetConsoleCounter);
+                    printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
                 }
             }
         }
@@ -4276,49 +4820,103 @@ void FuncAdmin_Mgr_SearchProgramEntry()
 }
 void FuncAdmin_Mgr_SearchID()
 {
+    system("CLS");
     FILE *Database_Enrollment;
     long int stdnt_ActiveID = 0;
+    int SetConsoleCounter = 5, DataReadCounter = 0;
     Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb");
-    system("cls");
-    printf("SEARCH - ID\n\n");
-    printf("Enter ID: ");
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Search Student Data by Student ID");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 \xAF \xDD NOTE \xDD \xAF Keep in mind that data will be set out from the window. Please scroll right to view more info.");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF \xDD INPUT #1 \xDD \xAF Enter Student ID \xAF ");
     scanf("%ld", &stdnt_ActiveID);
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+
     while (1)
     {
         fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
         if (feof(Database_Enrollment))
         {
-            printf("\xAF\xDD FAILED \xDD Data Inputted is incorrect!");
-            Sleep(2000);
-            rewind(Database_Enrollment);
-            break;
+            if (DataReadCounter == 0)
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF No Data Found...");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                getch();
+                rewind(Database_Enrollment);
+                break;
+            }
+            else
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                getch();
+                rewind(Database_Enrollment);
+                break;
+            }
         }
         else if (stdnt_ActiveID == DataChange.Generated_StudentID)
         {
-            system("CLS");
-            printf("%-20s", "Student ID");
-            printf("%-20s", "First name");
-            printf("%-20s", "Middle name");
-            printf("%-20s", "Last Name");
-            printf("%-20s", "Program Name");
-            printf("%-20s", "Year Level");
-            printf("%-20s", "Semester");
-            printf("%-20s", "Stdnt UserName");
-            printf("%-20s\n", "Stdnt Password");
-            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(1, SetConsoleCounter);
+            printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Student ID", "First name", "Middle name", "Last Name", "Program Name", "Year Level", "Semester", "Stdnt UserName", "Stdnt Password");
+            DataReadCounter++;
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(1, SetConsoleCounter);
+            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
             while (1)
             {
                 fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
                 if (feof(Database_Enrollment))
                 {
-                    printf("Data Check Completed!");
+                    SetConsoleCounter++;
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(30, SetConsoleCounter);
+                    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                    SetConsoleCounter++;
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(30, SetConsoleCounter);
+                    printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
                     rewind(Database_Enrollment);
                     getch();
                     FuncAdmin_Mgr_Mode();
                 }
                 else if (stdnt_ActiveID == DataChange.Generated_StudentID)
                 {
-                    printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(1, SetConsoleCounter);
+                    printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
                 }
             }
         }
@@ -4330,74 +4928,426 @@ void FuncAdmin_Mgr_SearchID()
 }
 void FuncAdmin_Mgr_Delete_Entry()
 {
-
+    system("CLS");
+    FILE *Database_Enrollment, *Database_Enrollment_Temporary;
+    Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb+");
+    Database_Enrollment_Temporary = fopen("LM KeyDatabase//TempMaster.lmdat", "wb+");
+    long int DataEntryBase_ID = 0;
+    int SetConsoleCounter = 5, DataReadCounter = 0;
+    char stdnt_Year_Placeholder[20], stdnt_Semester_Placeholder[20];
+    short unsigned int exist = 0;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Delete Student Data from the Database");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 \xAF \xDD NOTE \xDD \xAF Keep in mind that data will be set out from the window. Please scroll right to view more info.");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 \xAF \xDD WARNING \xDD \xAF Duplicates of data with same information from the given input will also be deleted...");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT #1 \xDD\xAF Enter Student ID \xAF [Syntax \xAF Last 2 # of Year, 2 # of Batch Num, 3# of Stdnt # Ex, 1810386] ");
+    scanf("%ld", &DataEntryBase_ID);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT #2 \xDD\xAF Enter Year Level \xAF [Syntax \xAF Ordinal Numbers Only, e.g 1st, 2nd, 3rd] ");
+    scanf("%20s", &stdnt_Year_Placeholder);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT #3 \xDD\xAF Enter Semester \xAF [Syntax \xAF Input 'First' or 'Second' Only!] ");
+    scanf("%20s", &stdnt_Semester_Placeholder);
+    fflush(stdin);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    while (1)
     {
-        FILE *Database_Enrollment, *Database_Enrollment_Temporary;
-        Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "rb+");
-        Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "wb+");
-        long int DataEntryBase_ID = 0;
-        short unsigned int exist = 0;
-        system("CLS");
-        printf("DELETE - ID\n\n");
-        printf("Enter ID \xAF ");
-        scanf("%ld", &DataEntryBase_ID);
-        system("CLS");
-        while (1)
+        fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+        if (feof(Database_Enrollment))
         {
-            fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
-            if (feof(Database_Enrollment))
+            if (DataReadCounter == 0)
             {
-                break;
-            }
-            if (DataEntryBase_ID == DataChange.Generated_StudentID)
-            {
-                exist++;
-                system("CLS");
-                printf("%-20s", "Student ID");
-                printf("%-20s", "First name");
-                printf("%-20s", "Middle name");
-                printf("%-20s", "Last Name");
-                printf("%-20s", "Program Name");
-                printf("%-20s", "Year Level");
-                printf("%-20s", "Semester");
-                printf("%-20s", "Stdnt UserName");
-                printf("%-20s\n", "Stdnt Password");
-                printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s --ENTRY DELETED--\n", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Course_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
-                printf("This ENTRY Entry will be deleted... \nPress Any Key To Continue...");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF No Data Found...");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
                 getch();
+                rewind(Database_Enrollment);
+                break;
             }
             else
             {
-                fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                rewind(Database_Enrollment);
+                break;
             }
         }
-        fclose(Database_Enrollment_Temporary);
-        fclose(Database_Enrollment);
-        if (exist >= 1)
+        if ((DataEntryBase_ID == DataChange.Generated_StudentID) && (strcmp(stdnt_Year_Placeholder, DataChange.stdnt_Year_Choice) == 0) && (strcmp(stdnt_Semester_Placeholder, DataChange.stdnt_Course_Semester) == 0))
         {
-            Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "wb+");
-            Database_Enrollment_Temporary = fopen("LM KeyDatabase//a5a2cd7asolkfjdzxcopik.lmdat", "rb+");
-            printf("\n\nData Read Completed!\n");
+            exist++;
+            DataReadCounter++;
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(1, SetConsoleCounter);
+            printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s", "Student ID", "First name", "Middle name", "Last Name", "Program Name", "Year Level", "Semester", "Stdnt UserName", "Stdnt Password");
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(1, SetConsoleCounter);
+            printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s --ENTRY DELETED--", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
             while (1)
             {
-                fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment_Temporary);
-                if (feof(Database_Enrollment_Temporary))
+                fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+                if (feof(Database_Enrollment))
                 {
                     break;
                 }
-                fwrite(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+                else if ((DataEntryBase_ID == DataChange.Generated_StudentID) && (strcmp(stdnt_Year_Placeholder, DataChange.stdnt_Year_Choice) == 0) && (strcmp(stdnt_Semester_Placeholder, DataChange.stdnt_Course_Semester) == 0))
+                {
+                    DataReadCounter++;
+                    SetConsoleCounter++;
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(1, SetConsoleCounter);
+                    printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s --ENTRY DELETED--", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+                }
+                else
+                {
+                    fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
+                }
             }
-            printf("\nData Transfer Complete!\n");
-            fclose(Database_Enrollment);
-            fclose(Database_Enrollment_Temporary);
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("The Following List of Student Data Entries will be deleted...");
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("Press Any Key To Continue...");
             getch();
-            FuncAdmin_Mgr_Mode();
         }
         else
         {
-            printf("\xAF\xDD FAILED \xDD Data Inputted is incorrect!\n");
-            getch();
-            FuncAdmin_Mgr_Mode();
+            fwrite(&DataChange, 1, sizeof(DataChange), Database_Enrollment_Temporary);
         }
+    }
+    fclose(Database_Enrollment_Temporary);
+    fclose(Database_Enrollment);
+    if (exist >= 1)
+    {
+        Database_Enrollment = fopen("LM KeyDatabase//LM_CEA_Enrollment.lmdat", "wb+");
+        Database_Enrollment_Temporary = fopen("LM KeyDatabase//TempMaster.lmdat", "rb+");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xAF\xDD FILE #1 -> FILE#2 \xDD\xAF Data Read Completed! Preparing for Data Transport...");
+        while (1)
+        {
+            fread(&DataChange, sizeof(DataChange), 1, Database_Enrollment_Temporary);
+            if (feof(Database_Enrollment_Temporary))
+            {
+                break;
+            }
+            fwrite(&DataChange, sizeof(DataChange), 1, Database_Enrollment);
+        }
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xAF\xDD FILE #1 == FILE#2 \xDD\xAF Data Transfer Complete!");
+        fclose(Database_Enrollment);
+        fclose(Database_Enrollment_Temporary);
+        remove("LM KeyDatabase//TempMaster.lmdat");
+        getch();
+        FuncAdmin_Mgr_Mode();
+    }
+    else
+    {
+        FuncAdmin_Mgr_Mode();
+    }
+}
+void FuncAdmin_Mgr_AddMaster()
+{
+    int SetConsoleCounter = 3;
+    system("CLS");
+    FILE *Database_MasterKey;
+    Database_MasterKey = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "ab");
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Add Master User / Credentials");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[1] Enter Username \xDD\xAF ");
+    scanf("%30s", &MasterPoint.Master_User);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("[2] Enter Password \xDD\xAF ");
+    scanf("%30s", &MasterPoint.Master_Password);
+    fwrite(&MasterPoint, 1, sizeof(MasterPoint), Database_MasterKey);
+    fclose(Database_MasterKey);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INFO \xDD Manual Data Input is Done!!!");
+    Sleep(2000);
+    FuncAdmin_Mgr_Mode();
+}
+void FuncAdmin_Mgr_ReadMaster()
+{
+    system("CLS");
+    FILE *Database_MasterKey;
+    int SetConsoleCounter = 5, SizeCheck = 0;
+    Database_MasterKey = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "rb");
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Read All List of Master Users");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    fseek(Database_MasterKey, 0, SEEK_END);
+    SizeCheck = ftell(Database_MasterKey);
+    if (SizeCheck == 0)
+    {
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        fclose(Database_MasterKey);
+        printf("\xAF\xDD WARNING - FILE \xDD\xAF No Data Found! Creating Default Master User!!!!");
+        Database_MasterKey = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "wb");
+        strcpy(MasterPoint.Master_User, "ADMIN");
+        strcpy(MasterPoint.Master_Password, "LM123");
+        fwrite(&MasterPoint, sizeof(MasterPoint), 1, Database_MasterKey);
+        fclose(Database_MasterKey);
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+        getch();
+        FuncAdmin_Mgr_Mode();
+    }
+    else
+    {
+        fseek(Database_MasterKey, 0, SEEK_SET);
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("%-20s%-20s", "Master Username", "Master Password");
+        SetConsoleCounter++;
+        while (1)
+        {
+            fread(&MasterPoint, sizeof(MasterPoint), 1, Database_MasterKey);
+            if (feof(Database_MasterKey))
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                break;
+            }
+            else
+            {
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("%-20s%-20s", MasterPoint.Master_User, MasterPoint.Master_Password);
+            }
+        }
+        fclose(Database_MasterKey);
+        getch();
+        FuncAdmin_Mgr_Mode();
+    }
+}
+void FuncAdmin_Mgr_DeleteMaster()
+{
+    system("CLS");
+    FILE *Database_MasterKey, *Database_MasterKey_Temporary;
+    Database_MasterKey = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "rb+");
+    Database_MasterKey_Temporary = fopen("LM KeyDatabase//TempMaster.lmdat", "wb+");
+    short unsigned int exist = 0;
+    int SetConsoleCounter = 3, DataReadCounter = 0;
+    char DataMaster_Username[50];
+    char DataMaster_Password[50];
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 Enrollment Management Mode \xDD\xAF Delete Master Data from the Database");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xB2 \xAF \xDD WARNING \xDD \xAF DO NOT DELETE ALL MASTER DATA, MAKE ONE ATLEAST MASTER ACCOUNT, REMOVING ALL WILL LOAD DEFAULT SET MASTER USER");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT #1 \xDD\xAF Enter Mater Username \xAF ");
+    scanf("%s", &DataMaster_Username);
+    SetConsoleCounter++;
+    SetConsoleCounter++;
+    SetCursorCoord_XY(30, SetConsoleCounter);
+    printf("\xAF\xDD INPUT #2 \xDD\xAF Enter Mater Password \xAF ");
+    scanf("%s", &DataMaster_Password);
+    while (1)
+    {
+        fread(&MasterPoint, sizeof(MasterPoint), 1, Database_MasterKey);
+        if (feof(Database_MasterKey))
+        {
+            if (DataReadCounter == 0)
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF No Data Found Matching To Delete...");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                getch();
+                rewind(Database_MasterKey);
+                break;
+            }
+            else
+            {
+                SetConsoleCounter++;
+                SetConsoleCounter++;
+                SetCursorCoord_XY(30, SetConsoleCounter);
+                printf("\xAF\xDD INFO - FILE \xDD\xAF Data Reading Reached the End of Line of the Database File...");
+                rewind(Database_MasterKey);
+                break;
+            }
+        }
+        if ((strcmp(DataMaster_Username, MasterPoint.Master_User) == 0) && (strcmp(DataMaster_Password, MasterPoint.Master_Password) == 0))
+        {
+            exist++;
+            DataReadCounter++;
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("%-20s%-20s", "Master Username", "Master Password");
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("%-20s%-20s -- ENTRY DELETED -- ", MasterPoint.Master_User, MasterPoint.Master_Password);
+            while (1)
+            {
+                fread(&MasterPoint, sizeof(MasterPoint), 1, Database_MasterKey);
+                if (feof(Database_MasterKey))
+                {
+                    break;
+                }
+                else if ((strcmp(DataMaster_Username, MasterPoint.Master_User) == 0) && (strcmp(DataMaster_Password, MasterPoint.Master_Password) == 0))
+                {
+                    exist++;
+                    DataReadCounter++;
+                    SetConsoleCounter++;
+                    SetConsoleCounter++;
+                    SetCursorCoord_XY(30, SetConsoleCounter);
+                    printf("%-20d%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s --ENTRY DELETED--", DataChange.Generated_StudentID, DataChange.stdnt_GName, DataChange.stdnt_MName, DataChange.stdnt_LName, DataChange.stdnt_Course_Codename, DataChange.stdnt_Year_Choice, DataChange.stdnt_Course_Semester, DataChange.stdnt_Username, DataChange.stdnt_Password);
+                }
+                else
+                {
+                    fwrite(&MasterPoint, 1, sizeof(MasterPoint), Database_MasterKey_Temporary);
+                }
+            }
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("\xFE\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xFE");
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("The following Master Entries will be deleted...");
+            SetConsoleCounter++;
+            SetConsoleCounter++;
+            SetCursorCoord_XY(30, SetConsoleCounter);
+            printf("Press Any Key To Continue...");
+            getch();
+        }
+        else
+        {
+            fwrite(&MasterPoint, 1, sizeof(MasterPoint), Database_MasterKey_Temporary);
+        }
+    }
+    fclose(Database_MasterKey_Temporary);
+    fclose(Database_MasterKey);
+    if (exist >= 1)
+    {
+        Database_MasterKey = fopen("LM KeyDatabase//LM_CEA_MasterKey.lmdat", "wb+");
+        Database_MasterKey_Temporary = fopen("LM KeyDatabase//TempMaster.lmdat", "rb+");
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xAF\xDD FILE #1 -> FILE#2 \xDD\xAF Data Read Completed! Preparing for Data Transport...");
+        while (1)
+        {
+            fread(&MasterPoint, sizeof(MasterPoint), 1, Database_MasterKey_Temporary);
+            if (feof(Database_MasterKey_Temporary))
+            {
+                break;
+            }
+            fwrite(&MasterPoint, 1, sizeof(MasterPoint), Database_MasterKey);
+        }
+        SetConsoleCounter++;
+        SetConsoleCounter++;
+        SetCursorCoord_XY(30, SetConsoleCounter);
+        printf("\xAF\xDD FILE #1 == FILE#2 \xDD\xAF Data Transfer Complete!");
+        fclose(Database_MasterKey);
+        fclose(Database_MasterKey_Temporary);
+        remove("LM KeyDatabase//TempMaster.lmdat");
+        getch();
+        FuncAdmin_Mgr_Mode();
+    }
+    else
+    {
+        FuncAdmin_Mgr_Mode();
     }
 }
