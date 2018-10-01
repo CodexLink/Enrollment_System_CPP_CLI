@@ -5513,12 +5513,12 @@ void FuncAdmin_Mgr_DeleteMaster()
     SetConsoleCounter++;
     SetConsoleCounter++;
     SetCursorCoord_XY(30, SetConsoleCounter);
-    printf("\xAF\xDD INPUT #1 \xDD\xAF Enter Mater Username \xAF ");
+    printf("\xAF\xDD INPUT #1 \xDD\xAF Enter Master Username \xAF ");
     scanf("%s", &DataMaster_Username);
     SetConsoleCounter++;
     SetConsoleCounter++;
     SetCursorCoord_XY(30, SetConsoleCounter);
-    printf("\xAF\xDD INPUT #2 \xDD\xAF Enter Mater Password \xAF ");
+    printf("\xAF\xDD INPUT #2 \xDD\xAF Enter Master Password \xAF ");
     scanf("%s", &DataMaster_Password);
     while (1)
     {
