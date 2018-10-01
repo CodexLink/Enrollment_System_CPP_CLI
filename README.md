@@ -1,4 +1,5 @@
-# Team LM - Enrollment System for C CLI (ERLM_C-CLI)
+# Offline Enrollment System for C CLI (ERLM_C-CLI)
+EX Name : Team LM - Enrollment System for C CLI (ERLM_C-CLI)
 A First Year College 1st Semester Programming Project in CPE 007 - Programming Logic and Design.
 An Enrollment Project that runs in CLI with C Language.
 
@@ -36,44 +37,6 @@ Github Desktop, Git GUI and Git Bash - Alternative Collaboration Than Usual File
 
 ```
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
@@ -106,10 +69,9 @@ We are planning to automatically do basic versioning with C Language soon. Not s
 Here are the list of authors who is taking part of the project.
 
 * **Janrey Tuazon Licas** - *Initial Work / Project Lead / FrontEnd Design and Backend Programming* - [CodexLink](https://github.com/CodexLink)
-* **Charles Ian Mascarenas** - *Junior Database Programming* - [ci-mascarenas](https://github.com/ci-mascarenas)
-* **Sim Harvey Agustin Marquez** - *Data Gatherer, Code Analysis and Flow Creator*
-* **Julie Ann Luzano** - *Data Gatherer and Flow Creator*
-* **Matt Matamis** - *Data Gatherer, Potentially VOID due to Cheating within Required Conditions*
+* **Charles Ian Mascarenas** - *Junior Database Programming, Algorithm and Flowchart + Documentation Checker* - [ci-mascarenas](https://github.com/ci-mascarenas)
+* **Sim Harvey Agustin Marquez** - *Data Gatherer, Documentation Base Creator*
+* **Julie Ann Luzano** - *Data Gathererr*
 
 ## License
 
