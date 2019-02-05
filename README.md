@@ -21,7 +21,7 @@ IDE (Dependent and Independent)
 
 Visual Studio Code (Dependent IDE) - For Coding w/o Compiling - Easy, w/ Compiling + Dependencies - Hard
 Dev-C++ - Obsolete Alternative IDE for Compiling - Easy
-Visualt Studio (Community Edition) - Accurate Checks with Quality, Large Size IDE - (For Setting up Options) - Intermediate
+Visual Studio (Community Edition) - Accurate Checks with Quality, Large Size IDE - (For Setting up Options) - Intermediate
 
 TOOLS & Visual Studio Code Dependencies
 
@@ -39,7 +39,7 @@ Github Desktop, Git GUI and Git Bash - Alternative Collaboration Than Usual File
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Just run the your-compiled version of this program and that was it. No additional steps required. User cannot change things on database...
 
 ## Built With
 
@@ -85,10 +85,13 @@ This project is licensed under the GNU v3 License - see the [LICENSE.md](https:/
 
 ## Links used to gain knowledge for creating this project
 Please refer to this for the list of stackoverflow links that we have checked out.
-# Unconventional FAQ
 
+# Unconventional FAQ
 ## Why would you like to distribute this?
 I want to distribute this in a way of helping people with a twist. Also this wasn't really meant to be shared in public. It was used to collaborate with people. Other than that, this repository will be private for some time.
 
+## Notes for Programmers who copies code and use this without citation or credits?
+You are not deserved to be programmer just to use my whole system without my credits. A PM would be better to thank me. This was open sourced to use by people who willing to learn and who will want to explore on my program.
+
 ## Disclaimer
-We want to be good as possible, but as far as we know, this project will likely to be shared by everyone else without any credit. With that, soon enough we will try to hard coded this.
+We want to be good as possible, but as far as we know, this project will likely to be shared by everyone else without any credit. With that, soon enough we (I) will try to hard coded this.
