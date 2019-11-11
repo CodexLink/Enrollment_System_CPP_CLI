@@ -1,4 +1,4 @@
-/*==============================================================================
+*==============================================================================
 Group LM - Enrollment System in C for Preliminary Project in Programming
 https://github.com/CodexLink/Project_5MES_C - Project Link managed by Janrey Licas
 LM Enrollment System, Version 1748-09302018-STABLE VERSION
@@ -136,7 +136,7 @@ void Func_SubjectUnit_Selection(char **Subject_CodeName, char **Subject_FullName
     One of the most longest body of function in the Whole System.
     Contains alot of Guard to Fix Entry Holes.
     -----------
-    Double Pointer is pretty much unusual specially for people who is beginner. 
+    Double Pointer is pretty much unusual specially for people who is beginner.
     To preserve memory after going out to the function, we need to use double pointer.
     To retain the memory even outside the function call. Please refer to this link for more information
     https://stackoverflow.com/questions/5580761/why-use-double-pointer-or-why-use-pointers-to-pointers
@@ -151,7 +151,7 @@ void Func_PrintDocument_FinalTranscript(); //Shows Final output of the potential
 /*
 The Func_PrintDocument_FinalTranscript is calls dynamic data creation function and those are:
 void GetDataEnrolleeInformation();
-void Increment_StudentID();                   
+void Increment_StudentID();
 void GenerateUserPass_withGenerateFileName();
 Those are used for data-interaction.
 */
@@ -510,7 +510,7 @@ void Func_OldStdnt_ERLM()
         /*
         This part has controversy where scanf has field limit where it only takes 30 characters. But this does not avoid
         buffer overflow. So to fix it, we added fflush(stdin); To clear any unnecessary data.
-        We are aware that fflush has undefined behavior due to the fact that it was specially used for output streams. 
+        We are aware that fflush has undefined behavior due to the fact that it was specially used for output streams.
         Refer to https://stackoverflow.com/questions/2979209/using-fflushstdin
         */
         SetCursorCoord_XY(30, 15);
@@ -1507,12 +1507,12 @@ It is another part of data check to avoid mistakes being corrected after enrollm
             THIS PART INCLUDES MORE THAN 64 COMPARISONS FOR WHICH TO KNOW WHAT DATA TO BE SENT
             THIS PART WAS KNOWN TO BE EFFECTIVE THAN STATIC ONE AS IT DECREASE THE CODE TO 80%. IN THE TIME OF CREATION FOR EACH
             THE TOTAL LINES WAS UP TO 6000+++ LINE OF CODE...
-            
+
            For readibility, there are identions to which part of the code is intended to be part of.
            First step, it checks the course codename passed
                 Second Step is the year college to be checked
                     Third Part is Semester to be checked
-            
+
             NOTE: THE FOLLOWING CHAR POINTTER ARRAY
             -- AS OBSERVERS (YOU) NOTICED, WE ARE GIVING DATA THAT IS NOT EXACTLY AS IT MEANT TO BE
             For Example: Give 8 datas while char is usually at 12 size
@@ -5205,7 +5205,7 @@ void FuncAdmin_Mgr_SearchID()
     }
 }
 /*
-THERE ARE AT LEAST TWO PROCESS, ONE IS AVOIDING THE VALID DATA AND COPY DATA TO TEMPORARY, AND LASTLY TEMPORARY OVERWRITES CURRENT FILE 
+THERE ARE AT LEAST TWO PROCESS, ONE IS AVOIDING THE VALID DATA AND COPY DATA TO TEMPORARY, AND LASTLY TEMPORARY OVERWRITES CURRENT FILE
 */
 void FuncAdmin_Mgr_Delete_Entry()
 {
