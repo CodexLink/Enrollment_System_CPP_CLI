@@ -1,14 +1,26 @@
-# Offline Enrollment System for C CLI (ERLM_C-CLI)
-EX Name : Team LM - Enrollment System for C CLI (ERLM_C-CLI)
-A First Year College 1st Semester Programming Project in CPE 007 - Programming Logic and Design.
-An Enrollment Project that runs in CLI with C Language.
+<h1 align="center">ARiS Basic Equivalent Enrollment System in C CLI</h1>
+<h5 align="center">A First Year College 1st Semester Programming porject in CPE 007 | Programming Logic and Design. Enrollment System Alternative for Offline Situation, First Made in C CLI</h5>
 
-## Introduction / Information
+<div align="center" markdown="10">
+<a href="https://www.codefactor.io/repository/github/codexlink/ARiSEquivERLMS_C_CLI">
+    <img src="https://www.codefactor.io/repository/github/codexlink/ARiSEquivERLMS_C_CLI/badge" alt="CodeFactor" />
+</a>
+<a href="https://www.codacy.com/app/CodexLink/ARiSEquivERLMS_C_CLI?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CodexLink/ARiSEquivERLMS_C_CLI&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/78fb2db215e1473e9bc4f4c0dfaa896f"/></a>
+  <a href="https://github.com/CodexLink/ARiSEquivERLMS_C_CLI">
+    <img src="https://badgen.net/github/status/CodexLink/ARiSEquivERLMS_C_CLI" alt="Repository Status">
+  </a>
+  <a href="https://github.com/CodexLink/ARiSEquivERLMS_C_CLI">
+    <img src="https://badgen.net/github/license/CodexLink/ARiSEquivERLMS_C_CLI" alt="Repository License">
+  </a>
+</div>
+
+
+## Welcome!
 Enrollment System for C CLI (No Brand) was one of our first project in programming that only circulates in C Language. Our goal is to make a responsive application that technically able to replicate a Web application / system called "ARIS". ARIS is one our school web system that currently operates within the school. With that, alternatives can be done just in case, and so this application was born.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
@@ -68,30 +80,18 @@ We are planning to automatically do basic versioning with C Language soon. Not s
 
 Here are the list of authors who is taking part of the project.
 
-* **Janrey Tuazon Licas** - *Initial Work / Project Lead / FrontEnd Design and Backend Programming* - [CodexLink](https://github.com/CodexLink)
-* **Charles Ian Mascarenas** - *Junior Database Programming, Algorithm and Flowchart + Documentation Checker* - [ci-mascarenas](https://github.com/ci-mascarenas)
-* **Sim Harvey Agustin Marquez** - *Data Gatherer, Documentation Base Creator*
-* **Julie Ann Luzano** - *Data Gathererr*
-
-## License
-
-This project is licensed under the GNU v3 License - see the [LICENSE.md](https://github.com/CodexLink/Project_5MES_C/blob/master/README.md) file for details
+1. **Janrey Tuazon Licas** - *Initial Work / Project Lead / FrontEnd Design and Backend Programming and Repository Maintainer* - [CodexLink](https://github.com/CodexLink)
+2. **Charles Ian Mascarenas** - *Backend Programming, Algorithm Planner and Flowchart, Documentation Checker* - [ci-mascarenas](https://github.com/ci-mascarenas)
+3. **Sim Harvey Agustin Marquez** - *Data Gatherer, Documentation Base Author*
+4. **Julie Ann Luzano** - *Data Gatherer*
+5. **< REDACTED >** - *VOIDED*
 
 ## Acknowledgments
-
-* StackOverflow
-* CISCO NetAcad
-* Someone who doesn't love us but we do love them...
-
-## Links used to gain knowledge for creating this project
-Please refer to this for the list of stackoverflow links that we have checked out.
+> To be added soon.
 
 # Unconventional FAQ
-## Why would you like to distribute this?
-I want to distribute this in a way of helping people with a twist. Also this wasn't really meant to be shared in public. It was used to collaborate with people. Other than that, this repository will be private for some time.
+> To be added soon.
 
-## Notes for Programmers who copies code and use this without citation or credits?
-You are not deserved to be programmer just to use my whole system without my credits. A PM would be better to thank me. This was open sourced to use by people who willing to learn and who will want to explore on my program.
+ ## License
 
-## Disclaimer
-We want to be good as possible, but as far as we know, this project will likely to be shared by everyone else without any credit. With that, soon enough we (I) will try to hard coded this.
+This project is licensed under the GNU v3 License - please check [LICENSE.md](https://github.com/CodexLink/ARiSEquivERLMS_C_CLI/blob/master/README.md) file for more details.
