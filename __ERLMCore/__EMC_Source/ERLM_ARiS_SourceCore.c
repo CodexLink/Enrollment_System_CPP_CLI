@@ -1,4 +1,4 @@
-*==============================================================================
+/*==============================================================================
 Group LM - Enrollment System in C for Preliminary Project in Programming
 https://github.com/CodexLink/Project_5MES_C - Project Link managed by Janrey Licas
 LM Enrollment System, Version 1748-09302018-STABLE VERSION
